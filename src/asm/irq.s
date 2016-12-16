@@ -1,5 +1,5 @@
-.export irq
-
-.segment "STARTUP"
-irq:
-    rti ; Return from interrupt
+.export irq
+
+.segment "STARTUP"
+irq:
+    rti ; Return from interrupt

@@ -1,5 +1,5 @@
-
-
-void change_palette(char num)
-{
+
+
+void change_palette(char num)
+{
 }
