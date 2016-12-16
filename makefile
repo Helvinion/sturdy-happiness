@@ -1,6 +1,7 @@
 CC=tools/cc65/bin/cc65
 CA=tools/cc65/bin/ca65
 LD=tools/cc65/bin/ld65
+NES=tools/fceux/fceux
 
 
 all:
@@ -22,3 +23,6 @@ all:
 	$(CA) src/asm/vectors.s   -t nes -W 3 -s -v -o compile/obj/vectors.o
 
 	$(LD) -v -C link.ld -o rom.nes compile/obj/*.o lib/nes.lib
+
+play:
+	$(NES) rom.nes
