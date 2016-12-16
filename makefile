@@ -7,23 +7,23 @@ RM=rm
 all:: play
 
 asm:
-	$(CC) src/text.c    -t nes -O -T -I include/ -o compile/asm/text.s
-	$(CC) src/palette.c -t nes -O -T -I include/ -o compile/asm/palette.s
-	$(CC) src/main.c    -t nes -O -T -I include/ -o compile/asm/main.s
-	$(CC) src/screen.c  -t nes -O -T -I include/ -o compile/asm/screen.s
+	$(CC) src/text.c    -t nes -O -T -I include/ -o compile/asm/text.asm
+	$(CC) src/palette.c -t nes -O -T -I include/ -o compile/asm/palette.asm
+	$(CC) src/main.c    -t nes -O -T -I include/ -o compile/asm/main.asm
+	$(CC) src/screen.c  -t nes -O -T -I include/ -o compile/asm/screen.asm
 
 obj: asm
-	$(CA) compile/asm/text.s      -t nes -W 3 -s -v -o compile/obj/text.o
-	$(CA) compile/asm/palette.s   -t nes -W 3 -s -v -o compile/obj/palette.o
-	$(CA) compile/asm/main.s      -t nes -W 3 -s -v -o compile/obj/main.o
-	$(CA) compile/asm/screen.s    -t nes -W 3 -s -v -o compile/obj/screen.o
+	$(CA) compile/asm/text.asm      -t nes -W 3 -s -v -o compile/obj/text.o
+	$(CA) compile/asm/palette.asm   -t nes -W 3 -s -v -o compile/obj/palette.o
+	$(CA) compile/asm/main.asm      -t nes -W 3 -s -v -o compile/obj/main.o
+	$(CA) compile/asm/screen.asm    -t nes -W 3 -s -v -o compile/obj/screen.o
 	
-	$(CA) src/asm/graphics.s  -t nes -W 3 -s -v -o compile/obj/graphics.o
-	$(CA) src/asm/header.s    -t nes -W 3 -s -v -o compile/obj/header.o
-	$(CA) src/asm/irq.s       -t nes -W 3 -s -v -o compile/obj/irq.o
-	$(CA) src/asm/nmi.s       -t nes -W 3 -s -v -o compile/obj/nmi.o
-	$(CA) src/asm/start.s     -t nes -W 3 -s -v -o compile/obj/start.o
-	$(CA) src/asm/vectors.s   -t nes -W 3 -s -v -o compile/obj/vectors.o
+	$(CA) src/asm/graphics.asm  -t nes -W 3 -s -v -o compile/obj/graphics.o
+	$(CA) src/asm/header.asm    -t nes -W 3 -s -v -o compile/obj/header.o
+	$(CA) src/asm/irq.asm       -t nes -W 3 -s -v -o compile/obj/irq.o
+	$(CA) src/asm/nmi.asm       -t nes -W 3 -s -v -o compile/obj/nmi.o
+	$(CA) src/asm/start.asm     -t nes -W 3 -s -v -o compile/obj/start.o
+	$(CA) src/asm/vectors.asm   -t nes -W 3 -s -v -o compile/obj/vectors.o
 	
 rom.nes: obj
 	$(LD) -v -C link.ld -o rom.nes compile/obj/*.o lib/nes.lib
