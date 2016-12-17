@@ -97,26 +97,32 @@ nmi:
 	sta PPU_DATA    ;
 	lda PAL_BUF+31  ;
 	sta PPU_DATA    ; Charge les 8 palettes enregistrées dans la PPU
-                    
-	ldx <NAME_UPD_LEN ;
-	beq @endUpdate   ; Sauter la fin de l'update si NAME_UPD_LEN est à 0
 	
 	; Mettre à jour les changements de tiles
 @update_tiles:
 	lda <VRAMUPDATE ;
 	and #%00000100 ; Vérifie le 3e bit de VRAMUPDATE
 	beq @update_scroll ; Sauter la section si ce bit est 0
-    ldy #0
+	                    
+	ldx <NAME_UPD_LEN ;
+	beq @update_scroll   ; Sauter la fin de l'update si NAME_UPD_LEN est à 0
+    
+	ldy #0
 @update_tiles_loop:
+	iny	                   ;
 	lda (NAME_UPD_ADR),y   ; 
-	iny                    ;
-	sta PPU_ADDR           ; Selectionner la première partie de l'adresse de la tile à changer.
-	lda (NAME_UPD_ADR),y   ;
-	iny                    ;
-	sta PPU_ADDR           ; Selectionner la deuxième partie de l'adresse de la tile à changer 
+	sta PPU_ADDR           ; Selectionner la première partie de l'adresse de la tile à changer
+                           ; L'endianness oblige à aller le chercher en 2e position                 
+    dey                    ;
+	lda (NAME_UPD_ADR),y   ; 
+	sta PPU_ADDR           ; Selectionner la deuxième partie de l'adresse de la tile à changer
+
+	iny
+	iny
 	lda (NAME_UPD_ADR),y   ;
 	iny                    ;
 	sta PPU_DATA           ; Change la valeur de la tile
+
 	dex                    ;
 	bne @update_tiles_loop ; Lit les octets pointés par NAME_UPD_ADR 3 par 3.
                            ; Les deux premiers indiquent où dans la PPU écrire le 3e.
@@ -125,9 +131,9 @@ nmi:
     stx <NAME_UPD_LEN    ; Place un zéro dans NAME_UPD_LEN pour indiquer que tout a été traité.
 
 @update_scroll:
-	lda <VRAMUPDATE ;
-	and #%00001000 ; Vérifie le 3e bit de VRAMUPDATE
-	beq @endUpdate ; Sauter la section si ce bit est 0
+	;lda <VRAMUPDATE ;
+	;and #%00001000 ; Vérifie le 4e bit de VRAMUPDATE
+	;beq @endUpdate ; Sauter la section si ce bit est 0
 
 	lda #0
 	sta PPU_ADDR
