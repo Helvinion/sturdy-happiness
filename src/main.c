@@ -1,3 +1,5 @@
+#include <tiles.h>
+
 char* message = "HELLO WORLD";
 
 unsigned char palette[4] = { 0x17, 0x38, 0x38, 0x38 };
@@ -56,8 +58,13 @@ void main(void)
    // turn on rendering
    (*PPUMASK) = (unsigned char)0x18; 
    
+   tiles_init();
+   tiles_add_change(10, 10, 'Z');
+   tiles_commit_changes();
+   
 	while(1)
 	{
+	  waitForVblank();
       (*PPUCTRL) = 0x90;
 	}
 }
