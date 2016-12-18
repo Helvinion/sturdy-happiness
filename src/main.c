@@ -65,6 +65,8 @@ void main(void)
 	while(1)
 	{
 	  waitForVblank();
-      (*PPUCTRL) = 0x90;
+	  (*PPUCTRL) = 0x90; // Indique en continu d'utiliser la 2e table des graphismes et d'appeller nmi à chaque VBlank.
+	  
+	  tiles_update();
 	}
 }

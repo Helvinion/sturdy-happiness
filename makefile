@@ -33,7 +33,7 @@ obj: asm
 	$(MV) compile/asm/*.lst debug/
 	
 rom.nes: obj
-	$(LD) -v -C link.ld -o rom.nes compile/obj/*.o lib/nes.lib --dbgfile labels.txt -m debug/rom.map
+	$(LD) -v -C link.ld -o rom.nes compile/obj/*.o lib/nes.lib -m debug/rom.map
 	$(NLGEN) -rom rom.nes -nl 0 STARTUP 8000 -nl 0 INIT 81D1 -nl 0 CODE 8201  -lst debug/graphics.lst  -lst debug/header.lst  -lst debug/irq.lst  -lst debug/main.lst  -lst debug/nmi.lst  -lst debug/palette.lst  -map debug/rom.map  -lst debug/screen.lst  -lst debug/start.lst  -lst debug/text.lst  -lst debug/tiles.lst  -lst debug/vectors.lst
 	
 play: rom.nes
@@ -42,4 +42,5 @@ play: rom.nes
 clean::
 	$(RM) -f compile/asm/*
 	$(RM) -f compile/obj/*
+	$(RM) -f debug/*
 	$(RM) -f rom.nes
