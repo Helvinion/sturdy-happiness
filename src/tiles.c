@@ -63,7 +63,7 @@ void tiles_add_change(unsigned char l, unsigned char c, unsigned char data)
 	}
 }
 
-void tiles_add_group_vertical(unsigned char l, unsigned char c, unsigned char* buffer)
+void tiles_add_group_vertical(unsigned char l, unsigned char c, const char* buffer)
 {
 	int i = 0;
 	group_updates[size_groups].ppu_addr = TO_PPU_ADDR(l, c);
@@ -77,7 +77,7 @@ void tiles_add_group_vertical(unsigned char l, unsigned char c, unsigned char* b
 	size_groups++;
 }
 
-void tiles_add_group_horizontal(unsigned char l, unsigned char c, unsigned char* buffer)
+void tiles_add_group_horizontal(unsigned char l, unsigned char c, const char* buffer)
 {
 	int i = 0;
 	group_updates[size_groups].ppu_addr = TO_PPU_ADDR(l, c);

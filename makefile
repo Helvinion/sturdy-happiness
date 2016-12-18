@@ -9,11 +9,12 @@ RM=rm
 all:: play
 
 asm:
-	$(CC) src/text.c    -g -t nes -O -T -I include/ -o compile/asm/text.asm
-	$(CC) src/palette.c -g -t nes -O -T -I include/ -o compile/asm/palette.asm
-	$(CC) src/main.c    -g -t nes -O -T -I include/ -o compile/asm/main.asm
-	$(CC) src/screen.c  -g -t nes -O -T -I include/ -o compile/asm/screen.asm
-	$(CC) src/tiles.c   -g -t nes -O -T -I include/ -o compile/asm/tiles.asm
+	$(CC) src/text.c     -g -t nes -O -T -I include/ -o compile/asm/text.asm
+	$(CC) src/palette.c  -g -t nes -O -T -I include/ -o compile/asm/palette.asm
+	$(CC) src/main.c     -g -t nes -O -T -I include/ -o compile/asm/main.asm
+	$(CC) src/screen.c   -g -t nes -O -T -I include/ -o compile/asm/screen.asm
+	$(CC) src/tiles.c    -g -t nes -O -T -I include/ -o compile/asm/tiles.asm
+	$(CC) src/messages.c -g -t nes -O -T -I include/ -o compile/asm/messages.asm
 
 obj: asm
 	$(CA) compile/asm/text.asm      -l -g -t nes -W 3 -s -v -o compile/obj/text.o
@@ -21,6 +22,7 @@ obj: asm
 	$(CA) compile/asm/main.asm      -l -g -t nes -W 3 -s -v -o compile/obj/main.o
 	$(CA) compile/asm/screen.asm    -l -g -t nes -W 3 -s -v -o compile/obj/screen.o
 	$(CA) compile/asm/tiles.asm     -l -g -t nes -W 3 -s -v -o compile/obj/tiles.o
+	$(CA) compile/asm/messages.asm  -l -g -t nes -W 3 -s -v -o compile/obj/messages.o
 	
 	$(CA) src/asm/graphics.asm  -l -g -t nes -W 3 -s -v -o compile/obj/graphics.o
 	$(CA) src/asm/header.asm    -l -g -t nes -W 3 -s -v -o compile/obj/header.o
