@@ -21,7 +21,7 @@ static char col = 0;
 
 static void set_ppu_addr()
 {
-  // L'écran fait 32 * 32 cases.
+  // L'Ã©cran fait 32 * 32 cases.
   // L'index final est donc line * 32 + col
   unsigned short int ppu_addr = TO_PPU_ADDR(line, col);
   (*PPUADDR) = (unsigned char)(ppu_addr >> 8);
@@ -32,7 +32,7 @@ static void bordure_haute()
 {
   set_ppu_addr(); // positionne le curseur
   
-  (*PPUDATA) = 0x10; // Coin supérieur gauche
+  (*PPUDATA) = 0x10; // Coin supÃ©rieur gauche
   asm("lda #$14\n"
       "sta $2007\n"
       "sta $2007\n"
@@ -50,7 +50,7 @@ static void bordure_haute()
       "sta $2007\n"
       "sta $2007\n"
       "sta $2007\n");
-  (*PPUDATA) = 0x11; // Coin supérieur droit
+  (*PPUDATA) = 0x11; // Coin supÃ©rieur droit
   
   line++;
 }
@@ -59,9 +59,9 @@ static void bordure_basse()
 {
 }
 
-/* Ecrit le contenu de texte jusuqu'a un retour à la ligne
-   ou jusqu'au 16e caractère inclu.
-   Renvoie le nombre de caractères écrits
+/* Ecrit le contenu de texte jusuqu'a un retour Ã  la ligne
+   ou jusqu'au 16e caractÃ¨re inclu.
+   Renvoie le nombre de caractÃ¨res Ã©crits
 */
 static char ecrire_ligne()
 {
@@ -85,13 +85,13 @@ static char ecrire_ligne()
     
   if (i != 16)
   {
-    // On a rencontré un '\n' ou un '\0', on doit finir la ligne
+    // On a rencontrÃ© un '\n' ou un '\0', on doit finir la ligne
     ret = i - 1;
     
     for (i; i < 16; i++)
       (*PPUDATA) = ' ';
     
-    if ((*texte) == '\n') // Si on a rencontré un '\n' il faut passer le caractere.
+    if ((*texte) == '\n') // Si on a rencontrÃ© un '\n' il faut passer le caractere.
         texte++;
   }
   else
@@ -104,7 +104,7 @@ static char ecrire_ligne()
 
 void afficher_texte(const char* perso, const char* a_ecrire)
 {
-    // On affiche 64 caractères sur 4 lignes de 16 caractères entourés
+    // On affiche 64 caractÃ¨res sur 4 lignes de 16 caractÃ¨res entourÃ©s
     // Par une bordure.
     line = 4;
     col = 4;

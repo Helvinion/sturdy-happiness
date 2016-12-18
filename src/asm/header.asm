@@ -3,12 +3,12 @@
     .byte 2                 ; 2 pages de 16Kio pour la PRG-ROM
     .byte 1                 ; 1 page de 8Kio pour la CHR-ROM
     .byte %00000001         ; Miroir Horizontal
-    .byte %00000000         ; Rien de spécial
-    .byte 0,0,0,0,0,0,0,0   ; 8 zéros
+    .byte %00000000         ; Rien de spÃ©cial
+    .byte 0,0,0,0,0,0,0,0   ; 8 zÃ©ros
 
 ; Adresse   |Taille |Contenu
 ;   |   |
-; 0 | 3 | Contient les 3 caractères ASCII 'NES'
+; 0 | 3 | Contient les 3 caractÃ¨res ASCII 'NES'
 ;   |   |
 ; 3 | 1 | Contient la valeur $1A
 ;   |   |
@@ -18,17 +18,17 @@
 ;   |   |
 ; 6 | 1 | Octet de controle de la ROM #1:
 ;   |   | masque: %mmmmvtsm
-;   |   |         |||||||+-- Miroir utilisé en VRAM (0=horizontal,1=vertical)
+;   |   |         |||||||+-- Miroir utilisÃ© en VRAM (0=horizontal,1=vertical)
 ;   |   |         ||||||+--- utilisation de SRAM ou non pour les sauvegardes (1=oui)
 ;   |   |         |||||+---- presence d'un trainer de 512 octets
-;   |   |         ||||+----- Possibilité d'utiliser 4 Name Table indépendantes en VRAM
-;   |   |         +--------- 4 bits de poids faible du mapper utilisé
+;   |   |         ||||+----- PossibilitÃ© d'utiliser 4 Name Table indÃ©pendantes en VRAM
+;   |   |         +--------- 4 bits de poids faible du mapper utilisÃ©
 ;   |   |
 ; 7 | 1 |Octet de controle de la ROM #2:
 ;   |   |masque: %mmmm0000
-;   |   |     ||||+------ ces 4 bits sont toujours à 0
-;   |   |     +---------- 4 bits de poids faible du mapper utilisé
+;   |   |     ||||+------ ces 4 bits sont toujours Ã  0
+;   |   |     +---------- 4 bits de poids faible du mapper utilisÃ©
 ;   |   |
 ;   |   |
-;   |   |Remarque: les octets suivants sont ignorés par la plupart des émulateurs et doivent rester à 0
+;   |   |Remarque: les octets suivants sont ignorÃ©s par la plupart des Ã©mulateurs et doivent rester Ã  0
 ;-------------------------------------------------------------------------------------------------------

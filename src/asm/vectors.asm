@@ -1,4 +1,4 @@
-; Contient grossièrement l'adresse des trois méthodes à appeller quand arrivent certains evenements
+; Contient grossiÃ¨rement l'adresse des trois mÃ©thodes Ã  appeller quand arrivent certains evenements
 
 .import start, nmi, irq
 
