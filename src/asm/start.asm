@@ -71,7 +71,7 @@ _exit:
     sta	sp+1                            ; Place le stack pointer (tambouille de ca65) à la fin de la RAM
 	jsr	initlib                         ; Tambouille pour pouvoir faire du C
 
-	lda #%10000000   ;
+	lda #%10010000   ;
 	sta PPU_CTRL_VAR ; Sauvegarde le PPUCTRL dans la zeropage
 	sta PPU_CTRL	 ; Active l'appel à NMI lors des VBlank
     

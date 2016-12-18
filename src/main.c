@@ -59,14 +59,24 @@ void main(void)
    (*PPUMASK) = (unsigned char)0x18; 
    
    tiles_init();
-   tiles_add_change(10, 10, 'Z');
-   tiles_commit_changes();
+   tiles_add_change(10, 10, '0');
+   tiles_add_change(9, 9, 0x10);
+   tiles_add_change(9, 11, 0x11);
+   tiles_add_change(11, 9, 0x12);
+   tiles_add_change(11, 11, 0x13);
+   tiles_add_change(10, 11, 0x15);
+   tiles_add_change(11, 10, 0x14);
+   tiles_add_change(10, 9, 0x15);
+   tiles_add_change(9, 10, 0x14);
+   //tiles_commit_changes();
+   
+   tiles_add_group_vertical(11, 10, "uper ca marche !");
+   tiles_add_group_horizontal(10, 10, "Salut ca va ????");
+   tiles_commit_groups();
    
 	while(1)
 	{
-	  waitForVblank();
-	  (*PPUCTRL) = 0x90; // Indique en continu d'utiliser la 2e table des graphismes et d'appeller nmi à chaque VBlank.
-	  
+	  waitForVblank(); 
 	  tiles_update();
 	}
 }

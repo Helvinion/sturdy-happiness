@@ -16,6 +16,7 @@ nmi:
     jsr update_sprites
     jsr update_palettes
     jsr update_tiles
+	jsr update_tiles_group
     jsr update_scolling
     jsr end_update
 
@@ -68,8 +69,7 @@ update_tiles:
     ldx <NAME_UPD_LEN ;
     beq @2            ; Sauter la fin de l'update si NAME_UPD_LEN est à 0
     ldy #0
-@1:
-    iny                    ;
+@1: iny                    ;
     lda (NAME_UPD_ADR),y   ;
     sta PPU_ADDR           ; Selectionner la première partie de l'adresse de la tile à changer
     dey                    ; L'endianness oblige à aller le chercher en 2e position
@@ -83,9 +83,70 @@ update_tiles:
     dex                    ;
     bne @1 ;
     stx <NAME_UPD_LEN    ; Place un zéro dans NAME_UPD_LEN pour indiquer que tout a été traité.
-@2:
-    rts
+@2: rts
 
+update_tiles_group:
+	lda <TODO_NMI
+	and #%00001000
+	beq @1            ; Quitter la routine si aucun changement n'est demandé
+	ldx <T_GROUP_SIZE
+	beq @1            ; Quitter la routine si aucun changement n'est demandé
+
+	ldy #0
+@2:	jsr set_addr
+	jsr manage_options;
+    jsr copy_group
+	ldx <T_GROUP_SIZE     ; Recharge le nombre de groupes à copier
+	dex
+	beq @1                ; Quitter si tout a été lu
+	stx <T_GROUP_SIZE
+	bne @2                ; Sinon, boucler
+@1:	rts
+
+manage_options:
+	iny                   ;
+	iny                   ;
+	lda (TILES_GROUP),y   ; Charger les options
+	and #%00000001        ;
+	beq @h                ; Selectionner le mode horizontal ou vertical
+    jsr set_vertical
+	rts                   ; Passer à la suite
+@h: jsr set_horizontal
+	rts
+
+set_addr:
+	iny                   ; Pour chaque groupe :
+	lda (TILES_GROUP),y   ;
+	sta PPU_ADDR          ;
+	dey                   ;
+	lda (TILES_GROUP),y   ; Charger l'adresse PPU
+	sta PPU_ADDR          ;
+	rts
+
+set_vertical:
+	lda PPU_CTRL_VAR      ; Mode vertical, changer PPU_CTRL et PPU_CTRL_VAR
+	ora #%00000100        ; allume le bit ordonnant à la PPU de changer son adresse de 32 en 32
+	sta PPU_CTRL_VAR      ;
+	sta PPU_CTRL          ;
+	rts
+
+set_horizontal:
+	lda PPU_CTRL_VAR      ;
+	and #%11111011        ; Désactive le bit ordonnant à la PPU de changer son adresse de 32 en 32 pour repasse en mode 1 en 1
+	sta PPU_CTRL_VAR      ; 
+	sta PPU_CTRL          ;
+	rts
+
+copy_group:
+    ldx #16               ; Initialise le compteur d'octets copiés
+@4: iny
+	lda (TILES_GROUP),y   ; Lit l'octet suivant
+	sta PPU_DATA          ; et le stocke.
+	dex                   ; Décrémente le nombre d'octets suivants
+	bne @4                ; Recommence si on en a pas copié 16.
+	iny                   ; Incrémente Y pour le mettre au début du groupe suivant
+	rts
+	
 update_palettes:
     lda <TODO_NMI
     and #%00000010 ; Vérifie le 2e bit de TODO_NMI
