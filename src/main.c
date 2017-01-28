@@ -60,7 +60,7 @@ void main(void)
    (*PPUMASK) = (unsigned char)0x18; 
    
    tiles_init();
-   
+   /*
    tiles_add_change(10, 10, '0');
    tiles_add_change(9, 9, 0x10);
    tiles_add_change(9, 11, 0x11);
@@ -75,8 +75,8 @@ void main(void)
    //tiles_add_group_vertical(11, 10, "uper ca marche !");
    //tiles_add_group_horizontal(10, 10, "Salut ca va ????");
    //tiles_commit_groups();
-   
-   messages_afficher(ID_PER_DIDACTICIEL, ID_MSG_DIDACTICIEL_A_B, 10, 10);
+   */
+   messages_afficher(ID_PER_DIDACTICIEL, ID_MSG_DIDACTICIEL_A_B, 2, 10);
    
 	while(1)
 	{

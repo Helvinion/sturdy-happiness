@@ -36,8 +36,10 @@ end_update:
     bne @1               ; Rien de spécial si le Frame Count 2 n'est pas à 6.
     lda #0               ;
     sta <FRAMECNT2       ; Réinitialise Le Frame Count 2 s'il atteint 6.
+@1:	
+	lda #0
     sta <TODO_NMI        ; Réinitialise la TODO liste de la NMI
-@1: rts
+    rts
 
 
 update_sprites:
@@ -98,8 +100,8 @@ update_tiles_group:
     jsr copy_group
 	ldx <T_GROUP_SIZE     ; Recharge le nombre de groupes à copier
 	dex
+	stx <T_GROUP_SIZE     ; stx n'affecte pas les flags
 	beq @1                ; Quitter si tout a été lu
-	stx <T_GROUP_SIZE
 	bne @2                ; Sinon, boucler
 @1:	rts
 

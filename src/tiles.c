@@ -97,4 +97,5 @@ void tiles_update()
     // Donc on oublie exprès les données en question.
     if ((*TILE_UPDATE_SIZE) == 0)
         size = 0;
+	size_groups = (*TILE_GROUP_SIZE);
 }
