@@ -1,6 +1,6 @@
 .export nmi
 
-.include "memmap.inc"
+.include "memmap.asm"
 .segment "STARTUP"
 
 ; Cette procédure est appellée à chaque VBlank.
