@@ -1,5 +1,6 @@
 #include <tiles.h>
 #include <messages.h>
+#include <sprites.h>
 
 char* message = "HELLO WORLD";
 
@@ -26,6 +27,8 @@ void waitForVblank(void)
 void main(void)
 {
    int i;
+   unsigned char x_coord = 0;
+   unsigned char y_coord = 0;
    unsigned char* pmsg = message;
    
    // enable vblank
@@ -76,12 +79,19 @@ void main(void)
    //tiles_add_group_horizontal(10, 10, "Salut ca va ????");
    //tiles_commit_groups();
    */
-   messages_afficher(ID_PER_DIDACTICIEL, ID_MSG_DIDACTICIEL_A_B, 2, 10);
+   //messages_afficher(ID_PER_DIDACTICIEL, ID_MSG_DIDACTICIEL_A_B, 2, 10);
+   add_sprite(0, x_coord, y_coord, 0);
    
 	while(1)
 	{
-	  waitForVblank(); 
+	  waitForVblank();
   	  tiles_update();
+	  
+	  x_coord += 1;
+	  y_coord += 2;
+	  
+	  move_sprite(0, x_coord, y_coord);
+	  
 	  messages_update();
 	}
 }
