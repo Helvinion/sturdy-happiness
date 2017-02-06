@@ -36,21 +36,15 @@ end_update:
     bne @1               ; Rien de spécial si le Frame Count 2 n'est pas à 6.
     lda #0               ;
     sta <FRAMECNT2       ; Réinitialise Le Frame Count 2 s'il atteint 6.
-@1:	
-	lda #0
-    sta <TODO_NMI        ; Réinitialise la TODO liste de la NMI
-    rts
+@1: rts
 
 
 update_sprites:
-    lda <TODO_NMI    ;
-    and #%00000001   ; Vérifie le 1er bit de TODO_NMI
-    beq @1           ; Quitter si ce bit est 0
     lda #$00         ;
     sta PPU_OAM_ADDR ; (Fait pointer la SPR-PPU au début de la SPR-RAM (Sprite RAM))
     lda #>OAM_BUF    ;
     sta PPU_OAM_DMA  ; Copie les 256 octets de la RAM ($0200 -> $0300) en SPR-RAM~
-@1: rts
+    rts
 
 update_scolling:
     lda #0
@@ -65,9 +59,6 @@ update_scolling:
     rts
 
 update_tiles:
-    lda <TODO_NMI     ;
-    and #%00000100    ; Vérifie le 3e bit de TODO_NMI
-    beq @2            ; quitter si ce bit est 0
     ldx <NAME_UPD_LEN ;
     beq @2            ; Sauter la fin de l'update si NAME_UPD_LEN est à 0
     ldy #0
@@ -88,12 +79,8 @@ update_tiles:
 @2: rts
 
 update_tiles_group:
-	lda <TODO_NMI
-	and #%00001000
-	beq @1            ; Quitter la routine si aucun changement n'est demandé
 	ldx <T_GROUP_SIZE
 	beq @1            ; Quitter la routine si aucun changement n'est demandé
-
 	ldy #0
 @2:	jsr set_addr
 	jsr manage_options;
@@ -149,12 +136,8 @@ copy_group:
 	iny                   ; Incrémente Y pour le mettre au début du groupe suivant
 	rts
 	
-update_palettes:
-    lda <TODO_NMI
-    and #%00000010 ; Vérifie le 2e bit de TODO_NMI
-    bne @1         ; rester si ce bit est à 1
-    rts            ; Sinon quitter
-@1:
+update_palettes:     ; Bugué ! Ou alors reinitinilise la palette à 'tout gris'
+	rts
     lda #$3f         ;
     sta PPU_ADDR     ;
     lda #$00         ;

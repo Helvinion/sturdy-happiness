@@ -81,7 +81,7 @@ void main(void)
 	while(1)
 	{
 	  waitForVblank(); 
+  	  tiles_update();
 	  messages_update();
-	  tiles_update();
 	}
 }

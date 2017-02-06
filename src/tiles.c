@@ -5,8 +5,6 @@
 #define TILE_GROUP         (struct tiles_goup**)0x16 
 #define TILE_GROUP_SIZE    (unsigned char*)0x18
 
-#define UPDATE_SCREEN   (unsigned char*)0x03
-
 struct tile_to_update
 {
     unsigned short int ppu_addr;
@@ -20,8 +18,8 @@ struct tiles_group
 	unsigned char      tiles[16];
 };
 
-static struct tile_to_update update_buffer[32]; // 32 éléments : On ne peux en gérer plus de 41 pendant un VBlank mais on la joue sécure
-static struct tiles_group    group_updates[4];
+static struct tile_to_update update_buffer[10]; // On interdit de modifier plus de 10 éléments en une frame
+static struct tiles_group    group_updates[2];  // On interdit de modifier plus d'une ligne complète en une seule frame
 static unsigned char size_groups;
 static unsigned char size;
 
@@ -40,17 +38,11 @@ void tiles_commit_changes()
     // Notifier la procédure NMI qu'il y a des updates à faire.
     // Pour cela, on charge le nombre d'updates dans NAME_UDP_LEN
     (*TILE_UPDATE_SIZE) = size;
-
-	if (size < 25)
-		(*UPDATE_SCREEN) += 4; // Si on a plus de 25 éléments, la PPU ne pourra pas tout faire et on force la MaJ des tiles
-	else
-		(*UPDATE_SCREEN) = 4;
 }
 
 void tiles_commit_groups()
 {
 	(*TILE_GROUP_SIZE) = size_groups;
-	(*UPDATE_SCREEN) += 8;
 }
 
 void tiles_add_change(unsigned char l, unsigned char c, unsigned char data)
