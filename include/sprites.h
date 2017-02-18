@@ -15,4 +15,19 @@ struct sprite
 };
 
 unsigned char add_sprite (unsigned char code, unsigned char x_init, unsigned char y_init, unsigned char flags);
+
 void move_sprite (unsigned char index, unsigned char x, unsigned char y);
+
+void remove_sprite(unsigned char index);
+
+void hide_sprite(unsigned char index);
+
+void unhide_sprite(unsigned char index);
+
+void change_sprite_design(unsigned char index, unsigned char new_design);
+
+void remove_all();
+
+void hide_all();
+
+void unhide_all();
