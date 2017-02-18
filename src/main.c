@@ -1,10 +1,11 @@
 #include <tiles.h>
 #include <messages.h>
 #include <sprites.h>
+#include <manette.h>
 
 char* message = "HELLO WORLD";
 
-unsigned char palette[4] = { 0x17, 0x38, 0x38, 0x38 };
+unsigned char palette[4] = {0x0d, 0x28, 0x06, 0x1a};
 
 #define PPUCTRL (unsigned char*)0x2000
 #define PPUMASK (unsigned char*)0x2001
@@ -12,11 +13,13 @@ unsigned char palette[4] = { 0x17, 0x38, 0x38, 0x38 };
 #define PPUADDR (unsigned char*)0x2006
 #define PPUDATA (unsigned char*)0x2007
 
+#define FRAME_COUNT (unsigned char*)0x00
+
 void waitForVblank(void)
 {
    for ( ; ; ) 
    {
-      if ( (*PPUSTAT)&0x80 )
+      if ((*PPUSTAT) & 0x80)
       {
          break;
       }
@@ -27,8 +30,8 @@ void waitForVblank(void)
 void main(void)
 {
    int i;
-   unsigned char x_coord = 0;
-   unsigned char y_coord = 0;
+   unsigned char x_coord = 15;
+   unsigned char y_coord = 15;
    unsigned char* pmsg = message;
    
    // enable vblank
@@ -80,18 +83,30 @@ void main(void)
    //tiles_commit_groups();
    */
    //messages_afficher(ID_PER_DIDACTICIEL, ID_MSG_DIDACTICIEL_A_B, 2, 10);
-   add_sprite(0, x_coord, y_coord, 0);
+   add_sprite(0, x_coord, y_coord, SPRITES_FLAGS_COLORS_00);
    
 	while(1)
 	{
 	  waitForVblank();
+	  update_manettes();
   	  tiles_update();
 	  
-	  x_coord += 1;
-	  y_coord += 2;
+	  if (bouton_haut(1))
+		  y_coord--;
+	  if (bouton_bas(1))
+		  y_coord++;
+	  if (bouton_droite(1))
+		  x_coord++;
+	  if (bouton_gauche(1))
+		  x_coord--;
 	  
 	  move_sprite(0, x_coord, y_coord);
 	  
+	  if (bouton_b(1))
+		hide_sprite(0);
+	  if (bouton_a(1))
+		unhide_sprite(0);
+
 	  messages_update();
 	}
 }
