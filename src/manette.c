@@ -21,7 +21,7 @@ static void fetch_manette(unsigned char* manette, unsigned char* registre)
 	for (i = 0; i < 8; i++)
 	{
 		tmp = *registre;
-		*manette = ((*manette) << 2) + (tmp & 0x01);
+		*manette = ((*manette) << 1) + (tmp & 0x01);
 	}
 }
 
