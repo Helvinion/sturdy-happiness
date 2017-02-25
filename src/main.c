@@ -87,26 +87,33 @@ void main(void)
    
 	while(1)
 	{
-	  waitForVblank();
-	  update_manettes();
-  	  tiles_update();
+		waitForVblank();
+		update_manettes();
+		tiles_update();
 	  
-	  if (bouton_haut(1))
-		  y_coord--;
-	  if (bouton_bas(1))
-		  y_coord++;
-	  if (bouton_droite(1))
-		  x_coord++;
-	  if (bouton_gauche(1))
-		  x_coord--;
+		if (bouton_haut(1))
+			y_coord--;
+		if (bouton_bas(1))
+			y_coord++;
+		if (bouton_droite(1))
+			x_coord++;
+		if (bouton_gauche(1))
+			x_coord--;
 	  
-	  move_sprite(0, x_coord, y_coord);
+		move_sprite(0, x_coord, y_coord);
 	  
-	  if (bouton_b(1))
-		hide_sprite(0);
-	  if (bouton_a(1))
-		unhide_sprite(0);
+		if (bouton_b(1))
+			hide_sprite(0);
+		if (bouton_a(1))
+			unhide_sprite(0);
 
-	  messages_update();
+		if (triche_konami(1))
+		{
+			x_coord = 15;
+			y_coord = 15;
+			unhide_sprite(0);
+		}
+	
+		messages_update();
 	}
 }

@@ -19,4 +19,8 @@ unsigned char bouton_gauche(unsigned char joueur);
 
 unsigned char bouton_droite(unsigned char joueur);
 
+unsigned char triche_konami(unsigned char joueur);
+
+unsigned char select_start(unsigned char joueur);
+
 #endif
