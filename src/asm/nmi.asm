@@ -136,8 +136,7 @@ copy_group:
 	iny                   ; Incrémente Y pour le mettre au début du groupe suivant
 	rts
 	
-update_palettes:     ; Bugué ! Ou alors reinitinilise la palette à 'tout gris'
-	rts
+update_palettes:     ;
     lda #$3f         ;
     sta PPU_ADDR     ;
     lda #$00         ;
