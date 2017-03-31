@@ -77,15 +77,8 @@ _exit:
     
     ; Note constante ;
     jsr init_apu
-    lda #%00010111
-    sta $4002
-
-    lda #%00000100
-    sta $4003
-
-    lda #%10111111
-    sta $4000
-    ; Fin ;
+	
+	; Fin ;
     
     jmp _main		 ; Appelle le programme C !
  
@@ -99,17 +92,17 @@ init_apu:
         bpl @loop
  
         ; We have to skip over $4014 (OAMDMA)
-        lda #$0f
+        lda #%00001111
         sta $4015
-        lda #$40
+        lda #%01000000
         sta $4017
    
         rts
 @regs:
-        .byte $30,$08,$00,$00
-        .byte $30,$08,$00,$00
-        .byte $80,$00,$00,$00
-        .byte $30,$00,$00,$00
+        .byte $00,$00,$00,$00
+        .byte $00,$00,$00,$00
+        .byte $00,$00,$00,$00
+        .byte $00,$00,$00,$00
         .byte $00,$00,$00,$00
 
 

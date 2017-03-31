@@ -39,7 +39,7 @@ enum Palettes
 	PALETTE_GRISE = 2,
 };
 
-struct palette palettes[] = 
+struct palette palettes_definies[] = 
 {
 	{NOIR, NOIR, NOIR, NOIR},	
 	{NOIR, JAUNE, ROUGE, VERT},

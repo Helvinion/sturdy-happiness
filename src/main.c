@@ -4,6 +4,7 @@
 #include <manette.h>
 #include <palette.h>
 #include <avatar.h>
+#include <musique.h>
 
 char* message = "HELLO WORLD";
 
@@ -44,6 +45,13 @@ void main(void)
    struct personnage_graphique G_Jolivet_anim_tab[1];
    struct animation G_Jolivet_anim;
    struct avatar G_Jolivet;
+   struct CanalCarre canal_carre_1;
+   
+   canal_carre_1.reg_1 = 0x4f;
+   canal_carre_1.reg_2 = 0x9a;
+   canal_carre_1.reg_3 = 0xeb;
+   canal_carre_1.reg_4 = 0x80;
+
    
    G_Jolivet_debout_tab[0] = G_Jolivet_debout_tete;
    G_Jolivet_debout_tab[1] = G_Jolivet_debout_tronc;
@@ -141,9 +149,9 @@ void main(void)
 			x_coord--;
 	  
 		if (bouton_b(1))
-			hide_sprite(0);
+		   jouer_son_carre_1(&canal_carre_1);
 		if (bouton_a(1))
-			unhide_sprite(0);
+		   jouer_son_carre_1(&canal_carre_1);;
 
 		if (triche_konami(1))
 		{

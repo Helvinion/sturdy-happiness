@@ -10,5 +10,5 @@ void changer_palette(unsigned char which, struct palette* pal)
 
 struct palette* get_palette(enum Palettes id)
 {
-	return &(palettes[id]);
+	return &(palettes_definies[id]);
 }

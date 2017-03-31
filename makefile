@@ -18,6 +18,7 @@ asm:
 	$(CC) src/sprites.c  -g -t nes -O -T -I include/ -o compile/asm/sprites.asm
 	$(CC) src/manette.c  -g -t nes -O -T -I include/ -o compile/asm/manette.asm
 	$(CC) src/avatar.c   -g -t nes -O -T -I include/ -o compile/asm/avatar.asm
+	$(CC) src/musique.c  -g -t nes -O -T -I include/ -o compile/asm/musique.asm
 	
 obj: asm
 	$(CA) compile/asm/text.asm      -l -g -t nes -W 3 -s -v -o compile/obj/text.o
@@ -28,7 +29,8 @@ obj: asm
 	$(CA) compile/asm/messages.asm  -l -g -t nes -W 3 -s -v -o compile/obj/messages.o
 	$(CA) compile/asm/sprites.asm   -l -g -t nes -W 3 -s -v -o compile/obj/sprites.o
 	$(CA) compile/asm/manette.asm   -l -g -t nes -W 3 -s -v -o compile/obj/manette.o
-	$(CA) compile/asm/avatar.asm   -l -g -t nes -W 3 -s -v -o compile/obj/avatar.o
+	$(CA) compile/asm/avatar.asm    -l -g -t nes -W 3 -s -v -o compile/obj/avatar.o
+	$(CA) compile/asm/musique.asm   -l -g -t nes -W 3 -s -v -o compile/obj/musique.o
 	
 	$(CA) src/asm/graphics.asm  -l -g -t nes -W 3 -s -v -o compile/obj/graphics.o
 	$(CA) src/asm/header.asm    -l -g -t nes -W 3 -s -v -o compile/obj/header.o
