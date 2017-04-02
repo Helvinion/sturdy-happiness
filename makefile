@@ -33,7 +33,7 @@ OBJ=$(OBJ_C) $(OBJ_ASM)
 all:: play
 
 # C -> ASM
-compile/asm/%.asm:src/%.c
+compile/asm/%.asm:src/%.c include/%.h
 	$(CC) $< $(CCFLAGS) -o $@
 
 # ASM -> O
