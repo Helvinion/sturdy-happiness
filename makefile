@@ -30,10 +30,10 @@ OBJ_C=$(patsubst ./%.c,./compile/obj/%.o,$(SRC_C))
 OBJ_ASM=$(patsubst ./asm/%.asm,./compile/obj/%.o,$(SRC_ASM))
 OBJ=$(OBJ_C) $(OBJ_ASM)
 
-all:: play
+all: rom.nes
 
 # C -> ASM
-compile/asm/%.asm:src/%.c include/%.h
+compile/asm/%.asm:src/%.c
 	$(CC) $< $(CCFLAGS) -o $@
 
 # ASM -> O
