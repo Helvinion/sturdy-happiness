@@ -5,6 +5,9 @@ NES=tools/fceux/fceux
 MV=mv
 RM=rm
 
+CCFLAGS=-g -t nes -O -T -I include/
+CAFLAGS=-g -t nes -W 3 -s -v
+
 SRC_ASM=./asm/graphics.asm \
 ./asm/header.asm           \
 ./asm/irq.asm              \
@@ -31,15 +34,15 @@ all:: play
 
 # C -> ASM
 compile/asm/%.asm:src/%.c
-	$(CC) $<     -g -t nes -O -T -I include/ -o $@
+	$(CC) $< $(CCFLAGS) -o $@
 
 # ASM -> O
 compile/obj/%.o:src/asm/%.asm
-	$(CA) $<      -g -t nes -W 3 -s -v -o $@
+	$(CA) $< $(CAFLAGS) -o $@
 
 # ASM -> O
 compile/obj/%.o:compile/asm/%.asm
-	$(CA) $<      -g -t nes -W 3 -s -v -o $@
+	$(CA) $< $(CAFLAGS) -o $@
 
 rom.nes: $(OBJ) link.ld lib/nes.lib
 	$(LD) -v -C link.ld -o rom.nes $(OBJ) lib/nes.lib -m debug/rom.map
