@@ -91,9 +91,11 @@ static void ajouter_historique(unsigned char joueur, unsigned char combinaison)
 void update_manettes()
 {
 	unsigned char combinaison;
+	
+	*(MANETTE_1_3) = 1;
+//	*(MANETTE_2_4) = 1;
 
-	*(MANETTE_1_3) = 0;
-	*(MANETTE_2_4) = 0;
+	
 	
 	combinaison = fetch_manette(MANETTE_1_3);
 	ajouter_historique(1, combinaison);
@@ -107,8 +109,9 @@ void update_manettes()
 	combinaison = fetch_manette(MANETTE_2_4);
 	ajouter_historique(4, combinaison);
 	
-	*(MANETTE_1_3) = 1;
-	*(MANETTE_2_4) = 1;
+	*(MANETTE_1_3) = 0;
+//	*(MANETTE_2_4) = 0;
+
 }
 
 // Indique si le code Konami a été entré par un joueur.

@@ -80,6 +80,8 @@ _exit:
 	
 	; Fin ;
     
+	cli ; Reactive les interruptions
+	
     jmp _main		 ; Appelle le programme C !
  
  
@@ -94,7 +96,7 @@ init_apu:
         ; We have to skip over $4014 (OAMDMA)
         lda #%00001111
         sta $4015
-        lda #%01000000
+        lda #%00000000
         sta $4017
    
         rts

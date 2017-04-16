@@ -19,11 +19,13 @@ PAL_BUF		=$01b0
 FRAMECNT1	=$00
 FRAMECNT2	=$01
 NTSCMODE	=$02
-TODO_NMI	=$03 ; abcd efgh où h : sprites / g : palettes / f : tiles / e : scroll
-PAD_STATE	=$04
-PAD_STATEP	=$05
-PAD_STATET	=$06
-FT_TEMP		=$07	;7 bytes in zeropage
+
+; Gestion de la musique
+ADR_MUS		=$03	; Adresse de la musique à jouer
+ADR_MUS_CUR	=$05	; Adresse de la note à jouer
+MUS_CMPT	=$07	; Compteur actuel
+MUS_REG_TMP =$08    ; Adresse du registre où ecrire
+
 SCROLL_X	=$0e
 SCROLL_Y	=$0f
 PPU_CTRL_VAR=$10

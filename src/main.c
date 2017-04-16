@@ -42,6 +42,8 @@ void main(void)
    canal_carre_1.reg_3 = 0xeb;
    canal_carre_1.reg_4 = 0x80;
 
+   jouer_musique();
+   
    // enable vblank
    (*PPUCTRL) = (unsigned char)0x90;
    
@@ -52,17 +54,7 @@ void main(void)
    {
 	   changer_palette(i, get_palette(PALETTE_BASE));
    }
-   
-   // write message
-   (*PPUADDR) = (unsigned char)0x20;
-   (*PPUADDR) = (unsigned char)0x42;
-   
-   while ( *pmsg )
-   {
-      (*PPUDATA) = (*pmsg);
-      pmsg++;
-   }
-   
+    
    // turn on rendering
    (*PPUMASK) = (unsigned char)0x18; 
    
@@ -79,34 +71,28 @@ void main(void)
    tiles_add_change(9, 10, 0x14);
    tiles_commit_changes();
    
+   
    tiles_add_group_vertical(11, 10, "uper ca marche !");
    tiles_add_group_horizontal(10, 10, "Salut ca va ????");
    tiles_commit_groups();
    
-   messages_afficher(ID_PER_DIDACTICIEL, ID_MSG_DIDACTICIEL_A_B, 2, 10);
-   add_sprite(0, x_coord, y_coord, SPRITES_FLAGS_COLORS_00);
-   /*
-   afficher_personnage(
-		G_Jolivet.x,
-		G_Jolivet.y,
-		G_Jolivet.anims.anims[0].anim);
-   */
-   afficher_personnage_2(&G_Jolivet);
    
-	while(1)
+   messages_afficher(ID_PER_DIDACTICIEL, ID_MSG_DIDACTICIEL_A_B, 2, 10);
+   
+   afficher_personnage_2(&G_Jolivet);
+
+   while(1)
 	{
 		waitForVblank();
+		
 		update_manettes();
 		tiles_update();
 		remove_all();
-
 		
-		
-	   //add_sprite(0, x_coord, y_coord, SPRITES_FLAGS_COLORS_00);
 	    G_Jolivet.x = x_coord;
 		G_Jolivet.y = y_coord;
 		
-		   afficher_personnage_2(&G_Jolivet);
+		afficher_personnage_2(&G_Jolivet);
 
 		
 		if (bouton_haut(1))
@@ -129,7 +115,8 @@ void main(void)
 			y_coord = 15;
 			unhide_sprite(0);
 		}
-	
+		
 		messages_update();
+		
 	}
 }

@@ -30,5 +30,6 @@ void jouer_son_triangle(struct CanalTriangle* son);
 
 void jouer_son_bruit(struct CanalBruit* son);
 
+void jouer_musique();
 
 #endif
