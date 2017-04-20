@@ -36,48 +36,10 @@ struct avatar
 	unsigned char etape_anim;         // Etape courante de l'animation
 };
 
+void afficher_personnage(const struct avatar *perso);
+void animer(struct avatar *perso);
+void changer_animation(struct avatar *perso, unsigned char anim);
 
-#define G_Jolivet_debout_curseur {0, -11, 0x00}
-#define G_Jolivet_debout_tete    {0, 0,   0x01}
-#define G_Jolivet_debout_tronc   {0, 8,   0x11}
-#define G_Jolivet_debout_bassin  {0, 16,  0x21}
-#define G_Jolivet_debout_pieds   {0, 24,  0x31}
-static const struct partie_personnage G_Jolivet_debout_tab[5] =
-{
-	G_Jolivet_debout_curseur,
-	G_Jolivet_debout_tete,
-	G_Jolivet_debout_tronc,
-	G_Jolivet_debout_bassin,
-	G_Jolivet_debout_pieds
-};
-
-static const struct personnage_graphique G_Jolivet_postures[1] =
-{
-	{
-		G_Jolivet_debout_tab,
-		5
-	}
-};
-
-static const struct animation G_Jolivet_animations[1] = 
-{
-	{
-		G_Jolivet_postures,
-		1
-	}
-};
-
-struct avatar G_Jolivet = {100, 100, {G_Jolivet_animations, 1}, 0, 0};
-
-void afficher_personnage(unsigned char x, unsigned char y, const struct personnage_graphique* const perso);
-
-void afficher_personnage_2(const struct avatar *perso);
-
-#undef G_Jolivet_debout_curseur
-#undef G_Jolivet_debout_tete
-#undef G_Jolivet_debout_tronc
-#undef G_Jolivet_debout_bassin
-#undef G_Jolivet_debout_pieds
-
+#include <liste_animations.h>
 
 #endif

@@ -5,7 +5,7 @@ NES=tools/fceux/fceux
 MV=mv
 RM=rm
 
-CCFLAGS=-g -t nes -O -T -I include/
+CCFLAGS=-g -t nes -O -T -I include/ -I animations/
 CAFLAGS=-g -t nes -W 3 -s -v
 
 SRC_ASM=./asm/graphics.asm \
@@ -24,6 +24,7 @@ SRC_C=./avatar.c \
 ./screen.c       \
 ./sprites.c      \
 ./text.c         \
+./physique.c     \
 ./tiles.c
 
 OBJ_C=$(patsubst ./%.c,./compile/obj/%.o,$(SRC_C))
