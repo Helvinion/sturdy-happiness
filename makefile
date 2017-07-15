@@ -4,6 +4,7 @@ LD=tools/cc65/bin/ld65
 NES=tools/fceux/fceux
 MV=mv
 RM=rm
+PYTHON=tools/python/python
 
 CCFLAGS=-g -t nes -O -T -I include/ -I animations/
 CAFLAGS=-g -t nes -W 3 -s -v
@@ -48,7 +49,8 @@ compile/obj/%.o:compile/asm/%.asm
 	$(CA) $< $(CAFLAGS) -o $@
 
 rom.nes: $(OBJ) link.ld lib/nes.lib
-	$(LD) -v -C link.ld -o rom.nes $(OBJ) lib/nes.lib -m debug/rom.map
+	$(LD) -v -C link.ld -o rom.nes $(OBJ) lib/nes.lib -vm -m debug/rom.map -Ln debug/labels.txt
+	$(PYTHON) fceux_symbols.py
 	
 play: rom.nes
 	$(NES) rom.nes
@@ -58,3 +60,4 @@ clean::
 	$(RM) -f compile/obj/*
 	$(RM) -f debug/*
 	$(RM) -f rom.nes
+	$(RM) -f *.nl
