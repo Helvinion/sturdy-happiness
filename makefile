@@ -34,6 +34,8 @@ OBJ=$(OBJ_C) $(OBJ_ASM)
 all: rom.nes
 
 # C -> ASM
+.PRECIOUS: compile/asm/%.asm
+
 compile/asm/%.asm:src/%.c
 	$(CC) $< $(CCFLAGS) -o $@
 
