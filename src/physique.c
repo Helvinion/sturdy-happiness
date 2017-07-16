@@ -1,24 +1,41 @@
 #include "physique.h"
 #include "tiles.h"
 
-static const unsigned char gravite = 2;
+static const unsigned char gravite = 1;
+static const int impulsion_saut = 6;
+static const int vitesse_terminale = 7;
 
 #define FLAGS_AU_SOL 0x01
 
-void mettre_a_jour(struct element_physique *element)
+static void MaJ_dessin(struct element_physique *element)
 {
-	// Mise à jour des accélérations
+	element->dessin->x = element->coordonnee_x;
+	element->dessin->y = element->coordonnee_y;
+}
+
+void appliquer_physique(struct element_physique *element)
+{
+	static unsigned char i = 1;
+
+	// Gestion horizontale :
+	element->vitesse_x += element->acceleration_x;
+	element->coordonnee_x += element->vitesse_x;
+
+	
+	// Gestion verticale :
+	// Faire tomber le perso s'il n'est pas au sol.
 	if (!(element->flags & FLAGS_AU_SOL))
 	{
 		element->acceleration_y += gravite;
 	}
 	
 	// Mise à jour des vitesses
-	element->vitesse_x += element->acceleration_x;
-	element->vitesse_y += element->acceleration_y;
+	element->vitesse_y += (element->acceleration_y >> 3);
+	
+	if (element->vitesse_y > vitesse_terminale)
+		element->vitesse_y = vitesse_terminale;
 	
 	// Mise à jour des positions
-	element->coordonnee_x += element->vitesse_x;
 	element->coordonnee_y += element->vitesse_y;
 	
 	if (element->coordonnee_y > 150)
@@ -30,19 +47,11 @@ void mettre_a_jour(struct element_physique *element)
 		element->coordonnee_y = 150;
 	}
 	
-	element->dessin->x = element->coordonnee_x;
-	element->dessin->y = element->coordonnee_y;
+	MaJ_dessin(element);
 }
 
 void saut(struct element_physique *element)
 {
-	if (element->flags & FLAGS_AU_SOL)
-	{
 		element->flags &= !FLAGS_AU_SOL;
-		element->acceleration_y -= 9;
-	}
-	else
-	{
-		tiles_commit_changes();
-	}
+		element->acceleration_y = -impulsion_saut;
 }

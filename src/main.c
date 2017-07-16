@@ -87,13 +87,13 @@ void main(void)
 		{
 			i++;
 			changer_animation(&G_Jolivet, 1);
-			G_Jolivet_phys.vitesse_x = 5;
+			G_Jolivet_phys.vitesse_x = 2;
 		}
 		else if (bouton_presse_manette_1(BOUTON_GAUCHE))
 		{
 			i++;
 			changer_animation(&G_Jolivet, 1);
-			G_Jolivet_phys.vitesse_x = -5;
+			G_Jolivet_phys.vitesse_x = -2;
 		}
 		else
 		{
@@ -107,12 +107,12 @@ void main(void)
 			saut(&G_Jolivet_phys);
 		}
 		
-		if (i == 2)
+		if (i == 5)
 		{
 			animer(&G_Jolivet);
 			i = 0;
 		}
-		mettre_a_jour(&G_Jolivet_phys);
+		appliquer_physique(&G_Jolivet_phys);
 		afficher_personnage(&G_Jolivet);
 		
 		sprites_end();

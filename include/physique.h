@@ -19,7 +19,7 @@ struct element_physique
 	unsigned char flags;
 };
 
-void mettre_a_jour(struct element_physique *element);
+void appliquer_physique(struct element_physique *element);
 
 void saut(struct element_physique *element);
 
