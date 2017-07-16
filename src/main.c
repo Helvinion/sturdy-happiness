@@ -1,11 +1,4 @@
-#include <tiles.h>
-#include <messages.h>
-#include <sprites.h>
-#include <manette.h>
-#include <palette.h>
 #include <avatar.h>
-#include <musique.h>
-#include <physique.h>
 #include <moteur.h>
 
 void main(void)

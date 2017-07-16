@@ -2,8 +2,9 @@
 #include "tiles.h"
 
 static const unsigned char gravite = 1;
+static const unsigned char diviseur_gravite = 3;
 static const int impulsion_saut = 6;
-static const int vitesse_terminale = 7;
+static const int vitesse_terminale = 5;
 
 #define FLAGS_AU_SOL 0x01
 
@@ -20,24 +21,30 @@ void appliquer_physique(struct element_physique *element)
 	// Gestion horizontale :
 	element->vitesse_x += element->acceleration_x;
 	element->coordonnee_x += element->vitesse_x;
-
 	
 	// Gestion verticale :
-	// Faire tomber le perso s'il n'est pas au sol.
-	if (!(element->flags & FLAGS_AU_SOL))
+	// Mise à jour des vitesses
+	if (element->acceleration_y != 0) // Si une accélaration doit être appliquée, on l'applique.
 	{
-		element->acceleration_y += gravite;
+		element->vitesse_y += element->acceleration_y;
+	}
+	else if (!(element->flags & FLAGS_AU_SOL))	// Sinon on est en mode "chute".
+	{
+		if (i++ == diviseur_gravite)
+		{
+			i = 1;
+			element->vitesse_y += gravite;
+		}
 	}
 	
-	// Mise à jour des vitesses
-	element->vitesse_y += (element->acceleration_y >> 3);
-	
+	// Limite la vitesse max ateignable.
 	if (element->vitesse_y > vitesse_terminale)
 		element->vitesse_y = vitesse_terminale;
 	
 	// Mise à jour des positions
 	element->coordonnee_y += element->vitesse_y;
 	
+	// Application des collisions.
 	if (element->coordonnee_y > 150)
 	{
 		// Au sol;
@@ -45,7 +52,12 @@ void appliquer_physique(struct element_physique *element)
 		element->acceleration_y = 0;
 		element->vitesse_y = 0;
 		element->coordonnee_y = 150;
+		i = 1;
 	}
+	
+	// Remise à zéro des forces
+	element->acceleration_x = 0;
+	element->acceleration_y = 0;
 	
 	MaJ_dessin(element);
 }
@@ -53,5 +65,6 @@ void appliquer_physique(struct element_physique *element)
 void saut(struct element_physique *element)
 {
 		element->flags &= !FLAGS_AU_SOL;
+		element->vitesse_y = 0;
 		element->acceleration_y = -impulsion_saut;
 }
