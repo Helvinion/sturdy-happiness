@@ -82,13 +82,13 @@ void main(void)
 		tiles_update();
 		remove_all();
 		
-		if (bouton_droite(1))
+		if (bouton_presse_manette_1(BOUTON_DROITE))
 		{
 			i++;
 			changer_animation(&G_Jolivet, 1);
 			G_Jolivet_phys.vitesse_x = 5;
 		}
-		else if (bouton_gauche(1))
+		else if (bouton_presse_manette_1(BOUTON_GAUCHE))
 		{
 			i++;
 			changer_animation(&G_Jolivet, 1);
@@ -101,7 +101,7 @@ void main(void)
 			G_Jolivet_phys.vitesse_x = 0;
 		}
 		
-		if (bouton_a(1))
+		if (nouveau_bouton_presse_manette_1(BOUTON_A))
 		{
 			saut(&G_Jolivet_phys);
 		}
