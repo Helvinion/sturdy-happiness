@@ -14,6 +14,10 @@ struct sprite
 	unsigned char x_pos;
 };
 
+void sprites_begin();
+
+void sprites_end();
+
 unsigned char add_sprite (unsigned char code, unsigned char x_init, unsigned char y_init, unsigned char flags);
 
 void move_sprite (unsigned char index, unsigned char x, unsigned char y);

@@ -4,7 +4,26 @@
 
 #define SPRITES_BUFFER_MAX_SIZE 64
 
+static unsigned char old_size;
 static unsigned char size;
+
+// Cette fonction doit être appellée au début de la boucle principale,
+// Elle réinitialise le buffer des sprites.
+void sprites_begin()
+{
+	old_size = size;
+	size = 0;
+}
+
+// Cette fonction doit être appellée à la fin de la boucle principale.
+// Elle efface le reste du buffer.
+void sprites_end()
+{
+	unsigned char i = size;
+	
+	while (i < old_size)
+		remove_sprite(i++);
+}
 
 unsigned char add_sprite(unsigned char code, unsigned char x_init, unsigned char y_init, unsigned char flags)
 {

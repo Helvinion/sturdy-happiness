@@ -80,7 +80,8 @@ void main(void)
 		
 		update_manettes();
 		tiles_update();
-		remove_all();
+		sprites_begin();
+//		remove_all();
 		
 		if (bouton_presse_manette_1(BOUTON_DROITE))
 		{
@@ -114,6 +115,7 @@ void main(void)
 		mettre_a_jour(&G_Jolivet_phys);
 		afficher_personnage(&G_Jolivet);
 		
+		sprites_end();
 		// messages_update();	
 	}
 }
