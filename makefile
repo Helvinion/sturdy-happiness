@@ -26,7 +26,8 @@ SRC_C=./avatar.c \
 ./sprites.c      \
 ./text.c         \
 ./physique.c     \
-./tiles.c
+./tiles.c        \
+./moteur.c
 
 OBJ_C=$(patsubst ./%.c,./compile/obj/%.o,$(SRC_C))
 OBJ_ASM=$(patsubst ./asm/%.asm,./compile/obj/%.o,$(SRC_ASM))
