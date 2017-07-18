@@ -1,5 +1,5 @@
 .export irq
-.include "memmap.asm"
+.include "zeropage.asm"
 
 .segment "STARTUP"
 irq:
