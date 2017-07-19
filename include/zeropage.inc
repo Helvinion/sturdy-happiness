@@ -1,105 +1,27 @@
-;
-; zeropage.inc
-;
-; (C) Copyright 2002-2012, Ullrich von Bassewitz (uz@cc65.org)
-;
-
-; Assembler include file that imports the runtime zero page locations used
-; by the compiler, ready for usage in asm code.
-
-
-        .globalzp       sp, sreg, regsave
-        .globalzp       ptr1, ptr2, ptr3, ptr4
-        .globalzp       tmp1, tmp2, tmp3, tmp4
-        .globalzp       regbank
-  
-; The size of the register bank
-regbanksize     = 6
-
-; The total amount of zero page space used
-zpspace         = 26
-
-; The amount of space that needs to be saved by an interrupt handler that
-; calls C code (does not include the register bank, which is saved by the
-; generated C code if required).
-zpsavespace     = zpspace - regbanksize
-
-
-PPU_CTRL	=$2000
-PPU_MASK	=$2001
-PPU_STATUS	=$2002
-PPU_OAM_ADDR=$2003
-PPU_OAM_DATA=$2004
-PPU_SCROLL	=$2005
-PPU_ADDR	=$2006
-PPU_DATA	=$2007
-PPU_OAM_DMA	=$4014
-PPU_FRAMECNT=$4017
-DMC_FREQ	=$4010
-CTRL_PORT1	=$4016
-OAM_BUF		=$0200
-PAL_BUF		=$01b0
-
+;;;;;;;;;;;;; ZEROPAGE ;;;;;;;;;;;;;
 
 ;  NOM       |    CASE  | COMMENTAIRE
-FRAMECNT1    =    $00   ; Compteur de frames
-FRAMECNT2    =    $01   ; Compteur de frames modulo 6
-NTSCMODE     =    $02   ; Mode NTSC ou PAL
-ADR_MUS      =    $03   ; Adresse de la musique à jouer sur deux octets
-;            =    $04   ;
-ADR_MUS_CUR  =    $05   ; Adresse de la note à jouer
-;            =    $06   ; 
-MUS_CMPT     =    $07   ; Compteur actuel
-MUS_REG_TMP  =    $08   ; Adresse du registre de musique où écrire
-;            =    $09   ;
-;            =    $0A
-;            =    $0B
-;            =    $0C
-;            =    $0D
-SCROLL_X     =    $0E  ; Srolling horizontal (traité en VBlank)
-SCROLL_Y     =    $0F  ; Scrolling vertical (traité en VBlank)
-PPU_CTRL_VAR =    $10  ; Controle de la PPU (traité en VBlank)
-RAND_SEED    =    $11  ; Graine du générateur aléatoire
-NAME_UPD_ADR =    $12  ; Adresse du buffer de modifs de tiles (traité en VBlank)
-;            =    $13  ;
-NAME_UPD_LEN =    $14  ; Nombre de modifications de tiles à appliquer (traité en VBlank)
-;            =    $15 
-TILES_GROUP  =    $16  ; Adresse du buffer des goupes de modifs (traité en VBlank)
-;            =    $17  ;
-T_GROUP_SIZE =    $18  ; Taille du buffer
-;            =    $19
-;            =    $1A
-;            =    $1B
-;            =    $1C
-;            =    $1D
-;            =    $1E
-;            =    $1F
-;            =    $20 ; SP Toute cette zone est interdite d'accès.
-;            =    $21 ; |  Elle appartient au compilateur C.
-;            =    $22 ; SREG
-;            =    $23 ; |
-;            =    $24 ; REGSAVE
-;            =    $25 ; |
-;            =    $26 ; |
-;            =    $27 ; |
-;            =    $28 ; PTR1
-;            =    $29 ; |
-;            =    $2A ; PTR2
-;            =    $2B ; |
-;            =    $2C ; PTR3
-;            =    $2D ; |
-;            =    $2E ; PTR4
-;            =    $2F ; |
-;            =    $30 ; TMP1
-;            =    $31 ; TMP2
-;            =    $32 ; TMP3
-;            =    $33 ; TMP4
-;            =    $34 ; REGBANK
-;            =    $35 ; |
-;            =    $36 ; |
-;            =    $37 ; |
-;            =    $38 ; |
-;            =    $39 ; |
+FRAMECNT1    =    $20   ; Compteur de frames
+FRAMECNT2    =    $21   ; Compteur de frames modulo 6
+NTSCMODE     =    $22   ; Mode NTSC ou PAL
+ADR_MUS      =    $23   ; Adresse de la musique à jouer sur deux octets
+ADR_MUS_CUR  =    $25   ; Adresse de la note à jouer
+MUS_CMPT     =    $27   ; Compteur actuel
+MUS_REG_TMP  =    $28   ; Adresse du registre de musique où écrire
+;            =    $2A
+;            =    $2B
+;            =    $2C
+;            =    $2D
+SCROLL_X     =    $2E  ; Srolling horizontal (traité en VBlank)
+SCROLL_Y     =    $2F  ; Scrolling vertical (traité en VBlank)
+PPU_CTRL_VAR =    $30  ; Controle de la PPU (traité en VBlank)
+RAND_SEED    =    $31  ; Graine du générateur aléatoire
+NAME_UPD_ADR =    $32  ; Adresse du buffer de modifs de tiles (traité en VBlank)
+NAME_UPD_LEN =    $34  ; Nombre de modifications de tiles à appliquer (traité en VBlank)
+;            =    $35 
+TILES_GROUP  =    $36  ; Adresse du buffer des goupes de modifs (traité en VBlank)
+T_GROUP_SIZE =    $38  ; Taille du buffer
+;            =    $39
 ;            =    $3A
 ;            =    $3B
 ;            =    $3C
@@ -292,14 +214,25 @@ T_GROUP_SIZE =    $18  ; Taille du buffer
 ;            =    $F7
 ;            =    $F8
 ;            =    $F9
-;            =    $FA ; 6 octets pour les registres du compilateur
+;            =    $FA
 ;            =    $FB
 ;            =    $FC
 ;            =    $FD
 ;            =    $FE
 ;            =    $FF
 
-.globalzp       sp, sreg, regsave
-        .globalzp       ptr1, ptr2, ptr3, ptr4
-        .globalzp       tmp1, tmp2, tmp3, tmp4
-        .globalzp       regbank
+;;;;;;;;;;;;; Registres de la NES ;;;;;;;;;;;;;
+PPU_CTRL	 = $2000
+PPU_MASK	 = $2001
+PPU_STATUS	 = $2002
+PPU_OAM_ADDR = $2003
+PPU_OAM_DATA = $2004
+PPU_SCROLL	 = $2005
+PPU_ADDR	 = $2006
+PPU_DATA	 = $2007
+PPU_OAM_DMA	 = $4014
+PPU_FRAMECNT = $4017
+DMC_FREQ	 = $4010
+CTRL_PORT1	 = $4016
+OAM_BUF		 = $0200
+PAL_BUF		 = $01b0

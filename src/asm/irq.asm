@@ -1,7 +1,8 @@
+.include "include/zeropage.inc"
 .export irq
-.include "zeropage.asm"
 
 .segment "STARTUP"
+
 irq:
 	php ; Sauvegarder le statut
 	pha ; Sauvergarder A
@@ -11,7 +12,6 @@ irq:
 	pha ; Sauvegarder Y
 	
 	lda $4015 ; Aknowldege de l'interruption
-	
 	
 boucle:
 	lda MUS_CMPT         ; Charger le délai actuel dans A

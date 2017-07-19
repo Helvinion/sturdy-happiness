@@ -1,10 +1,10 @@
+.include "include/zeropage.inc"
+.import sp
+
 .export start
 .export _exit
 
 .export __STARTUP__:absolute=1      ; Mark as startup
-
-;.include "memmap.asm"
-.include "zeropage.asm"
 
 .import _main
 

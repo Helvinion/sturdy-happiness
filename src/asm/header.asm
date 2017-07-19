@@ -1,6 +1,6 @@
 .segment        "HEADER"
     .byte $4e,$45,$53,$1a   ; "NES"^Z
-    .byte 2                 ; 2 pages de 16Kio pour la PRG-ROM
+    .byte 2                 ; 1 pages de 16Kio pour la PRG-ROM
     .byte 1                 ; 1 page de 8Kio pour la CHR-ROM
     .byte %00000001         ; Miroir Horizontal
     .byte %00000000         ; Rien de spécial

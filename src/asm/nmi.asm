@@ -1,6 +1,6 @@
+.include "include/zeropage.inc"
 .export nmi
 
-.include "zeropage.asm"
 .segment "STARTUP"
 
 ; Cette procédure est appellée à chaque VBlank.
