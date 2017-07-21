@@ -32,26 +32,46 @@ MEMORY
 }
 
 SEGMENTS {
+	# Plutot evident, le segment HEADER remplie la zone memoire HEADER
     HEADER:   load = HEADER,         type = ro;
+	
+	# Le segment startup est destiné à contenir le code qui initialise un environnement C
     STARTUP:  load = PRG,            type = ro,  define = yes;
+	
+	# Le segment LowCode est garanti comme accessible depuis toutes les banques de données (utile si on en utilise plusieurs)
     LOWCODE:  load = PRG,            type = ro,                optional = yes;
-    INIT:     load = PRG,            type = ro,  define = yes, optional = yes;
+    
+	# Le segment INIT est sensé contenir des procédires d'initialisation... Je ne l'utilise pas à l'écriture de ces lignes.
+	INIT:     load = PRG,            type = ro,  define = yes, optional = yes;
+	
+	# Le segment CODE contient le binaire du programme du jeu lui même
     CODE:     load = PRG,            type = ro,  define = yes;
-    RODATA:   load = PRG,            type = ro,  define = yes;
-    DATA:     load = PRG, run = RAM, type = rw,  define = yes;
+    
+	# Ce segment contient les données constantes (chaines, etc.)
+	RODATA:   load = PRG,            type = ro,  define = yes;
+    
+	# Ce segment contient les variables globales avec leu initialisation. Il sera copié en RAM au démarrage
+	DATA:     load = PRG, run = RAM, type = rw,  define = yes;
+	
+	# Ce segment contient les 3 adresses des trois interruptions du jeu.
     VECTORS:  load = VECTORS,        type = rw;
+	
+	# Ce segment contient... les sprites et les tiles
 	GRAPHICS: load = CHR,            type = ro;
 	
+	# Comme DATA sauf que son contenu *doit* être initialisé à 0 avant de lancer le code C.
     BSS:      load = RAM,             type = bss, define = yes;
-    HEAP:     load = RAM,             type = bss, optional = yes;
+	
+	# La zéropage, evidemment.
     ZEROPAGE: load = ZP,              type = zp;
 }
 
+# Je ne suis pas sur, mais je crois que le code C a besoin de cette section pour linker.
 FEATURES {
     CONDES: segment = INIT,
 	    type = constructor,
 	    label = __CONSTRUCTOR_TABLE__,
-	    count = __CONSTRUCTOR_COUNT__;
+        count = __CONSTRUCTOR_COUNT__;
     CONDES: segment = RODATA,
 	    type = destructor,
 	    label = __DESTRUCTOR_TABLE__,
@@ -61,8 +81,3 @@ FEATURES {
 	    label = __INTERRUPTOR_TABLE__,
 	    count = __INTERRUPTOR_COUNT__;
 }
-
-
-#SYMBOLS {
-#    __STACKSIZE__: type = weak, value = $0300;   # 3 pages stack
-#	}

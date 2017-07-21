@@ -1,26 +1,21 @@
 .include "include/zeropage.inc"
-.import sp
-
-.export start
-.export _exit
-
-.export __STARTUP__:absolute=1      ; Mark as startup
-
+.importzp sp
 .import _main
-
 .import initlib
 .import zerobss
 .import copydata
-
 .import __RAM_START__
 .import __RAM_SIZE__
 
-.segment       	"STARTUP"
+.export start
+.export _exit
+.export __STARTUP__:absolute=1      ; Place le bout de code dans le segment startup
+
 start:
 _exit:
     sei           ; Désactive les interruptions
     ldx #$ff      ;
-    txs           ; Définit le stack pointer à $ff
+    txs           ; Définit le stack pointer à $ff, le haut de la stack
     inx           ; Remet X à 0
     stx PPU_MASK  ; Met le registre 2 de contrôle de la PPU à 0
     stx DMC_FREQ  ; Met le registre de contrôle du son à 0
@@ -32,7 +27,9 @@ _exit:
     bpl @1         ; Tant que ce n'est PAS le cas, on attend.
 
     txa            ; 0 -> A
-@clearRAM:          ;
+
+; Effacer toute la mémoire vive	
+@clearRAM:         ;
     sta $0000,x    ;
     sta $0100,x    ;
     sta $0200,x    ;
@@ -44,7 +41,7 @@ _exit:
     inx            ;
     bne @clearRAM  ; Met des 0 dans toute la RAM ($0000 -> $07ff)
 
-@clearVRAM:
+; Effacer toute la mémoire vidéo.
 	lda #$20       ;
 	sta PPU_ADDR   ;
 	lda #$00       ;
@@ -75,7 +72,7 @@ _exit:
 	sta PPU_CTRL_VAR ; Sauvegarde le PPUCTRL dans la zeropage
 	sta PPU_CTRL	 ; Active l'appel à NMI lors des VBlank
     
-    ; Note constante ;
+    ; Initialise le moteur de sons.
     jsr init_apu
 	
 	; Fin ;
@@ -83,48 +80,18 @@ _exit:
 	cli ; Reactive les interruptions
 	
     jmp _main		 ; Appelle le programme C !
- 
- 
+
 init_apu:
         ; Init $4000-4013
         ldy #$13
-@loop:  lda @regs,y
+@loop:  lda #0
         sta $4000,y
         dey
         bpl @loop
  
-        ; We have to skip over $4014 (OAMDMA)
+        ; On saute $4014 et $4016 (OAMDMA)
         lda #%00001111
         sta $4015
         lda #%00000000
         sta $4017
-   
         rts
-@regs:
-        .byte $00,$00,$00,$00
-        .byte $00,$00,$00,$00
-        .byte $00,$00,$00,$00
-        .byte $00,$00,$00,$00
-        .byte $00,$00,$00,$00
-
-
-; ---Code mort sensé détecter un mode ntsc. On considère le mode PAL ---
-;   lda <FRAMECNT1    ;
-;@wait:                ;
-;	cmp <FRAMECNT1    ;
-;	beq @wait         ; Attend un changement de FRAMECNT1 (lors d'une nmi probablement)
-
-;	ldx #52		      ; (blargg's code)
-;	ldy #24           ;
-;@detectNTSC:          ;
-;	dex               ;
-;	bne @detectNTSC   ;
-;	dey               ;
-;	bne @detectNTSC   ; Attendre d'avoir fait cette boucle 1248 fois (??)
-
-;	lda PPU_STATUS    ; 
-;	and #$80          ;
-;	sta <NTSCMODE     ; (???)
-
-;	lda #1
-;	sta <RAND_SEED
