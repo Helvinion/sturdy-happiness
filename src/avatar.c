@@ -5,7 +5,8 @@
 void afficher_personnage(const struct avatar *perso)
 {
 	unsigned char i = 0;
-
+	unsigned char ret = 0;
+	
 	// Alias pour acceder à l'étape courante de l'animation courante
 	const struct personnage_graphique *tmp = &(perso->anims.anims[perso->animation_courante].anim[perso->etape_anim]);
 	const struct partie_personnage* partie;
@@ -15,7 +16,7 @@ void afficher_personnage(const struct avatar *perso)
 	{
 		partie = tmp->parties + i;
 
-		add_sprite(partie->sprite_id, perso->x + partie->delta_x, perso->y + partie->delta_y, 0);
+		ret = add_sprite(partie->sprite_id, perso->x + partie->delta_x, perso->y + partie->delta_y, partie->numero_palette);
 		i++;
 	}
 }

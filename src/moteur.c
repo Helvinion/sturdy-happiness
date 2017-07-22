@@ -77,10 +77,15 @@ void initialiser()
     // changer les palettes pendant un vblank
     attendre_VBlank();
 
-    for (i = 0; i < 8; i++)
+    for (i = 0; i < 4; i++)
     {
- 	   changer_palette(i, get_palette(PALETTE_BASE));
+ 	   changer_palette(i, get_palette(PALETTE_CURSEURS));
     }
+
+	changer_palette(4, get_palette(PALETTE_CURSEURS));
+	changer_palette(5, get_palette(PALETTE_JOLIVET));
+	changer_palette(6, get_palette(PALETTE_JOLIVET));
+	changer_palette(7, get_palette(PALETTE_JOLIVET));
     
     // Activer le rendu de l'écran
     (*PPUMASK) = (unsigned char)0x18; 

@@ -6,6 +6,7 @@ struct partie_personnage
 	const signed char delta_x;      // Distance en X de la coordonnée du personnage
 	const signed char delta_y;      // Distance en y de la coordonnée du personnage
 	const unsigned char sprite_id;  // Dessin de la, partie de personnage
+	const unsigned char numero_palette;
 };
 
 struct personnage_graphique

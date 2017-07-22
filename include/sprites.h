@@ -30,6 +30,8 @@ void unhide_sprite(unsigned char index);
 
 void change_sprite_design(unsigned char index, unsigned char new_design);
 
+void select_sprite_palette(unsigned char index, unsigned char palette);
+
 void remove_all();
 
 void hide_all();

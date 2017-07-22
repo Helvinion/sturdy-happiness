@@ -22,6 +22,12 @@ enum Couleur
 	JAUNE  = 0x28,
 	ROUGE  = 0x06,
 	VERT   = 0x1a,
+	MARRON = 0x07,
+	PEAU   = 0x36,
+	VERT_1 = 0x18,
+	SAUMON = 0x26,
+	BLEU   = 0x01,
+	BLEU_1 = 0x11
 };
 
 struct palette
@@ -35,14 +41,16 @@ struct palette
 enum Palettes
 {
 	PALETTE_NOIRE = 0,
-	PALETTE_BASE  = 1,
-	PALETTE_GRISE = 2,
+	PALETTE_CURSEURS  = 1,
+	PALETTE_JOLIVET = 2,
+	PALETTE_GRISE = 3,
 };
 
 struct palette palettes_definies[] = 
 {
 	{NOIR, NOIR, NOIR, NOIR},	
 	{NOIR, JAUNE, ROUGE, VERT},
+	{NOIR, MARRON, PEAU, BLEU},
 	{NOIR, GRIS_0, GRIS_2, BLANC}
 };
 

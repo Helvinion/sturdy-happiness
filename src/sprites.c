@@ -70,6 +70,12 @@ void change_sprite_design(unsigned char index, unsigned char new_design)
 	SPRITES_BUFFER[index].design = new_design;
 }
 
+void select_sprite_palette(unsigned char index, unsigned char palette)
+{
+	/* Les deux derniers bits de flags designent la palette a utiliser */
+	SPRITES_BUFFER[index].flags |= (palette & 0x03);
+}
+
 void remove_sprite(unsigned char index)
 {
 	SPRITES_BUFFER[index].y_pos = 0;
