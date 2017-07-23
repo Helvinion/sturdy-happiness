@@ -15,44 +15,48 @@ static const struct partie_personnage G_Jolivet_debout_tab[] =
 {
 	{-5, -11, 0x00, 0},
 	{-5, 0,   0x01, 1},
-	{-8, 8,   25, 1},
-	{0, 8,    26, 1},
-	{-8, 16,  41, 1},
-	{0, 16,   42, 1},
-	{-8, 24,  57, 1},
-	{0, 24,   58, 1}
+	{-8, 8,   25, 2},
+	{0, 8,    26, 2},
+	{-8, 16,  41, 2},
+	{0, 16,   42, 2},
+	{-8, 24,  57, 2},
+	{0, 24,   58, 2}
 };
 
 static const struct partie_personnage G_Jolivet_marche_1_tab[] =
 {
-	{0, -11, 0x00, 0},
-	{0, 0,   0x01, 0},
-	{0, 8,   0x11, 0},
-	{0, 16,  0x22, 0},
-	{0, 24,  0x32, 0},
-	{-8, 24, 0x10, 0}
+	{-5, -11, 0x00, 0},
+	{-5, 0,   0x01, 1},
+	{-8, 8,   25,   2},
+	{0,  8,   26,   2},
+	{-8, 16,  0x2B, 2},
+	{0,  16,  0x2C, 2},
+	{-8, 24,  0x3B, 2},
+	{0,  24,  0x3C, 2}
 };
 
 static const struct partie_personnage G_Jolivet_marche_2_tab[] =
 {
-	{0, -11, 0x00, 0},
-	{0, 0,   0x01, 0},
-	{0, 8,   0x11, 0},
-	{2, 16,  0x30, 0},
-	{2, 24,  0x40, 0},
+	{-5, -11, 0x00, 0},
+	{-5, 0,   0x01, 1},
+	{-8, 8,   25,   2},
+	{0,  8,   26,   2},
+	{-5, 16,  0x2D, 2},
+	{-5, 24,  0x3D, 2}
 };
 
 static const struct partie_personnage G_Jolivet_marche_3_tab[] =
 {
-	{0, -11, 0x00, 0},
-	{0, 0,   0x01, 0},
-	{-1, 8,  0x12, 0},
-	{0, 16,  0x23, 0},
-	{0, 16,  0x20, 0},
-	{0, 24,  0x33, 0},
-	{-8, 24, 0x10, 0}	
+	{-5, -11, 0x00, 0},
+	{-5, 0,   0x01, 1},
+	{-8, 8,   25,   2},
+	{0,  8,   26,   2},
+	{-8, 16,  0x2E, 2},
+	{0,  16,  0x2F, 2},
+	{-9, 24,  0x3E, 2},
+	{-1,  24,  0x3F, 2}
 };
-
+/*
 static const struct partie_personnage G_Jolivet_marche_4_tab[] =
 {
 	{0, -11, 0x00, 0},
@@ -63,7 +67,7 @@ static const struct partie_personnage G_Jolivet_marche_4_tab[] =
 	{0, 24,  0x34, 0},
 	{2, 24,  0x35, 0}
 };
-
+*/
 static const struct personnage_graphique G_Jolivet_debout[] =
 {
 	{
@@ -76,19 +80,19 @@ static const struct personnage_graphique G_Jolivet_marche[] =
 {
 	{
 		G_Jolivet_marche_1_tab,
-		6
+		8
 	},	
 	{
 		G_Jolivet_marche_2_tab,
-		5
+		6
 	},
 	{
 		G_Jolivet_marche_3_tab,
-		7
+		8
 	},
 	{
-		G_Jolivet_marche_4_tab,
-		7
+		G_Jolivet_marche_2_tab,
+		6
 	},
 };
 

@@ -83,7 +83,7 @@ void initialiser()
     }
 
 	changer_palette(4, get_palette(PALETTE_CURSEURS));
-	changer_palette(5, get_palette(PALETTE_JOLIVET));
+	changer_palette(5, get_palette(PALETTE_VISAGE_JOLIVET));
 	changer_palette(6, get_palette(PALETTE_JOLIVET));
 	changer_palette(7, get_palette(PALETTE_JOLIVET));
     

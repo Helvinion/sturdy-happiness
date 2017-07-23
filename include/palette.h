@@ -42,8 +42,9 @@ enum Palettes
 {
 	PALETTE_NOIRE = 0,
 	PALETTE_CURSEURS  = 1,
-	PALETTE_JOLIVET = 2,
-	PALETTE_GRISE = 3,
+	PALETTE_VISAGE_JOLIVET = 2,
+	PALETTE_JOLIVET = 3,
+	PALETTE_GRISE = 4,
 };
 
 struct palette palettes_definies[] = 
@@ -51,6 +52,7 @@ struct palette palettes_definies[] =
 	{NOIR, NOIR, NOIR, NOIR},	
 	{NOIR, JAUNE, ROUGE, VERT},
 	{NOIR, MARRON, PEAU, BLEU},
+	{NOIR, VERT, PEAU, BLEU},
 	{NOIR, GRIS_0, GRIS_2, BLANC}
 };
 
