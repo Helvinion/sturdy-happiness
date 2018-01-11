@@ -3,7 +3,6 @@
 
 void main(void)
 {
-
 	initialiser();
 
 	changer_animation(&G_Jolivet, 1);

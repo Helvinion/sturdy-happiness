@@ -1,9 +1,9 @@
 #include <common.h>
 
-#define TILE_UPDATE_BUFFER (struct tile_to_update**)0x12
-#define TILE_UPDATE_SIZE   (unsigned char*)0x14
-#define TILE_GROUP         (struct tiles_goup**)0x16 
-#define TILE_GROUP_SIZE    (unsigned char*)0x18
+#define TILE_UPDATE_BUFFER (struct tile_to_update**)0x32
+#define TILE_UPDATE_SIZE   (unsigned char*)0x34
+#define TILE_GROUP         (struct tiles_goup**)0x36 
+#define TILE_GROUP_SIZE    (unsigned char*)0x38
 
 struct tile_to_update
 {

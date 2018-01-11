@@ -23,7 +23,7 @@ SRC_C=./avatar.c \
 ./messages.c     \
 ./musique.c      \
 ./palette.c      \
-./screen.c       \
+./ecran.c        \
 ./sprites.c      \
 ./text.c         \
 ./physique.c     \

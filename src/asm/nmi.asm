@@ -47,9 +47,9 @@ update_sprites:
     rts
 
 update_scolling:
-    lda #0
-    sta PPU_ADDR
-    sta PPU_ADDR
+    ;lda #0
+   ; sta PPU_ADDR
+    ;sta PPU_ADDR
     lda <SCROLL_X        ;
     sta PPU_SCROLL       ;
     lda <SCROLL_Y        ;

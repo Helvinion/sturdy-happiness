@@ -1,5 +1,4 @@
 #include <avatar.h>
-
 #include <sprites.h>
 
 void afficher_personnage(const struct avatar *perso)

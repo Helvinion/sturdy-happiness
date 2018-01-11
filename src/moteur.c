@@ -62,9 +62,10 @@ static void fin_boucle()
 //	while (i++ < nombre_elements)
 	{
 		appliquer_physique(joueur);
-		afficher_personnage(joueur->dessin);
+		//afficher_personnage(joueur->dessin);
 	}
-	sprites_end();	
+	sprites_end();
+	attendre_VBlank();
 }
 
 void initialiser()
@@ -87,7 +88,7 @@ void initialiser()
 	changer_palette(6, get_palette(PALETTE_JOLIVET));
 	changer_palette(7, get_palette(PALETTE_JOLIVET));
     
-    // Activer le rendu de l'écran
+	// Activer le rendu de l'écran
     (*PPUMASK) = (unsigned char)0x18; 
    
     tiles_init();
@@ -101,6 +102,9 @@ void moteur_mode_jeu()
 {
 	debut_boucle();
 	
+	tiles_add_change(5, 5, 'Q');
+	tiles_commit_changes();
+	/*
 	if (bouton_presse_manette_1(BOUTON_DROITE))
 	{
 		changer_animation(joueur->dessin, 1);
@@ -121,6 +125,6 @@ void moteur_mode_jeu()
 	{
 		saut(joueur);
 	}
-
+*/
 	fin_boucle();
 }

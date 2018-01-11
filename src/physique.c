@@ -1,5 +1,7 @@
 #include "physique.h"
 #include "tiles.h"
+#include <ecran.h>
+
 
 static const unsigned char gravite = 1;
 static const unsigned char diviseur_gravite = 3;
@@ -21,6 +23,7 @@ void appliquer_physique(struct element_physique *element)
 	// Gestion horizontale :
 	element->vitesse_x += element->acceleration_x;
 	element->coordonnee_x += element->vitesse_x;
+	change_scrolling_x(-1);
 	
 	// Gestion verticale :
 	// Mise à jour des vitesses

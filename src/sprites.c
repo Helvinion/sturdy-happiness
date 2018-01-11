@@ -78,10 +78,31 @@ void select_sprite_palette(unsigned char index, unsigned char palette)
 
 void remove_sprite(unsigned char index)
 {
+	unsigned char offset = index * sizeof(struct sprite);
+
+	/*
 	SPRITES_BUFFER[index].y_pos = 0;
 	SPRITES_BUFFER[index].design = 0;
 	SPRITES_BUFFER[index].flags = 0;
 	SPRITES_BUFFER[index].x_pos = 0;
+	*/
+
+	__asm__("pha");
+	__asm__("txa");
+	__asm__("pha");
+	__asm__ ("lda #%o", offset);
+	__asm__ ("tax");
+	__asm__ ("lda #0");
+	__asm__ ("sta %w,x", 0x200);
+	__asm__ ("inx");
+	__asm__ ("sta %w,x", 0x200);
+	__asm__ ("inx");
+	__asm__ ("sta %w,x", 0x200);
+	__asm__ ("inx");
+	__asm__ ("sta %w,x", 0x200);
+	__asm__("pla");
+	__asm__("tax");
+	__asm__("pla");
 }
 
 void remove_all()
