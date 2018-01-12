@@ -23,7 +23,7 @@ void appliquer_physique(struct element_physique *element)
 	// Gestion horizontale :
 	element->vitesse_x += element->acceleration_x;
 	element->coordonnee_x += element->vitesse_x;
-	change_scrolling_x(-1);
+	change_scrolling_x(element->vitesse_x);
 	
 	// Gestion verticale :
 	// Mise à jour des vitesses

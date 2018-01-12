@@ -6,6 +6,14 @@
 #define SPRITES_FLAGS_COLORS_10   0x10
 #define SPRITES_FLAGS_COLORS_11   0x11
 
+#define SPRITE_Y      0
+#define SPRITE_DESIGN 1
+#define SPRITE_FLAGS  2
+#define SPRITE_X      3
+
+typedef unsigned char sprite[4];
+
+/*
 struct sprite
 {
 	unsigned char y_pos;
@@ -13,6 +21,7 @@ struct sprite
 	unsigned char flags;
 	unsigned char x_pos;
 };
+*/
 
 void sprites_begin();
 

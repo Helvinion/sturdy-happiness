@@ -27,15 +27,43 @@ void sprites_end()
 
 unsigned char add_sprite(unsigned char code, unsigned char x_init, unsigned char y_init, unsigned char flags)
 {
+	unsigned char index = size * 4;
+
 	// Vérifier que l'on peut effectivement ajouter un sprite
 	if (size == SPRITES_BUFFER_MAX_SIZE)
 		return 65;
 	
+	// unsigned char* sprite = SPRITES_BUFFER + size;
+	
+	__asm__ ("ldy #%o", index);
+	__asm__ ("lda (sp),y");
+	__asm__ ("tax");
+	
+	__asm__ ("ldy #%o", y_init);
+	__asm__ ("lda (sp),y");
+	__asm__ ("sta %w,x", 0x200);
+	__asm__ ("inx");
+	
+	__asm__ ("ldy #%o", code);
+	__asm__ ("lda (sp),y");
+	__asm__ ("sta %w,x", 0x200);
+	__asm__ ("inx");
+	
+	__asm__ ("ldy #%o", flags);
+	__asm__ ("lda (sp),y");
+	__asm__ ("sta %w,x", 0x200);
+	__asm__ ("inx");
+	
+	__asm__ ("ldy #%o", x_init);
+	__asm__ ("lda (sp),y");
+	__asm__ ("sta %w,x", 0x200);
+	
+	/*
 	SPRITES_BUFFER[size].y_pos = y_init;
 	SPRITES_BUFFER[size].design = code;
 	SPRITES_BUFFER[size].flags = flags;
 	SPRITES_BUFFER[size].x_pos = x_init;
-	
+	*/
 	size++;
 	
 	return size - 1;
@@ -43,42 +71,96 @@ unsigned char add_sprite(unsigned char code, unsigned char x_init, unsigned char
 
 void move_sprite(unsigned char index, unsigned char x, unsigned char y)
 {
-	SPRITES_BUFFER[index].x_pos = x;
-	SPRITES_BUFFER[index].y_pos = y;
+	index *= 4;
+	
+	__asm__ ("ldy #%o", index);
+	__asm__ ("lda (sp),y");
+	__asm__ ("tax");
+	__asm__ ("ldy #%o", y);
+	__asm__ ("lda (sp),y");
+	__asm__ ("sta %w,x", 0x200);
+	__asm__ ("inx");
+	__asm__ ("inx");
+	__asm__ ("inx");
+	__asm__ ("ldy #%o", x);
+	__asm__ ("lda (sp),y");
+	__asm__ ("sta %w,x", 0x200);
 }
 
 void hide_sprite(unsigned char index)
 {
 	if (index >= size)
 		return;
-	SPRITES_BUFFER[index].flags |= SPRITES_FLAGS_HIDDEN_BACK;
+	
+	index *= 4;
+
+	__asm__ ("ldy #%o", index);
+	__asm__ ("lda (sp),y");
+	__asm__ ("tax");
+	__asm__ ("inx");
+	__asm__ ("inx");	
+	__asm__ ("lda #%b", SPRITES_FLAGS_HIDDEN_BACK);
+	__asm__ ("ora %w,x", 0x200);
+	__asm__ ("sta %w,x", 0x200);
 }
 
 void unhide_sprite(unsigned char index)
 {
 	if (index >= size)
 		return;
+
+	index *= 4;
 	
-	SPRITES_BUFFER[index].flags &= (!SPRITES_FLAGS_HIDDEN_BACK);
+	__asm__("ldy #%o", index);
+	__asm__("lda (sp),y");
+	__asm__("tax");
+	__asm__("inx");
+	__asm__("inx");	
+	__asm__("lda #%b", SPRITES_FLAGS_HIDDEN_BACK);
+	__asm__("eor #%b", (unsigned int)0xff);
+	__asm__("and %w,x", 0x200);
+	__asm__("sta %w,x", 0x200);
 }
 
 void change_sprite_design(unsigned char index, unsigned char new_design)
 {
 	if (index >= size)
 		return;
+
+	index *= 4;
 	
-	SPRITES_BUFFER[index].design = new_design;
+	__asm__ ("ldy #%o", index);
+	__asm__ ("lda (sp),y");
+	__asm__ ("tax");
+	__asm__ ("inx");	
+	__asm__ ("ldy #%o", new_design);
+	__asm__ ("lda (sp),y");
+	__asm__ ("sta %w,x", 0x200);
 }
 
 void select_sprite_palette(unsigned char index, unsigned char palette)
 {
 	/* Les deux derniers bits de flags designent la palette a utiliser */
-	SPRITES_BUFFER[index].flags |= (palette & 0x03);
+	if (index >= size)
+		return;
+	
+	index *= 4;
+
+	__asm__ ("ldy #%o", index);
+	__asm__ ("lda (sp),y");
+	__asm__ ("tax");
+	__asm__ ("inx");	
+	__asm__ ("inx");	
+	__asm__ ("ldy #%o", palette);
+	__asm__ ("lda (sp),y");
+	__asm__ ("and #%b", 0x03);
+	__asm__ ("ora %w,x", 0x200);
+	__asm__ ("sta %w,x", 0x200);
 }
 
 void remove_sprite(unsigned char index)
 {
-	unsigned char offset = index * sizeof(struct sprite);
+	unsigned char offset = index * 4; //sizeof(struct sprite);
 
 	/*
 	SPRITES_BUFFER[index].y_pos = 0;
@@ -87,10 +169,8 @@ void remove_sprite(unsigned char index)
 	SPRITES_BUFFER[index].x_pos = 0;
 	*/
 
-	__asm__("pha");
-	__asm__("txa");
-	__asm__("pha");
-	__asm__ ("lda #%o", offset);
+	__asm__ ("ldy #%o", offset);
+	__asm__ ("lda (sp),y");
 	__asm__ ("tax");
 	__asm__ ("lda #0");
 	__asm__ ("sta %w,x", 0x200);
@@ -100,9 +180,6 @@ void remove_sprite(unsigned char index)
 	__asm__ ("sta %w,x", 0x200);
 	__asm__ ("inx");
 	__asm__ ("sta %w,x", 0x200);
-	__asm__("pla");
-	__asm__("tax");
-	__asm__("pla");
 }
 
 void remove_all()

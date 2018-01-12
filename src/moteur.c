@@ -39,7 +39,7 @@ static void traiter_animations()
 {
 	static unsigned char compteur = 0;
 	
-	if (compteur++ == 32)
+	if (compteur++ == 8)
 	{
 		// Rustique. Animer tous les 8 frames.
 		animer(joueur->dessin);
@@ -62,7 +62,7 @@ static void fin_boucle()
 //	while (i++ < nombre_elements)
 	{
 		appliquer_physique(joueur);
-		//afficher_personnage(joueur->dessin);
+		afficher_personnage(joueur->dessin);
 	}
 	sprites_end();
 	attendre_VBlank();
@@ -95,6 +95,9 @@ void initialiser()
 	
 	joueur = &G_Jolivet_phys;
 	
+	tiles_add_change(5, 5, 'Q');
+	tiles_commit_changes();
+	
 	attendre_VBlank();
 }
 
@@ -102,18 +105,15 @@ void moteur_mode_jeu()
 {
 	debut_boucle();
 	
-	tiles_add_change(5, 5, 'Q');
-	tiles_commit_changes();
-	/*
 	if (bouton_presse_manette_1(BOUTON_DROITE))
 	{
 		changer_animation(joueur->dessin, 1);
-		joueur->vitesse_x = 1;
+		joueur->vitesse_x = 2;
 	}
 	else if (bouton_presse_manette_1(BOUTON_GAUCHE))
 	{
 		changer_animation(joueur->dessin, 1);
-		joueur->vitesse_x = -1;
+		joueur->vitesse_x = -2;
 	}
 	else
 	{
@@ -125,6 +125,6 @@ void moteur_mode_jeu()
 	{
 		saut(joueur);
 	}
-*/
+
 	fin_boucle();
 }
