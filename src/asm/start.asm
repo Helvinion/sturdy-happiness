@@ -25,7 +25,7 @@ _exit:
 @1:                ;
     bit PPU_STATUS ; A est indéfini mais le flag N indique maintenant si on est en VBlank
     bpl @1         ; Tant que ce n'est PAS le cas, on attend.
-
+				   ; Ca y est, on est en VBlank, on peut placer nos instructions
     txa            ; 0 -> A
 
 ; Effacer toute la mémoire vive	

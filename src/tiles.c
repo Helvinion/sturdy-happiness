@@ -56,7 +56,7 @@ void tiles_add_change(unsigned char nametable, unsigned char l, unsigned char c,
 	}
 }
 
-void tiles_add_group_vertical(unsigned char nametable, unsigned char l, unsigned char c, const char* buffer)
+void tiles_add_group_vertical(unsigned char nametable, unsigned char l, unsigned char c, unsigned int step, const char* buffer)
 {
 	int i = 0;
 	group_updates[size_groups].ppu_addr = TO_PPU_ADDR(NAMETABLES[nametable], l, c);
@@ -64,7 +64,7 @@ void tiles_add_group_vertical(unsigned char nametable, unsigned char l, unsigned
 	
 	while (i != 16)
 	{
-		group_updates[size_groups].tiles[i] = buffer[i];
+		group_updates[size_groups].tiles[i] = buffer[i * step];
 		i++;
 	}
 	size_groups++;
@@ -72,7 +72,7 @@ void tiles_add_group_vertical(unsigned char nametable, unsigned char l, unsigned
 
 void tiles_add_group_horizontal(unsigned char nametable, unsigned char l, unsigned char c, const char* buffer)
 {
-	int i = 0;
+	unsigned int i = 0;
 	group_updates[size_groups].ppu_addr = TO_PPU_ADDR(NAMETABLES[nametable], l, c);
 	group_updates[size_groups].options = 0; // Horizontal (todo : a améliorer)
 	

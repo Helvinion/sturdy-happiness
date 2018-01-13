@@ -13,6 +13,9 @@ nmi:
     tya ;
     pha ; Sauvegarder Y
 
+	sta PPU_MASK_VAR
+	lda PPU_MASK
+	
     jsr update_sprites
     jsr update_palettes
     jsr update_tiles
@@ -90,7 +93,8 @@ update_tiles_group:
 	stx <T_GROUP_SIZE     ; stx n'affecte pas les flags
 	beq @1                ; Quitter si tout a été lu
 	bne @2                ; Sinon, boucler
-@1:	rts
+@1:	jsr set_horizontal
+	rts
 
 manage_options:
 	iny                   ;

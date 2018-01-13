@@ -7,7 +7,7 @@ void tiles_add_change(unsigned char nametable, unsigned char l, unsigned char c,
 void tiles_update();
 
 void tiles_commit_groups();
-void tiles_add_group_vertical(unsigned char nametable, unsigned char l, unsigned char c, const char *buffer);
+void tiles_add_group_vertical(unsigned char nametable, unsigned char l, unsigned char c, unsigned int step, const char *buffer);
 void tiles_add_group_horizontal(unsigned char nametable, unsigned char l, unsigned char c, const char *buffer);
 
 #endif /* TILES_H */

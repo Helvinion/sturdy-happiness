@@ -6,6 +6,8 @@
 #include <avatar.h>
 #include <musique.h>
 #include <physique.h>
+#include <niveau.h>
+#include <ecran.h>
 
 #define PPUCTRL (unsigned char*)0x2000
 #define PPUMASK (unsigned char*)0x2001
@@ -23,7 +25,7 @@ static unsigned char nombre_elements;
 static struct element_physique *joueur;
 static struct element_physique elements[10];
 
-void attendre_VBlank(void)
+static void attendre_VBlank(void)
 {
    for ( ; ; ) 
    {
@@ -95,18 +97,9 @@ void initialiser()
 	
 	joueur = &G_Jolivet_phys;
 	
-	tiles_add_group_horizontal(0,  5, 0, "ABCDEFGHIJKLMNOP");
-	tiles_add_group_horizontal(0, 5, 16, "QRSTUVWXYZ012345");
-	tiles_commit_groups();
+	changer_niveau(1);
+	fixer_position_camera(0, 0);
 	attendre_VBlank();
-	tiles_update();
-
-	
-	tiles_add_group_horizontal(1,  5, 0, "abcdefghijklmnop");
-	tiles_add_group_horizontal(1, 5, 16, "qrstuvwxyz012345");
-	tiles_commit_groups();
-	attendre_VBlank();
-	tiles_update();
 }
 
 void moteur_mode_jeu()

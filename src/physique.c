@@ -23,7 +23,7 @@ void appliquer_physique(struct element_physique *element)
 	// Gestion horizontale :
 	element->vitesse_x += element->acceleration_x;
 	element->coordonnee_x += element->vitesse_x;
-	change_scrolling_x(element->vitesse_x);
+	bouger_camera_x(element->vitesse_x);
 	
 	// Gestion verticale :
 	// Mise à jour des vitesses
@@ -31,7 +31,7 @@ void appliquer_physique(struct element_physique *element)
 	{
 		element->vitesse_y += element->acceleration_y;
 	}
-	else if (!(element->flags & FLAGS_AU_SOL))	// Sinon on est en mode "chute".
+	else if (!(element->flags & FLAGS_AU_SOL))	// Sinon si on est en mode "chute".
 	{
 		if (i++ == diviseur_gravite)
 		{
@@ -46,7 +46,6 @@ void appliquer_physique(struct element_physique *element)
 	
 	// Mise à jour des positions
 	element->coordonnee_y += element->vitesse_y;
-	change_scrolling_y(element->vitesse_y);
 	
 	// Application des collisions.
 	if (element->coordonnee_y > 150)
@@ -54,7 +53,6 @@ void appliquer_physique(struct element_physique *element)
 		// Au sol;
 		element->flags |= FLAGS_AU_SOL;
 		element->acceleration_y = 0;
-		change_scrolling_y(-element->vitesse_y);
 		element->vitesse_y = 0;
 		element->coordonnee_y = 150;
 		i = 1;
