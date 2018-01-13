@@ -7,7 +7,7 @@ MEMORY
 
 	# La PRG est la ROM proprement dite. Son adresse virtuelle est en 0x8000
 	# Elle fait 0x8000 cases moins 6.
-    PRG: start = $8000, size = $7ffa, file = %O ,fill = yes, define = yes;
+    PRG: start = $8000, size = $3ffa, file = %O ,fill = yes, define = yes;
 	
     # Cette zone de 6 octets indique la localisation des 3 interruptions
 	# de la NES : nmi, start et irq.

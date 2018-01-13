@@ -18,6 +18,7 @@ struct tiles_group
 	unsigned char      tiles[16];
 };
 
+static const unsigned short int NAMETABLES[4] = {0x2000, 0x2400, 0x2800, 0x2C00};
 static struct tile_to_update update_buffer[10]; // On interdit de modifier plus de 10 éléments en une frame
 static struct tiles_group    group_updates[2];  // On interdit de modifier plus d'une ligne complète en une seule frame
 static unsigned char size_groups;
@@ -45,20 +46,20 @@ void tiles_commit_groups()
 	(*TILE_GROUP_SIZE) = size_groups;
 }
 
-void tiles_add_change(unsigned char l, unsigned char c, unsigned char data)
+void tiles_add_change(unsigned char nametable, unsigned char l, unsigned char c, unsigned char data)
 {
 	if (size < 32)
 	{
-		update_buffer[size].ppu_addr = TO_PPU_ADDR(l, c);
+		update_buffer[size].ppu_addr = TO_PPU_ADDR(NAMETABLES[nametable], l, c);
 		update_buffer[size].ppu_data = data;
 		size++;
 	}
 }
 
-void tiles_add_group_vertical(unsigned char l, unsigned char c, const char* buffer)
+void tiles_add_group_vertical(unsigned char nametable, unsigned char l, unsigned char c, const char* buffer)
 {
 	int i = 0;
-	group_updates[size_groups].ppu_addr = TO_PPU_ADDR(l, c);
+	group_updates[size_groups].ppu_addr = TO_PPU_ADDR(NAMETABLES[nametable], l, c);
 	group_updates[size_groups].options = 1; // Vertical (todo : a améliorer)
 	
 	while (i != 16)
@@ -69,10 +70,10 @@ void tiles_add_group_vertical(unsigned char l, unsigned char c, const char* buff
 	size_groups++;
 }
 
-void tiles_add_group_horizontal(unsigned char l, unsigned char c, const char* buffer)
+void tiles_add_group_horizontal(unsigned char nametable, unsigned char l, unsigned char c, const char* buffer)
 {
 	int i = 0;
-	group_updates[size_groups].ppu_addr = TO_PPU_ADDR(l, c);
+	group_updates[size_groups].ppu_addr = TO_PPU_ADDR(NAMETABLES[nametable], l, c);
 	group_updates[size_groups].options = 0; // Horizontal (todo : a améliorer)
 	
 	while (i != 16)

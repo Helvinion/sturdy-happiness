@@ -46,6 +46,7 @@ void appliquer_physique(struct element_physique *element)
 	
 	// Mise à jour des positions
 	element->coordonnee_y += element->vitesse_y;
+	change_scrolling_y(element->vitesse_y);
 	
 	// Application des collisions.
 	if (element->coordonnee_y > 150)
@@ -53,6 +54,7 @@ void appliquer_physique(struct element_physique *element)
 		// Au sol;
 		element->flags |= FLAGS_AU_SOL;
 		element->acceleration_y = 0;
+		change_scrolling_y(-element->vitesse_y);
 		element->vitesse_y = 0;
 		element->coordonnee_y = 150;
 		i = 1;

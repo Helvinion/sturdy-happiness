@@ -95,10 +95,18 @@ void initialiser()
 	
 	joueur = &G_Jolivet_phys;
 	
-	tiles_add_change(5, 5, 'Q');
-	tiles_commit_changes();
-	
+	tiles_add_group_horizontal(0,  5, 0, "ABCDEFGHIJKLMNOP");
+	tiles_add_group_horizontal(0, 5, 16, "QRSTUVWXYZ012345");
+	tiles_commit_groups();
 	attendre_VBlank();
+	tiles_update();
+
+	
+	tiles_add_group_horizontal(1,  5, 0, "abcdefghijklmnop");
+	tiles_add_group_horizontal(1, 5, 16, "qrstuvwxyz012345");
+	tiles_commit_groups();
+	attendre_VBlank();
+	tiles_update();
 }
 
 void moteur_mode_jeu()
