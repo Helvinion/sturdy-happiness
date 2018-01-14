@@ -16,38 +16,40 @@ typedef struct niveau niveau;
 
 static const niveau niveau_1 =
 {
-	72,
-	30,
-	"ZERO ZERO ZERO ZERO ZERO ZERO ZERO ZERO ZERO ZERO ZERO ZERO ZERO ZERO !!"
-	"UN UN UN UN UN UN UN UN UN UN UN UN UN UN UN UN UN UN UN UN UN UN UN UN "
-	"DEUX DEUX DEUX DEUX DEUX DEUX DEUX DEUX DEUX DEUX DEUX DEUX DEUX DEUX !!"
-	"TROIS TROIS TROIS TROIS TROIS TROIS TROIS TROIS TROIS TROIS TROIS TROIS "
-	"QUATRE QUATRE QUATRE QUATRE QUATRE QUATRE QUATRE QUATRE QUATRE QUATRE !!"
-	"CINQ CINQ CINQ CINQ CINQ CINQ CINQ CINQ CINQ CINQ CINQ CINQ CINQ CINQ !!"
-	"SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX "
-	"SEPT SEPT SEPT SEPT SEPT SEPT SEPT SEPT SEPT SEPT SEPT SEPT SEPT SEPT !!"
-	"HUIT HUIT HUIT HUIT HUIT HUIT HUIT HUIT HUIT HUIT HUIT HUIT HUIT HUIT !!"
-	"NEUF NEUF NEUF NEUF NEUF NEUF NEUF NEUF NEUF NEUF NEUF NEUF NEUF NEUF !!"
-	"DIX DIX DIX DIX DIX DIX DIX DIX DIX DIX DIX DIX DIX DIX DIX DIX DIX DIX "
-	"ONZE ONZE ONZE ONZE ONZE ONZE ONZE ONZE ONZE ONZE ONZE ONZE ONZE ONZE !!"
-	"DOUZE DOUZE DOUZE DOUZE DOUZE DOUZE DOUZE DOUZE DOUZE DOUZE DOUZE DOUZE "
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
-	"AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ00112233445566778899"
+	74,
+	32,
+	"                                                                          "
+	" +----------------------------------------------------------------------+ "
+	" |                                                                      | "
+	" |                                                                      | "
+	" |                                                                      | "
+	" |                                                                      | "
+	" |                                                                      | "
+	" |                                                                      | "
+	" |                                                                      | "
+	" |                                                                      | "
+	" |                                                                      | "
+	" |                                                                      | "
+	" |                                                                      | "
+	" |                                                                      | "
+	" |                                                                      | "
+	" |                                            ---+---                   | "
+	" |                                               |                      | "
+	" |                                               |                      | "
+	" |                                               |                      | "
+	" |                                     ---+---   |                      | "
+	" |                                        |      |                      | "
+	" |                                        |      |                      | "
+	" |                                        |      |                      | "
+	" |                                        |      |                      | "
+	" |                             ---+---    |      |                      | "
+	" |                                |       |      |                      | "
+	" |                                |       |      |                      | "
+	" |                   ---+----     |       |      |                      | "
+	" |                      |         |       |      |                      | "
+	" |                      |         |       |      |                      | "
+	" +----------------------+---------+-------+------+----------------------+ "
+	"                                                                          "
 };
 
 static const niveau *niveau_courant;
@@ -88,12 +90,12 @@ void changer_niveau(unsigned char niveau_n)
 // En principe, cela dure 32 frames.
 void charger_niveau(unsigned char nametable, unsigned int position_x, unsigned int position_y)
 {
-	unsigned int l;
+	unsigned int ligne;
 	
-	for (l = 0; l < 30; l++)
+	for (ligne = 0; ligne < 30; ligne++)
 	{
-		// Charger la ligne du niveau située en (position_x, position_y + l) sur l'écran à la ligne l
-		charger_ligne_horizontale(nametable, l, position_x, position_y + l);
+		// Charger la ligne du niveau située en (position_x, position_y + ligne sur l'écran à la ligne l
+		charger_ligne_horizontale(nametable, ligne, position_x, position_y + ligne);	
 
 		attendre_VBlank();
 		tiles_update();

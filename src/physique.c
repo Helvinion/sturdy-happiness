@@ -12,7 +12,38 @@ static const int vitesse_terminale = 5;
 
 static void MaJ_dessin(struct element_physique *element)
 {
-	element->dessin->x = element->coordonnee_x;
+	// Contiennent un rappel d'un éventuel décalage de la caméra par rapport au perso
+	// Si celle si atteint un bord du niveau
+	static signed int diff_x = 0;
+	signed int ret = 0;
+	signed char camera_x = element->vitesse_x;
+
+	
+	if (diff_x != 0)
+	{
+		// On a un décalage de caméra: on l'immobilise donc pour le moment.
+		camera_x = 0;
+
+		// diff_x a changé de signe : la caméra peut à nouveau bouger !
+		if ((diff_x < 0 && diff_x + element->vitesse_x > 0) || (diff_x > 0 && diff_x + element->vitesse_x < 0))
+		{
+			camera_x = diff_x + element->vitesse_x;
+			element->dessin->x += (element->vitesse_x - camera_x);
+			diff_x = 0;
+		}
+		else
+		{
+			diff_x += element->vitesse_x;
+			element->dessin->x += element->vitesse_x;
+		}
+	}
+
+	ret = bouger_camera_x(camera_x);
+	diff_x += ret;
+	
+	if (ret != 0) 		// La caméra est collée à droite (ou à gauche) : il faut bouger les sprites de l'avatar lui même
+		element->dessin->x += ret;
+
 	element->dessin->y = element->coordonnee_y;
 }
 
@@ -23,7 +54,6 @@ void appliquer_physique(struct element_physique *element)
 	// Gestion horizontale :
 	element->vitesse_x += element->acceleration_x;
 	element->coordonnee_x += element->vitesse_x;
-	bouger_camera_x(element->vitesse_x);
 	
 	// Gestion verticale :
 	// Mise à jour des vitesses
@@ -48,13 +78,13 @@ void appliquer_physique(struct element_physique *element)
 	element->coordonnee_y += element->vitesse_y;
 	
 	// Application des collisions.
-	if (element->coordonnee_y > 150)
+	if (element->coordonnee_y > 194)
 	{
 		// Au sol;
 		element->flags |= FLAGS_AU_SOL;
 		element->acceleration_y = 0;
 		element->vitesse_y = 0;
-		element->coordonnee_y = 150;
+		element->coordonnee_y = 194;
 		i = 1;
 	}
 	

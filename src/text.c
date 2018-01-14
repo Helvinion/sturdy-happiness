@@ -1,5 +1,7 @@
 #include <common.h>
 
+#define PPU_CTRL_VAR  (unsigned char*)(0x30) // Nametable de départ pour le scrolling (aussi géré en VBlank)
+
 enum
 {
     INACTIF,
@@ -23,7 +25,7 @@ static void set_ppu_addr()
 {
   // L'écran fait 32 * 32 cases.
   // L'index final est donc line * 32 + col
-  unsigned short int ppu_addr = TO_PPU_ADDR(line, col);
+  unsigned short int ppu_addr = TO_PPU_ADDR((*PPU_CTRL_VAR) & (unsigned char)0x03, line, col);
   (*PPUADDR) = (unsigned char)(ppu_addr >> 8);
   (*PPUADDR) = (unsigned char)(ppu_addr);
 }

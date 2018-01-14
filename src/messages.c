@@ -1,6 +1,8 @@
 #include <messages.h>
 #include <tiles.h>
 
+#define PPU_CTRL_VAR  (unsigned char*)(0x30) // Nametable de départ pour le scrolling (aussi géré en VBlank)
+
 static const char *personnages[] =
 {
 	"Erreur",
@@ -37,7 +39,7 @@ void messages_update()
 {
 	if (statut_courant != 0)
 	{
-		tiles_add_group_horizontal(ligne_courante, colonne_courante, liste_messages[message_courant][statut_courant - 1]);
+		tiles_add_group_horizontal((*PPU_CTRL_VAR) & (unsigned char)0x03, ligne_courante, colonne_courante, liste_messages[message_courant][statut_courant - 1]);
 		tiles_commit_groups();
 		statut_courant++;
 		ligne_courante++;

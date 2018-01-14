@@ -29,8 +29,8 @@ struct pack_anim
 
 struct avatar
 {
-	unsigned char x;                  // Coordonnée X de l'avatar
-	unsigned char y;                  // Coordonnée Y de l'avatar
+	unsigned char x;                  // Coordonnée X de l'avatar (sur l'ecran)
+	unsigned char y;                  // Coordonnée Y de l'avatar (sur l'écran)
 	
 	const struct pack_anim anims;     // Animation du personnage
 	unsigned char animation_courante; // Animation actuelle

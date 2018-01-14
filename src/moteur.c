@@ -82,7 +82,7 @@ void initialiser()
 
     for (i = 0; i < 4; i++)
     {
- 	   changer_palette(i, get_palette(PALETTE_CURSEURS));
+ 	   changer_palette(i, get_palette(PALETTE_GRISE));
     }
 
 	changer_palette(4, get_palette(PALETTE_CURSEURS));
@@ -98,7 +98,7 @@ void initialiser()
 	joueur = &G_Jolivet_phys;
 	
 	changer_niveau(1);
-	fixer_position_camera(0, 0);
+	fixer_position_camera(0, 16);
 	attendre_VBlank();
 }
 

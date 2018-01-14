@@ -16,16 +16,20 @@ void fixer_position_camera(unsigned int x, unsigned int y)
 	unsigned char new_nametable = ((*PPU_CTRL_VAR) & (unsigned char)0x03) ^ (unsigned char)0x03;
 	
 	// Ordonner au moteur de niveau de charger les tiles correspondantes.
-	charger_niveau(new_nametable, x, y);
+	charger_niveau(new_nametable, x / 8, y / 8);
+	camera_x = x;
+	camera_y = y;
 	
 	// Switcher de nametable
 	(*PPU_CTRL_VAR) ^= 0x03;
 }
 
-void bouger_camera_x(signed char pixels)
+signed char bouger_camera_x(signed char pixels)
 {
+	signed char sav = pixels;
+
 	if (pixels == 0)
-		return;
+		return 0;
 
 	// Sécurité : éviter un camera_x < 0.
 	// Sécurité : éviter un camera_x > taille_x_niveau_courant
@@ -52,13 +56,16 @@ void bouger_camera_x(signed char pixels)
 	{
 		charger_ligne_verticale(((*PPU_CTRL_VAR) & (unsigned char)0x03), (*SCROLL_X) / 8, camera_x / 8, camera_y / 8);
 	}
-	
+
+	return sav - pixels;
 }
 
-void bouger_camera_y(signed char pixels)
+signed char bouger_camera_y(signed char pixels)
 {
+	signed char sav = pixels;
+
 	if (pixels == 0)
-		return;
+		return 0 ;
 
 	// Sécurité : éviter un camera_x < 0.
 	// Sécurité : éviter un camera_x > taille_x_niveau_courant
@@ -85,6 +92,18 @@ void bouger_camera_y(signed char pixels)
 		(*PPU_CTRL_VAR) ^= 0x03;
 		// Inverse le penultième bit de ce registre pour changer de Nametable : on est arrivé au bout de l'autre.
 	}
+	
+	return sav - pixels;
+}
+
+unsigned char est_bloquee_gauche()
+{
+	return (camera_x == 0);
+}
+
+unsigned char est_bloquee_droite()
+{
+	return (camera_x == 8 * taille_x_niveau_courant() - 256);
 }
 
 /*
