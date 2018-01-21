@@ -73,7 +73,8 @@ static void fin_boucle()
 void initialiser()
 {
 	int i = 0;
-	static struct element_physique G_Jolivet_phys = {&G_Jolivet, 15,150, 0,0, 0,0, 0};
+	static struct avatar G_Jolivet = {120, 200, {G_Jolivet_animations, 2}, 0, 0};
+	static struct element_physique G_Jolivet_phys = {&G_Jolivet, 150,200, 0,0, 0,0, 0};
 
 	(*PPUCTRL) = (unsigned char)0x90;
    

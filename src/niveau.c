@@ -117,3 +117,10 @@ void charger_ligne_horizontale(unsigned char nametable, unsigned char l, unsigne
 	tiles_commit_groups();
 
 }
+
+int camera_dans_niveau(unsigned int x, unsigned int y)
+{
+	unsigned int x_est_bon = (x > 0 && x + 256 < niveau_courant->taille_x);
+	unsigned int y_est_bon = (y > 0 && y + 240 < niveau_courant->taille_y);
+	return (x_est_bon && y_est_bon);
+}

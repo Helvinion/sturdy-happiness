@@ -108,6 +108,4 @@ static const struct animation G_Jolivet_animations[] =
 	}
 };
 
-struct avatar G_Jolivet = {100, 100, {G_Jolivet_animations, 2}, 0, 0};
-
 #endif

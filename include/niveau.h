@@ -10,4 +10,6 @@ void charger_niveau(unsigned char nametable, unsigned int position_x, unsigned i
 void charger_ligne_verticale(unsigned char nametable, unsigned char c, unsigned int position_x, unsigned int position_y);
 void charger_ligne_horizontale(unsigned char nametable, unsigned char l, unsigned int position_x, unsigned int position_y);
 
+int camera_dans_niveau(unsigned int x, unsigned int y);
+
 #endif /* NIVEAU_H */

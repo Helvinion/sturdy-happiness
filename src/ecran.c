@@ -24,12 +24,23 @@ void fixer_position_camera(unsigned int x, unsigned int y)
 	(*PPU_CTRL_VAR) ^= 0x03;
 }
 
+// Indique de combien de pixels la camera pourra bouger
+signed char faux_bouger_camera_x(signed char pixels)
+{
+	// Sécurité : éviter un camera_x < 0.
+	// Sécurité : éviter un camera_x > taille_x_niveau_courant
+	if (pixels < 0 && -pixels > camera_x)
+		pixels = camera_x;
+	else if (pixels > 0 && camera_x + 256 + pixels > 8 * taille_x_niveau_courant())
+		pixels = 8 * taille_x_niveau_courant() - camera_x - 256;	
+
+	return pixels;
+}
+
+
 signed char bouger_camera_x(signed char pixels)
 {
 	signed char sav = pixels;
-
-	if (pixels == 0)
-		return 0;
 
 	// Sécurité : éviter un camera_x < 0.
 	// Sécurité : éviter un camera_x > taille_x_niveau_courant
@@ -46,7 +57,6 @@ signed char bouger_camera_x(signed char pixels)
 	// Les parenthèses sont obligatoires parce que ce vieux cc65 ne gère pas les priorités d'opérateurs.
 	if ((pixels > 0 && (*OLD_SCROLL) > (*SCROLL_X)) || (pixels < 0 && (unsigned char)-pixels > (*OLD_SCROLL)))
 		(*PPU_CTRL_VAR) ^= 0x03; // Inverse le dernier bit de ce registre pour changer de Nametable : on est arrivé au bout de l'autre.
-	
 	
 	if (pixels > 0)
 	{
