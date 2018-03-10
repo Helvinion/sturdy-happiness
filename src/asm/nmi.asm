@@ -131,7 +131,7 @@ set_horizontal:
 	rts
 
 copy_group:
-    ldx #16               ; Initialise le compteur d'octets copiés
+    ldx #32               ; Initialise le compteur d'octets copiés
 @4: iny
 	lda (TILES_GROUP),y   ; Lit l'octet suivant
 	sta PPU_DATA          ; et le stocke.

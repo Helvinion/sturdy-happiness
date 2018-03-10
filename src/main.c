@@ -5,7 +5,7 @@ void main(void)
 {
 	initialiser();
 
-	changer_animation(&G_Jolivet, 1);
+	//changer_animation(&G_Jolivet, 1);
 
     while(1)
 	{

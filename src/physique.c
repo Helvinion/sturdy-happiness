@@ -81,42 +81,6 @@ static void MaJ_dessin(struct element_physique *element)
 	element->dessin->y = element->coordonnee_y;
 
 	return;
-	
-/*
-	static signed int diff_x = 0;
-	signed char diff_camera_x = element->vitesse_x;
-
-	
-	if (diff_x != 0)
-	{
-		// On a un décalage de caméra: on l'immobilise donc pour le moment.
-		diff_camera_x = 0;
-
-		// diff_x a changé de signe : la caméra peut à nouveau bouger !
-		if ((diff_x < 0 && diff_x + element->vitesse_x > 0) || (diff_x > 0 && diff_x + element->vitesse_x < 0))
-		{
-			diff_camera_x = diff_x + element->vitesse_x;
-			element->dessin->x += (element->vitesse_x - diff_camera_x);
-			diff_x = 0;
-		}
-		else
-		{
-			diff_x += element->vitesse_x;
-			element->dessin->x += element->vitesse_x;
-		}
-	}
-
-	if (diff_camera_x != 0)
-	{
-		ret = bouger_camera_x(diff_camera_x);
-		diff_x += ret;
-	}
-	
-	if (ret != 0) 		// La caméra est collée à droite (ou à gauche) : il faut bouger les sprites de l'avatar lui même
-		element->dessin->x += ret;
-
-	element->dessin->y = element->coordonnee_y;
-	*/
 }
 
 void appliquer_physique(struct element_physique *element)

@@ -15,7 +15,8 @@ SRC_ASM=./asm/graphics.asm \
 ./asm/nmi.asm              \
 ./asm/start.asm            \
 ./asm/registres_cc65.asm   \
-./asm/vectors.asm
+./asm/vectors.asm          \
+./asm/utile.asm
 
 SRC_C=./avatar.c \
 ./main.c         \

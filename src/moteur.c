@@ -98,7 +98,7 @@ void initialiser()
 	
 	joueur = &G_Jolivet_phys;
 	
-	changer_niveau(1);
+	changer_niveau(0);
 	fixer_position_camera(0, 16);
 	attendre_VBlank();
 }
