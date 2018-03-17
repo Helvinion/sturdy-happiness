@@ -32,7 +32,7 @@ struct avatar
 	unsigned char x;                  // Coordonnée X de l'avatar (sur l'ecran)
 	unsigned char y;                  // Coordonnée Y de l'avatar (sur l'écran)
 	
-	const struct pack_anim anims;     // Animation du personnage
+	const struct pack_anim *anims;     // Animation du personnage
 	unsigned char animation_courante; // Animation actuelle
 	unsigned char etape_anim;         // Etape courante de l'animation
 };
@@ -40,7 +40,5 @@ struct avatar
 void afficher_personnage(const struct avatar *perso);
 void animer(struct avatar *perso);
 void changer_animation(struct avatar *perso, unsigned char anim);
-
-#include <liste_animations.h>
 
 #endif

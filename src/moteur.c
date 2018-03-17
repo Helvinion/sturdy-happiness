@@ -8,6 +8,7 @@
 #include <physique.h>
 #include <niveau.h>
 #include <ecran.h>
+#include <liste_animations.h>
 
 #define PPUCTRL (unsigned char*)0x2000
 #define PPUMASK (unsigned char*)0x2001
@@ -73,7 +74,7 @@ static void fin_boucle()
 void initialiser()
 {
 	int i = 0;
-	static struct avatar G_Jolivet = {120, 200, {G_Jolivet_animations, 2}, 0, 0};
+	static struct avatar G_Jolivet = {120, 200, &G_Jolivet_pack, 0, 0};
 	static struct element_physique G_Jolivet_phys = {&G_Jolivet, 150,200, 0,0, 0,0, 0};
 
 	(*PPUCTRL) = (unsigned char)0x90;

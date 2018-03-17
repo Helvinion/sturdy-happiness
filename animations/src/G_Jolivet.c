@@ -1,16 +1,6 @@
-#ifndef G_JOLIVET_H
-#define G_JOLIVET_H
+#include <G_Jolivet.h>
+#include <avatar.h>
 
-/* POSITON DEBOUT 
-static const struct partie_personnage G_Jolivet_debout_tab[] =
-{
-	{0, -11, 0x00},
-	{0, 0,   0x01},
-	{0, 8,   0x11},
-	{0, 16,  0x21},
-	{0, 24,  0x31}
-};
-*/
 static const struct partie_personnage G_Jolivet_debout_tab[] =
 {
 	{-5, -11, 0x00, 0},
@@ -56,18 +46,7 @@ static const struct partie_personnage G_Jolivet_marche_3_tab[] =
 	{-9, 24,  0x3E, 2},
 	{-1,  24,  0x3F, 2}
 };
-/*
-static const struct partie_personnage G_Jolivet_marche_4_tab[] =
-{
-	{0, -11, 0x00, 0},
-	{0, 0,   0x01, 0},
-	{-1, 8,  0x12, 0},
-	{0, 16,  0x24, 0},
-	{2, 16,  0x25, 0},
-	{0, 24,  0x34, 0},
-	{2, 24,  0x35, 0}
-};
-*/
+
 static const struct personnage_graphique G_Jolivet_debout[] =
 {
 	{
@@ -108,4 +87,8 @@ static const struct animation G_Jolivet_animations[] =
 	}
 };
 
-#endif
+const struct pack_anim G_Jolivet_pack = 
+{
+	G_Jolivet_animations,
+	2
+};
