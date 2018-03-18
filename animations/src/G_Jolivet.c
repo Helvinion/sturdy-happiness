@@ -1,5 +1,6 @@
 #include <G_Jolivet.h>
 #include <avatar.h>
+#include <hitbox.h>
 
 static const struct partie_personnage G_Jolivet_debout_tab[] =
 {
@@ -11,6 +12,29 @@ static const struct partie_personnage G_Jolivet_debout_tab[] =
 	{0, 16,   42, 2},
 	{-8, 24,  57, 2},
 	{0, 24,   58, 2}
+};
+
+static const struct hitline G_Jolivet_debout_hitline_1 = {-8, 47, 16};
+
+static const struct pack_hitbox G_Jolivet_debout_pack_hitbox = 
+{
+	(void*)0x00,
+	0,
+	
+	&G_Jolivet_debout_hitline_1,
+	1,
+	
+	(void*)0x00,
+	0,
+
+	(void*)0x00,
+	0,
+	
+	(void*)0x00,
+	0,
+	
+	(void*)0x00,
+	0
 };
 
 static const struct partie_personnage G_Jolivet_marche_1_tab[] =
@@ -51,7 +75,8 @@ static const struct personnage_graphique G_Jolivet_debout[] =
 {
 	{
 		G_Jolivet_debout_tab,
-		8
+		8,
+		&G_Jolivet_debout_pack_hitbox
 	}
 };
 

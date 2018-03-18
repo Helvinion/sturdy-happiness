@@ -1,15 +1,18 @@
 #include <tiles.h>
 #include <niveau.h>
+#include <physique.h>
+#include <hitbox.h>
 
 #define PPU_CTRL_VAR  (unsigned char*)(0x30) // Nametable pour le scrolling (aussi géré en VBlank)
 #define PPUSTAT (unsigned char*)0x2002
-
 
 struct niveau
 {
 	const unsigned char  numero;
 	const unsigned int   taille_x;
 	const unsigned int   taille_y;
+	const unsigned int   x0;
+	const unsigned int   y0;
 	const unsigned char* addr; 
 };
 
@@ -20,6 +23,8 @@ static const niveau niveau_0 =
 	0,
 	74,
 	32,
+	0,
+	0,
 	"                                "
 	" +||||||||||||||||||||||||||||+ "
 	" -                            - "
@@ -220,3 +225,32 @@ int camera_dans_niveau(unsigned int x, unsigned int y)
 	unsigned int y_est_bon = (y > 0 && y + 240 < niveau_courant->taille_y);
 	return (x_est_bon && y_est_bon);
 }
+
+unsigned char get_tile(signed int x, signed int y)
+{
+	unsigned int tile_x = (unsigned int)(x / 8 + niveau_courant->x0);
+	unsigned int tile_y = (unsigned int)(y / 8 + niveau_courant->y0);
+
+	return *conversion_coordonnees_adresse(tile_x, tile_y);
+}
+
+unsigned char detecter_future_collision_bas(const struct element_physique *element, const struct hitline *ligne)
+{
+	const signed int position_x_debut = element->coordonnee_x + element->vitesse_x + ligne->diff_x;
+	const signed int position_x_fin = position_x_debut + ligne->taille;
+	const signed int position_y = element->coordonnee_y + element->vitesse_y + ligne->diff_y;
+	signed int       position_x = position_x_debut;
+	unsigned char    tile;
+	
+	while (position_x < position_x_fin)
+	{
+		tile = get_tile(position_x, position_y);
+		if (tile == '-')
+			return 1;
+		else
+			position_x += (8 - (position_x % 8));
+	/* Incrémente position_x de ce qu'il faut pour atteindre la prochaine huitaine */
+	}
+	return 0;
+}
+

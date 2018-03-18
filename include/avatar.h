@@ -1,6 +1,8 @@
 #ifndef AVATAR_H
 #define AVATAR_H
 
+#include <hitbox.h>
+
 struct partie_personnage
 {
 	const signed char delta_x;      // Distance en X de la coordonnée du personnage
@@ -13,6 +15,8 @@ struct personnage_graphique
 {
 	const struct partie_personnage const *parties; // Liste des différents sprites à combiner
 	const unsigned char taille_parties;      // Taille de la liste
+	
+	const struct pack_hitbox *hitbox; 
 };
 
 struct animation

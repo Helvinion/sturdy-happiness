@@ -1,6 +1,7 @@
 #include "physique.h"
 #include "tiles.h"
 #include <ecran.h>
+#include <niveau.h>
 
 
 static const unsigned char gravite = 1;
@@ -83,16 +84,37 @@ static void MaJ_dessin(struct element_physique *element)
 	return;
 }
 
-void appliquer_physique(struct element_physique *element)
+static void corriger_verticalement(struct element_physique *element)
+{
+	int future_coordonnee_y = element->coordonnee_y + element->vitesse_y;
+	
+	const struct avatar*      raccourci_dessin = element->dessin;
+	const struct pack_hitbox* raccourci_hitbox = raccourci_dessin->anims->anims[raccourci_dessin->animation_courante].anim[raccourci_dessin->etape_anim].hitbox;
+	const struct hitline*     raccourci_hitbox_bas = raccourci_hitbox->hitline_bas;
+	const unsigned char       nb_hitbox_bas = raccourci_hitbox->nb_hitline_bas;
+	
+	// Application des collisions.
+	if (future_coordonnee_y > 194)
+	{
+		// Au sol;
+		element->flags |= FLAGS_AU_SOL;
+		element->acceleration_y = 0;
+		element->vitesse_y = 0;
+		element->coordonnee_y = 194;
+	}
+	else
+	{
+		if (element->vitesse_y > 0 && detecter_future_collision_bas(element, raccourci_hitbox_bas) == 0)
+			element->coordonnee_y = future_coordonnee_y;
+		else if (element->vitesse_y < 0)
+			element->coordonnee_y = future_coordonnee_y;
+	}
+}
+
+static void appliquer_gravite(struct element_physique *element)
 {
 	static unsigned char i = 1;
-
-	// Gestion horizontale :
-	element->vitesse_x += element->acceleration_x;
-	if (element->vitesse_x != 0)
-		element->coordonnee_x += element->vitesse_x;
 	
-	// Gestion verticale :
 	// Mise à jour des vitesses
 	if (element->acceleration_y != 0) // Si une accélaration doit être appliquée, on l'applique.
 	{
@@ -110,21 +132,20 @@ void appliquer_physique(struct element_physique *element)
 	// Limite la vitesse max ateignable.
 	if (element->vitesse_y > vitesse_terminale)
 		element->vitesse_y = vitesse_terminale;
+
+}
+
+void appliquer_physique(struct element_physique *element)
+{
+	// Gestion horizontale :
+	element->vitesse_x += element->acceleration_x;
+	if (element->vitesse_x != 0)
+		element->coordonnee_x += element->vitesse_x;
 	
-	// Mise à jour des positions
-	element->coordonnee_y += element->vitesse_y;
-	
-	// Application des collisions.
-	if (element->coordonnee_y > 194)
-	{
-		// Au sol;
-		element->flags |= FLAGS_AU_SOL;
-		element->acceleration_y = 0;
-		element->vitesse_y = 0;
-		element->coordonnee_y = 194;
-		i = 1;
-	}
-	
+	// Gestion verticale :
+	appliquer_gravite(element);
+	corriger_verticalement(element);
+
 	// Remise à zéro des forces
 	element->acceleration_x = 0;
 	element->acceleration_y = 0;

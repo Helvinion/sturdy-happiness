@@ -68,7 +68,9 @@ play: rom.nes
 
 clean::
 	$(RM) -f compile/asm/*.asm
+	$(RM) -f compile/asm/animations/*.asm
 	$(RM) -f compile/obj/*.o
+	$(RM) -f compile/obj/animations/*.o
 	$(RM) -f debug/*
 	$(RM) -f rom.nes
 	$(RM) -f *.nl
