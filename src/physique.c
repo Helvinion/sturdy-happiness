@@ -7,7 +7,7 @@
 static const unsigned char gravite = 1;
 static const unsigned char diviseur_gravite = 3;
 static const int impulsion_saut = 6;
-static const int vitesse_terminale = 5;
+static const int vitesse_terminale = 6;
 
 #define FLAGS_AU_SOL 0x01
 #define avatar_x ((unsigned char *)0x3A)
@@ -86,27 +86,38 @@ static void MaJ_dessin(struct element_physique *element)
 
 static void corriger_verticalement(struct element_physique *element)
 {
-	int future_coordonnee_y = element->coordonnee_y + element->vitesse_y;
-	
+	signed int future_coordonnee_y = element->coordonnee_y + element->vitesse_y;
+	signed int tmp = 0;
 	const struct avatar*      raccourci_dessin = element->dessin;
 	const struct pack_hitbox* raccourci_hitbox = raccourci_dessin->anims->anims[raccourci_dessin->animation_courante].anim[raccourci_dessin->etape_anim].hitbox;
 	const struct hitline*     raccourci_hitbox_bas = raccourci_hitbox->hitline_bas;
 	const unsigned char       nb_hitbox_bas = raccourci_hitbox->nb_hitline_bas;
 	
 	// Application des collisions.
-	if (future_coordonnee_y > 194)
+	if (future_coordonnee_y > 191)
 	{
 		// Au sol;
 		element->flags |= FLAGS_AU_SOL;
 		element->acceleration_y = 0;
 		element->vitesse_y = 0;
-		element->coordonnee_y = 194;
+		element->coordonnee_y = 191;
 	}
 	else
 	{
-		if (element->vitesse_y > 0 && detecter_future_collision_bas(element, raccourci_hitbox_bas) == 0)
-			element->coordonnee_y = future_coordonnee_y;
-		else if (element->vitesse_y < 0)
+		if (element->vitesse_y > 0)
+		{
+			tmp = detecter_future_collision_bas(element, raccourci_hitbox_bas);
+			if (tmp != element->vitesse_y)
+			{
+				element->flags |= FLAGS_AU_SOL;
+				element->acceleration_y = 0;
+				element->vitesse_y = 0;
+				element->coordonnee_y += tmp;
+			}
+			else
+				element->coordonnee_y = future_coordonnee_y;
+		}
+		else
 			element->coordonnee_y = future_coordonnee_y;
 	}
 }

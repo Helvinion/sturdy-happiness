@@ -12,6 +12,6 @@ void charger_ligne_horizontale(unsigned char nametable, unsigned char l, unsigne
 
 int camera_dans_niveau(unsigned int x, unsigned int y);
 
-unsigned char detecter_future_collision_bas(const struct element_physique *element, const struct hitline *ligne);
+signed int detecter_future_collision_bas(const struct element_physique *element, const struct hitline *ligne);
 
 #endif /* NIVEAU_H */

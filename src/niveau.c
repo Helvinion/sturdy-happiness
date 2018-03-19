@@ -22,83 +22,83 @@ static const niveau niveau_0 =
 {
 	0,
 	74,
-	32,
+	30,
 	0,
 	0,
-	"                                "
-	" +||||||||||||||||||||||||||||+ "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                         -  - "
-	" -                         -  - "
-	" -                         -  - "
-	" -                         +||+ "
-	" -                         -  - "
-	" -                         -  - "
-	" -                         -  - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                      -     - "
-	" -                      -     - "
-	" -                      -     - "
-	" -                      +|||||+ "
-	" -                      -     - "
-	" -                      -     - "
-	" -                      -     - "
-	" -                            - "
-	" -                 -          - "
-	" -                 -          - "
-	" -                 -          - "
-	" -                 +||||||||||+ "
-	" -                 -          - "
-	" -                 -          - "
-	" -                 -          - "
-	" -             -              - "
-	" -             -              - "
-	" -             -              - "
-	" -             +||||||||||||||+ "
-	" -             -              - "
-	" -             -              - "
-	" -             -              - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" -                            - "
-	" +||||||||||||||||||||||||||||+ "
-	"                                "
+	"D                             "
+	" +||||||||||||||||||||||||||+ "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                       -  - "
+	" -                       -  - "
+	" -                       -  - "
+	" -                       +||+ "
+	" -                       -  - "
+	" -                       -  - "
+	" -                       -  - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                    -     - "
+	" -                    -     - "
+	" -                    -     - "
+	" -                    +|||||+ "
+	" -                    -     - "
+	" -                    -     - "
+	" -                    -     - "
+	" -                          - "
+	" -               -          - "
+	" -               -          - "
+	" -               -          - "
+	" -               +||||||||||+ "
+	" -               -          - "
+	" -               -          - "
+	" -               -          - "
+	" -           -              - "
+	" -           -              - "
+	" -           -              - "
+	" -           +||||||||||||||+ "
+	" -           -              - "
+	" -           -              - "
+	" -           -              - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" -                          - "
+	" +||||||||||||||||||||||||||+ "
+	"                             F"
 };
 
 static const niveau *niveau_courant;
@@ -167,7 +167,7 @@ static const unsigned char *conversion_coordonnees_adresse(unsigned int x, unsig
 	{
 		/* Optimisation : on garde une trace de la taille du niveau courant */
 		niveau_courant_sav = niveau_courant;
-		fin_buffer_sav = niveau_courant->addr + (niveau_courant->taille_y * niveau_courant->taille_x) - niveau_courant->taille_y;
+		fin_buffer_sav = niveau_courant->addr + (niveau_courant->taille_y * niveau_courant->taille_x);
 		x_sav = x;
 	}
 	
@@ -177,8 +177,8 @@ static const unsigned char *conversion_coordonnees_adresse(unsigned int x, unsig
 		mul_sav += niveau_courant->taille_y;
 	else if (x == x_sav - 1)
 		mul_sav -= niveau_courant->taille_y;
-	else
-		mul_sav = niveau_courant->taille_y * x;
+	else if (x != x_sav)
+		mul_sav = niveau_courant->taille_y * (x);
 
 	x_sav = x;
 	
@@ -234,23 +234,37 @@ unsigned char get_tile(signed int x, signed int y)
 	return *conversion_coordonnees_adresse(tile_x, tile_y);
 }
 
-unsigned char detecter_future_collision_bas(const struct element_physique *element, const struct hitline *ligne)
+signed int detecter_future_collision_bas(const struct element_physique *element, const struct hitline *ligne)
 {
+	/* Calcul du début et de la fin du trait de collision à tester */
 	const signed int position_x_debut = element->coordonnee_x + element->vitesse_x + ligne->diff_x;
 	const signed int position_x_fin = position_x_debut + ligne->taille;
-	const signed int position_y = element->coordonnee_y + element->vitesse_y + ligne->diff_y;
+
+	/* Calcul de la gauter initiale et finale de ce trait */
+	const signed int position_y_debut = element->coordonnee_y + ligne->diff_y;
+	const signed int position_y_fin = position_y_debut + element->vitesse_y;
+	
+	/* Variables d'itération */
+	signed int       position_y = position_y_debut;
 	signed int       position_x = position_x_debut;
 	unsigned char    tile;
 	
-	while (position_x < position_x_fin)
+	while (position_y < position_y_fin)
 	{
-		tile = get_tile(position_x, position_y);
-		if (tile == '-')
-			return 1;
-		else
+		position_x = position_x_debut;
+		while (position_x < position_x_fin)
+		{
+			tile = get_tile(position_x, position_y);
+			
+			/* Si une tile intraversable est détéctée, renvoyer le nombre de pixels autorisés à parcourir sans la toucher */
+			if (tile == '-')
+				return position_y_fin - position_y - 2; /* Pourquoi ce -2 (et pas -1), je ne sais pas */
+
+			/* Incrémente position_x de ce qu'il faut pour atteindre la prochaine huitaine */
 			position_x += (8 - (position_x % 8));
-	/* Incrémente position_x de ce qu'il faut pour atteindre la prochaine huitaine */
+		}
+		position_y++;
 	}
-	return 0;
+	return element->vitesse_y;
 }
 

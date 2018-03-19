@@ -74,7 +74,7 @@ static void fin_boucle()
 void initialiser()
 {
 	int i = 0;
-	static struct avatar G_Jolivet = {20, 200, &G_Jolivet_pack, 0, 0};
+	static struct avatar G_Jolivet = {20, 8, &G_Jolivet_pack, 0, 0};
 	static struct element_physique G_Jolivet_phys = {&G_Jolivet, 20,200, 0,0, 0,0, 0};
 
 	(*PPUCTRL) = (unsigned char)0x90;
@@ -100,7 +100,7 @@ void initialiser()
 	joueur = &G_Jolivet_phys;
 	
 	changer_niveau(0);
-	fixer_position_camera(0, 16);
+	fixer_position_camera(0, 0);
 	attendre_VBlank();
 }
 
