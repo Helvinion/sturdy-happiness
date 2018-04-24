@@ -47,7 +47,7 @@ void tiles_commit_groups()
 
 void tiles_add_change(unsigned char nametable, unsigned char l, unsigned char c, unsigned char data)
 {
-	if (size < 32)
+	if (size < 10)
 	{
 		update_buffer[size].ppu_addr = TO_PPU_ADDR(NAMETABLES[nametable], l, c);
 		update_buffer[size].ppu_data = data;
@@ -55,7 +55,7 @@ void tiles_add_change(unsigned char nametable, unsigned char l, unsigned char c,
 	}
 }
 
-void tiles_add_group_vertical(unsigned char nametable, unsigned char c, const char* source)
+void tiles_add_group_vertical(unsigned char nametable, unsigned char c, const char *source)
 {
 	unsigned int i = 0;
 	char*        dst = group_updates.tiles;

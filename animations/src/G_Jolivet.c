@@ -14,22 +14,12 @@ static const struct partie_personnage G_Jolivet_debout_tab[] =
 	{0, 24,   58, 2}
 };
 
-static const struct hitline G_Jolivet_debout_hitline_1 = {-8, 32, 16};
+static const struct hitbox G_Jolivet_debout_hitbox = {-8, 0, 16, 32};
 
 static const struct pack_hitbox G_Jolivet_debout_pack_hitbox = 
 {
-	(void*)0x00,
-	0,
-	
-	&G_Jolivet_debout_hitline_1,
-	1,
-	
-	(void*)0x00,
-	0,
+	&G_Jolivet_debout_hitbox,
 
-	(void*)0x00,
-	0,
-	
 	(void*)0x00,
 	0,
 	
@@ -84,19 +74,23 @@ static const struct personnage_graphique G_Jolivet_marche[] =
 {
 	{
 		G_Jolivet_marche_1_tab,
-		8
-	},	
+		8,
+		&G_Jolivet_debout_pack_hitbox
+	},
 	{
 		G_Jolivet_marche_2_tab,
-		6
+		6,
+		&G_Jolivet_debout_pack_hitbox
 	},
 	{
 		G_Jolivet_marche_3_tab,
-		8
+		8,
+		&G_Jolivet_debout_pack_hitbox
 	},
 	{
 		G_Jolivet_marche_2_tab,
-		6
+		6,
+		&G_Jolivet_debout_pack_hitbox
 	},
 };
 

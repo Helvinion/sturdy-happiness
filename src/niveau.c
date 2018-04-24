@@ -234,13 +234,14 @@ unsigned char get_tile(signed int x, signed int y)
 	return *conversion_coordonnees_adresse(tile_x, tile_y);
 }
 
+#if 0
 signed int detecter_future_collision_bas(const struct element_physique *element, const struct hitline *ligne)
 {
 	/* Calcul du début et de la fin du trait de collision à tester */
 	const signed int position_x_debut = element->coordonnee_x + element->vitesse_x + ligne->diff_x;
 	const signed int position_x_fin = position_x_debut + ligne->taille;
 
-	/* Calcul de la gauter initiale et finale de ce trait */
+	/* Calcul de la hauteur initiale et finale de ce trait */
 	const signed int position_y_debut = element->coordonnee_y + ligne->diff_y;
 	const signed int position_y_fin = position_y_debut + element->vitesse_y;
 	
@@ -263,8 +264,32 @@ signed int detecter_future_collision_bas(const struct element_physique *element,
 			/* Incrémente position_x de ce qu'il faut pour atteindre la prochaine huitaine */
 			position_x += (8 - (position_x % 8));
 		}
-		position_y++;
+		position_y+=8;
 	}
 	return element->vitesse_y;
 }
+#endif
 
+signed int detecter_future_collision_bas(const struct element_physique *element, const struct hitbox *box)
+{
+	/* Calcul du début et de la fin du trait de collision à tester */
+	const signed int position_x_debut = element->coordonnee_x + element->vitesse_x + box->diff_x;
+	const signed int position_x_fin = position_x_debut + box->taille_x;
+
+	const signed int position_y = element->coordonnee_y + (box->diff_y + box->taille_y) + element->vitesse_y;
+
+	/* Variables d'itération */
+	signed int       position_x = position_x_debut;
+	unsigned char    tile;
+
+	for (position_x = position_x_debut; position_x < position_x_fin; position_x += 8)
+	{
+		tile = get_tile(position_x, position_y);
+		if (tile == '-')
+		{
+			return (element->vitesse_y - position_y % 8 - 1);
+		}
+	}
+
+	return element->vitesse_y;
+}
