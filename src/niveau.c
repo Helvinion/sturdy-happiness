@@ -293,3 +293,27 @@ signed int detecter_future_collision_bas(const struct element_physique *element,
 
 	return element->vitesse_y;
 }
+
+signed int detecter_future_collision_haut(const struct element_physique *element, const struct hitbox *box)
+{
+	/* Calcul du début et de la fin du trait de collision à tester */
+	const signed int position_x_debut = element->coordonnee_x + element->vitesse_x + box->diff_x;
+	const signed int position_x_fin = position_x_debut + box->taille_x;
+
+	const signed int position_y = element->coordonnee_y + box->diff_y + element->vitesse_y;
+
+	/* Variables d'itération */
+	signed int       position_x = position_x_debut;
+	unsigned char    tile;
+
+	for (position_x = position_x_debut; position_x < position_x_fin; position_x += 8)
+	{
+		tile = get_tile(position_x, position_y);
+		if (tile == '-')
+		{
+			return (element->vitesse_y + position_y % 8 - 1);
+		}
+	}
+
+	return element->vitesse_y;
+}

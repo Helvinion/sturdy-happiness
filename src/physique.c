@@ -90,13 +90,13 @@ static void corriger_verticalement(struct element_physique *element)
 	signed int tmp = 0;
 	const struct avatar*      raccourci_dessin = element->dessin;
 	const struct pack_hitbox* raccourci_hitbox = raccourci_dessin->anims->anims[raccourci_dessin->animation_courante].anim[raccourci_dessin->etape_anim].hitbox;
-	const struct hitbox*      raccourci_hitbox_bas = raccourci_hitbox->collisions;
+	const struct hitbox*      raccourci_hitbox_collision = raccourci_hitbox->collisions;
 	
 	// Application des collisions.
 
 	if (element->vitesse_y > 0)
 	{
-		tmp = detecter_future_collision_bas(element, raccourci_hitbox_bas);
+		tmp = detecter_future_collision_bas(element, raccourci_hitbox_collision);
 		if (tmp != element->vitesse_y)
 		{
 			element->flags |= FLAGS_AU_SOL;
@@ -107,8 +107,18 @@ static void corriger_verticalement(struct element_physique *element)
 		else
 			element->coordonnee_y = future_coordonnee_y;
 	}
-	else
-		element->coordonnee_y = future_coordonnee_y;
+	else if (element->vitesse_y < 0)
+	{
+		tmp = detecter_future_collision_haut(element, raccourci_hitbox_collision);
+		if (tmp != element->vitesse_y)
+		{
+			element->acceleration_y = 0;
+			element->vitesse_y = 0;
+			element->coordonnee_y += tmp;
+		}
+		else
+			element->coordonnee_y = future_coordonnee_y;
+	}
 }
 
 static void appliquer_gravite(struct element_physique *element)
@@ -132,6 +142,11 @@ static void appliquer_gravite(struct element_physique *element)
 	// Limite la vitesse max ateignable.
 	if (element->vitesse_y > vitesse_terminale)
 		element->vitesse_y = vitesse_terminale;
+
+	if (element->vitesse_y > 8)
+		element->vitesse_y = 8;
+	if (element->vitesse_y < -8)
+		element->vitesse_y = -8;
 
 }
 
