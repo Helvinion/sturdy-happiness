@@ -35,7 +35,7 @@ boucle:
 	lda ADR_MUS_CUR   ; Charge les bits de poids *faible* (little endian) de l'adresse de la note courante
 	adc #3            ; Y ajoute 3
 	sta ADR_MUS_CUR   ; Sauvegarde le résultat
-	lda ADR_MUS_CUR+1 ; Charge les bits de poid faible
+	lda ADR_MUS_CUR+1 ; Charge les bits de poids faible
 	adc #0            ; Y ajoute 0, plus le Carry s'il est set.
 	sta ADR_MUS_CUR+1
 	

@@ -106,6 +106,8 @@ static void corriger_verticalement(struct element_physique *element)
 		}
 		else
 			element->coordonnee_y = future_coordonnee_y;
+
+		element->flags &= !FLAGS_AU_SOL;
 	}
 	else if (element->vitesse_y < 0)
 	{
@@ -170,7 +172,7 @@ void appliquer_physique(struct element_physique *element)
 
 void saut(struct element_physique *element)
 {
-		element->flags &= !FLAGS_AU_SOL;
-		element->vitesse_y = 0;
-		element->acceleration_y = -impulsion_saut;
+	element->flags &= !FLAGS_AU_SOL;
+	element->vitesse_y = 0;
+	element->acceleration_y = -impulsion_saut;
 }

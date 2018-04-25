@@ -3,7 +3,7 @@
 struct etape_musique
 {
 	unsigned char registre; // Régistre mémoire ou écrire la valeur
-	unsigned char delai;     // Délai (par rapport à l'étape précédente) à attendre (PAL 50 pfs)
+	unsigned char delai;     // Délai (par rapport à l'étape précédente) à attendre (PAL 50 fps)
     unsigned char valeur;    // Valeur à assigner au registre 
 };
 
@@ -14,9 +14,9 @@ unsigned char bip_bip[] = {0x00, 50, 0x4f,
 						   0xff, 0, 0};
 
 
-static struct etape_musique **musique = (void*)0x03;         // Stocke l'adresse du début de la musique en cours, changer pour changer de musique
-static struct etape_musique **etape_courante = (void*)0x05;  // Socker l'adresse de l'étape actuelle, incrémenter 50 fois par seconde (en PAL)
-static unsigned char         *delai_actuel = (void*)0x07;
+static struct etape_musique **musique = (void*)0x23;         // Stocke l'adresse du début de la musique en cours, changer pour changer de musique
+static struct etape_musique **etape_courante = (void*)0x25;  // Socker l'adresse de l'étape actuelle, incrémenter 50 fois par seconde (en PAL)
+static unsigned char         *delai_actuel = (void*)0x27;
 
 void jouer_son_carre_1(struct CanalCarre* son)
 {

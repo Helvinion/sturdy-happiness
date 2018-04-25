@@ -101,6 +101,7 @@ void initialiser()
 	
 	changer_niveau(0);
 	fixer_position_camera(0, 0);
+	//jouer_musique();
 	attendre_VBlank();
 }
 
