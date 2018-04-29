@@ -20,7 +20,7 @@ boucle:
 	bne @1               ; Sauter ce qui suit si le délai n'est pas atteint
 	                     ; OK, si on est ici, on a un bout de note à jouer !
 	
-	ldy #0
+	ldy #0 ; TODO: on peut faire un clr y, non ?
 	lda (ADR_MUS_CUR),y  ; Charge dans A le n° de registre ou ecrire la valeur
 	tax                  ; Copie ce n° dans X
 	ldy #2               

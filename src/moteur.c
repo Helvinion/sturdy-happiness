@@ -101,12 +101,14 @@ void initialiser()
 	
 	changer_niveau(0);
 	fixer_position_camera(0, 0);
-	//jouer_musique();
+	jouer_musique();
 	attendre_VBlank();
 }
 
 void moteur_mode_jeu()
 {
+	jouer_musique();
+	
 	debut_boucle();
 	
 	if (bouton_presse_manette_1(BOUTON_DROITE))
