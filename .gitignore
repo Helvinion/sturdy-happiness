@@ -1,8 +1,10 @@
 rom.nes
-tools/
+rom.nes.deb
+lib
+tools
 compile/
-lib/
 debug/
 rom.nes.0.nl
 rom.nes.1.nl
 rom.nes.ram.nl
+.*.swp

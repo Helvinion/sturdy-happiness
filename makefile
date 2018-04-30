@@ -4,6 +4,7 @@ LD=tools/cc65/bin/ld65
 NES=tools/fceux/fceux
 MV=mv
 RM=rm
+MKDIR=mkdir
 PYTHON=tools/python/python
 
 CCFLAGS=-g -t nes -O -T -I include/ -I animations/include
@@ -39,7 +40,7 @@ OBJ_C=$(patsubst ./%.c,./compile/obj/%.o,$(SRC_C))
 OBJ_ASM=$(patsubst ./asm/%.asm,./compile/obj/%.o,$(SRC_ASM))
 OBJ=$(OBJ_C) $(OBJ_ASM) $(OBJ_ANIMS)
 
-all: rom.nes
+all: prepare rom.nes
 
 # C -> ASM
 .PRECIOUS: compile/asm/%.asm compile/asm/animations/%.asm
@@ -66,6 +67,11 @@ rom.nes: $(OBJ) link.ld lib/nes.lib
 play: rom.nes
 	$(NES) rom.nes
 
+prepare:
+	$(MKDIR) -p compile/asm/animations
+	$(MKDIR) -p compile/obj/animations
+	$(MKDIR) -p debug
+
 clean::
 	$(RM) -f compile/asm/*.asm
 	$(RM) -f compile/asm/animations/*.asm
@@ -73,4 +79,5 @@ clean::
 	$(RM) -f compile/obj/animations/*.o
 	$(RM) -f debug/*
 	$(RM) -f rom.nes
+	$(RM) -f rom.nes.deb
 	$(RM) -f *.nl
