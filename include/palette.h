@@ -10,7 +10,7 @@ enum Couleur
 	NOIR_4 = 0x3e,
 	NOIR_5 = 0x2e,
 	NOIR_6 = 0x1e,
-	NOIR_7 = 0x0e,	
+	NOIR_7 = 0x0e,
 	NOIR_8 = 0x1d,
 	NOIR_9 = 0x0d,
 	GRIS_0 = 0x2d,
@@ -47,9 +47,9 @@ enum Palettes
 	PALETTE_GRISE = 4,
 };
 
-struct palette palettes_definies[] = 
+struct palette palettes_definies[] =
 {
-	{NOIR, NOIR, NOIR, NOIR},	
+	{NOIR, NOIR, NOIR, NOIR},
 	{NOIR, JAUNE, ROUGE, VERT},
 	{NOIR, MARRON, PEAU, BLEU},
 	{NOIR, VERT, PEAU, BLEU},

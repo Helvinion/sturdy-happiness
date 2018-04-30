@@ -51,7 +51,7 @@ compile/asm/%.asm:src/%.c
 
 compile/asm/animations/%.asm:animations/src/%.c
 	$(CC) $< $(CCFLAGS) -o $@
-	
+
 # ASM -> O
 compile/obj/%.o:src/asm/%.asm
 	$(CA) $< $(CAFLAGS) -o $@
@@ -59,11 +59,11 @@ compile/obj/%.o:src/asm/%.asm
 # ASM -> O
 compile/obj/%.o:compile/asm/%.asm
 	$(CA) $< $(CAFLAGS) -o $@
-	
+
 rom.nes: $(OBJ) link.ld lib/nes.lib
 	$(LD) -v -C link.ld -o rom.nes $(OBJ) lib/nes.lib -vm -m debug/rom.map -Ln debug/labels.txt
 	$(PYTHON) fceux_symbols.py
-	
+
 play: rom.nes
 	$(NES) rom.nes
 

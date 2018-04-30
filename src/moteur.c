@@ -28,7 +28,7 @@ static struct element_physique elements[10];
 
 static void attendre_VBlank(void)
 {
-   for ( ; ; ) 
+   for ( ; ; )
    {
       if ((*PPUSTAT) & 0x80)
       {
@@ -41,7 +41,7 @@ static void attendre_VBlank(void)
 static void traiter_animations()
 {
 	static unsigned char compteur = 0;
-	
+
 	if (compteur++ == 8)
 	{
 		// Rustique. Animer tous les 8 frames.
@@ -54,7 +54,7 @@ static void debut_boucle()
 {
 	update_manettes();
 	tiles_update();
-	sprites_begin();	
+	sprites_begin();
 }
 
 static void fin_boucle()
@@ -78,7 +78,7 @@ void initialiser()
 	static struct element_physique G_Jolivet_phys = {&G_Jolivet, 40,191, 0,0, 0,0, 0};
 
 	(*PPUCTRL) = (unsigned char)0x90;
-   
+
     // changer les palettes pendant un vblank
     attendre_VBlank();
 
@@ -91,14 +91,14 @@ void initialiser()
 	changer_palette(5, get_palette(PALETTE_VISAGE_JOLIVET));
 	changer_palette(6, get_palette(PALETTE_JOLIVET));
 	changer_palette(7, get_palette(PALETTE_JOLIVET));
-    
+
 	// Activer le rendu de l'écran
-    (*PPUMASK) = (unsigned char)0x18; 
-   
+    (*PPUMASK) = (unsigned char)0x18;
+
     tiles_init();
-	
+
 	joueur = &G_Jolivet_phys;
-	
+
 	changer_niveau(0);
 	fixer_position_camera(0, 0);
 	jouer_musique();
@@ -108,9 +108,9 @@ void initialiser()
 void moteur_mode_jeu()
 {
 	jouer_musique();
-	
+
 	debut_boucle();
-	
+
 	if (bouton_presse_manette_1(BOUTON_DROITE))
 	{
 		changer_animation(joueur->dessin, 1);
@@ -126,7 +126,7 @@ void moteur_mode_jeu()
 		changer_animation(joueur->dessin, 0);
 		joueur->vitesse_x = 0;
 	}
-	
+
 	if (nouveau_bouton_presse_manette_1(BOUTON_A))
 	{
 		saut(joueur);

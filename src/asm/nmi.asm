@@ -15,7 +15,7 @@ nmi:
 
 	sta PPU_MASK_VAR
 	lda PPU_MASK
-	
+
     jsr update_sprites
     jsr update_palettes
     jsr update_tiles
@@ -126,7 +126,7 @@ set_vertical:
 set_horizontal:
 	lda PPU_CTRL_VAR      ;
 	and #%11111011        ; Désactive le bit ordonnant à la PPU de changer son adresse de 32 en 32 pour repasse en mode 1 en 1
-	sta PPU_CTRL_VAR      ; 
+	sta PPU_CTRL_VAR      ;
 	sta PPU_CTRL          ;
 	rts
 
@@ -139,7 +139,7 @@ copy_group:
 	bne @4                ; Recommence si on en a pas copié 16.
 	iny                   ; Incrémente Y pour le mettre au début du groupe suivant
 	rts
-	
+
 update_palettes:     ;
     lda #$3f         ;
     sta PPU_ADDR     ;

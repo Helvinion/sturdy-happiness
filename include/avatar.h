@@ -15,8 +15,8 @@ struct personnage_graphique
 {
 	const struct partie_personnage const *parties; // Liste des différents sprites à combiner
 	const unsigned char taille_parties;      // Taille de la liste
-	
-	const struct pack_hitbox *hitbox; 
+
+	const struct pack_hitbox *hitbox;
 };
 
 struct animation
@@ -35,7 +35,7 @@ struct avatar
 {
 	unsigned char x;                  // Coordonnée X de l'avatar (sur l'ecran)
 	unsigned char y;                  // Coordonnée Y de l'avatar (sur l'écran)
-	
+
 	const struct pack_anim *anims;     // Animation du personnage
 	unsigned char animation_courante; // Animation actuelle
 	unsigned char etape_anim;         // Etape courante de l'animation

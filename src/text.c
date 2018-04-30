@@ -33,7 +33,7 @@ static void set_ppu_addr()
 static void bordure_haute()
 {
   set_ppu_addr(); // positionne le curseur
-  
+
   (*PPUDATA) = 0x10; // Coin supérieur gauche
   asm("lda #$14\n"
       "sta $2007\n"
@@ -53,7 +53,7 @@ static void bordure_haute()
       "sta $2007\n"
       "sta $2007\n");
   (*PPUDATA) = 0x11; // Coin supérieur droit
-  
+
   line++;
 }
 
@@ -69,11 +69,11 @@ static char ecrire_ligne()
 {
   char ret;
   char i;
-    
+
   set_ppu_addr(); // positionne le curseur
-    
+
   (*PPUDATA) = 0x15; // Bordure verticale
-  
+
   i = 0;
   while (i < 16)
   {
@@ -84,15 +84,15 @@ static char ecrire_ligne()
     /*
   for (i = 0; i < 16 && (*texte) != '\n' && (*texte) != '\0'; i++, texte++)
     (*PPUDATA) = (*texte);
-    
+
   if (i != 16)
   {
     // On a rencontré un '\n' ou un '\0', on doit finir la ligne
     ret = i - 1;
-    
+
     for (i; i < 16; i++)
       (*PPUDATA) = ' ';
-    
+
     if ((*texte) == '\n') // Si on a rencontré un '\n' il faut passer le caractere.
         texte++;
   }
@@ -125,7 +125,7 @@ void maj_texte()
         case BORDURE_DESSUS:
             bordure_haute();
             break;
-        
+
         case TEXTE_1:
         case TEXTE_2:
         case TEXTE_3:
@@ -135,7 +135,7 @@ void maj_texte()
         case BORDURE_DESSOUS:
             bordure_basse();
             break;
-        
+
     }
     a_faire++;
     if (a_faire == FIN)

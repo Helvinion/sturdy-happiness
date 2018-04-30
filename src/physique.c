@@ -78,7 +78,7 @@ static void MaJ_dessin(struct element_physique *element)
 				}
 			}
 		}
-	}	
+	}
 	element->dessin->y = element->coordonnee_y;
 
 	return;
@@ -91,7 +91,7 @@ static void corriger_verticalement(struct element_physique *element)
 	const struct avatar*      raccourci_dessin = element->dessin;
 	const struct pack_hitbox* raccourci_hitbox = raccourci_dessin->anims->anims[raccourci_dessin->animation_courante].anim[raccourci_dessin->etape_anim].hitbox;
 	const struct hitbox*      raccourci_hitbox_collision = raccourci_hitbox->collisions;
-	
+
 	// Application des collisions.
 
 	if (element->vitesse_y > 0)
@@ -126,7 +126,7 @@ static void corriger_verticalement(struct element_physique *element)
 static void appliquer_gravite(struct element_physique *element)
 {
 	static unsigned char i = 1;
-	
+
 	// Mise à jour des vitesses
 	if (element->acceleration_y != 0) // Si une accélaration doit être appliquée, on l'applique.
 	{
@@ -140,7 +140,7 @@ static void appliquer_gravite(struct element_physique *element)
 			element->vitesse_y += gravite;
 		}
 	}
-	
+
 	// Limite la vitesse max ateignable.
 	if (element->vitesse_y > vitesse_terminale)
 		element->vitesse_y = vitesse_terminale;
@@ -158,7 +158,7 @@ void appliquer_physique(struct element_physique *element)
 	element->vitesse_x += element->acceleration_x;
 	if (element->vitesse_x != 0)
 		element->coordonnee_x += element->vitesse_x;
-	
+
 	// Gestion verticale :
 	appliquer_gravite(element);
 	corriger_verticalement(element);
@@ -166,7 +166,7 @@ void appliquer_physique(struct element_physique *element)
 	// Remise à zéro des forces
 	element->acceleration_x = 0;
 	element->acceleration_y = 0;
-	
+
 	MaJ_dessin(element);
 }
 

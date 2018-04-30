@@ -10,27 +10,27 @@ irq:
 	pha ; Sauvergarder X;
 	tya
 	pha ; Sauvegarder Y
-	
+
 	lda $4015 ; Aknowldege de l'interruption
-	
+
 boucle:
 	lda MUS_CMPT         ; Charger le délai actuel dans A
 	ldy #1               ; Le délai à attendre est le deuxième octet de la structure
 	cmp (ADR_MUS_CUR),y  ; Comparer le délai actuel avec celui à atteindre
 	bne @1               ; Sauter ce qui suit si le délai n'est pas atteint
 	                     ; OK, si on est ici, on a un bout de note à jouer !
-	
+
 	ldy #0 ; TODO: on peut faire un clr y, non ?
 	lda (ADR_MUS_CUR),y  ; Charge dans A le n° de registre ou ecrire la valeur
 	tax                  ; Copie ce n° dans X
-	ldy #2               
+	ldy #2
 	lda (ADR_MUS_CUR),y  ; Charge dans A la valeur a écrire dans le registre
 	sta $4000,X          ; Sauvegarde cette valeur en 0x4000 + X, soit le registre a atteindre
-	
+
 						; Il faut à présent remettre le delai à 0 et passer à l'étape suivante
 	lda #0
 	sta MUS_CMPT
-	
+
 	clc
 	lda ADR_MUS_CUR   ; Charge les bits de poids *faible* (little endian) de l'adresse de la note courante
 	adc #3            ; Y ajoute 3
@@ -38,7 +38,7 @@ boucle:
 	lda ADR_MUS_CUR+1 ; Charge les bits de poids faible
 	adc #0            ; Y ajoute 0, plus le Carry s'il est set.
 	sta ADR_MUS_CUR+1
-	
+
 	ldy #0
 	lda (ADR_MUS_CUR),y ; Charge le registre de la nouvelle note
 	cmp #$ff            ; Compare cette valeur avec 0xff
@@ -47,9 +47,9 @@ boucle:
 	sta ADR_MUS_CUR
 	lda ADR_MUS+1
 	sta ADR_MUS_CUR+1
-	
+
 	jmp boucle          ; retour en haut
-	
+
 @1:
 	; La boucle est terminée, on peut finaliser l'IRQ
 	inc MUS_CMPT ; Incrémenter le delai

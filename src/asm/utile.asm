@@ -13,14 +13,14 @@
 	ldy     #$01
 	lda     (sp),y
 	tax
-	
+
 	; Mettre dans a le deuxième argument, la valeur
 	ldy #$00
 	lda (sp), y
-	
+
 	; Copier A à l'adresse X
 	sta $00,x
-	
+
 	; Quitter la fonction
 	jmp     incsp2
 .endproc
@@ -32,22 +32,22 @@
 	ldy     #$02
 	lda     (sp),y
 	tax
-	
+
 	; Mettre dans a le deuxième argument, le début de la valeur
 	ldy #$00
 	lda (sp), y
 
-	
+
 	; Copier A à l'adresse X
 	sta $00,x
-	
+
 	; Mettre dans a le deuxième argument, la fin de la valeur
 	ldy #$01
 	lda (sp), y
-	
+
 	; Copier A à l'adresse X + 1
 	sta $01,x
-	
+
 	; Quitter la fonction
 	jmp     incsp3
 .endproc

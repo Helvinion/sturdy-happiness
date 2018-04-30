@@ -28,7 +28,7 @@ _exit:
 				   ; Ca y est, on est en VBlank, on peut placer nos instructions
     txa            ; 0 -> A
 
-; Effacer toute la mémoire vive	
+; Effacer toute la mémoire vive
 @clearRAM:         ;
     sta $0000,x    ;
     sta $0100,x    ;
@@ -45,7 +45,7 @@ _exit:
 	lda #$20       ;
 	sta PPU_ADDR   ;
 	lda #$00       ;
-	sta PPU_ADDR   ; Indique que la PPU doit écrire à l'adresse $2000 
+	sta PPU_ADDR   ; Indique que la PPU doit écrire à l'adresse $2000
 @3:                ;
 	ldy #$40       ;
 @4:                ;
@@ -55,7 +55,7 @@ _exit:
 	inx            ;
 	bne @3         ; Remplit la mémoire de la PPU de 0 ($2000 -> $e000)
 
-    bit PPU_STATUS ; 
+    bit PPU_STATUS ;
 @2:                ;
     bit PPU_STATUS ;
     bpl @2         ; Attend de ne plus être en VBlank
@@ -71,14 +71,14 @@ _exit:
 	lda #%10010000   ;
 	sta PPU_CTRL_VAR ; Sauvegarde le PPUCTRL dans la zeropage
 	sta PPU_CTRL	 ; Active l'appel à NMI lors des VBlank
-    
+
     ; Initialise le moteur de sons.
     jsr init_apu
-	
+
 	; Fin ;
-    
+
 	cli ; Reactive les interruptions
-	
+
     jmp _main		 ; Appelle le programme C !
 
 init_apu:
@@ -88,7 +88,7 @@ init_apu:
         sta $4000,y
         dey
         bpl @loop
- 
+
         ; On saute $4014 et $4016 (OAMDMA)
         lda #%00001111
         sta $4015

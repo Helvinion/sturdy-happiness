@@ -12,7 +12,7 @@ static unsigned char recup_manette_1()
 	res = (res << 1) + (*MANETTE_1_3 & 0x01);
 	res = (res << 1) + (*MANETTE_1_3 & 0x01);
 	res = (res << 1) + (*MANETTE_1_3 & 0x01);
-	
+
 	res = (res << 1) + (*MANETTE_1_3 & 0x01);
 	res = (res << 1) + (*MANETTE_1_3 & 0x01);
 	res = (res << 1) + (*MANETTE_1_3 & 0x01);
@@ -24,10 +24,10 @@ static unsigned char recup_manette_1()
 void update_manettes()
 {
 	*(MANETTE_1_3) = 1;
-	
+
 	prec_manette_1 = manette_1;
 	manette_1 = recup_manette_1();
-	
+
 	*(MANETTE_1_3) = 0;
 }
 
