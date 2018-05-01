@@ -1,63 +1,5 @@
 #include <musique.h>
 
-#define FREQ_PROC	111860800
-
-#define IDX_END		0
-#define IDX_LA		1
-#define IDX_LAD		2
-#define IDX_SIB		2
-#define IDX_SI		3
-#define IDX_DO		4
-#define IDX_DOD		5
-#define IDX_REB		5
-#define IDX_RE		6
-#define IDX_RED		7
-#define IDX_MIB		7
-#define IDX_MI		8
-#define IDX_FA		9
-#define IDX_FAD		10
-#define IDX_SOLB	10
-#define IDX_SOL		11
-#define IDX_SOLD	12
-#define IDX_LAB		12
-
-#define FREQ_LA 	440000
-#define FREQ_LAD	466164
-#define FREQ_SIB 	FREQ_LAD
-#define FREQ_SI		493883
-#define FREQ_DO		523251
-#define FREQ_DOD	554365
-#define FREQ_REB	FREQ_DOD
-#define FREQ_RE		587330
-#define FREQ_RED	622254
-#define FREQ_MIB	FREQ_RED
-#define FREQ_MI		659255
-#define FREQ_FA		698456
-#define FREQ_FAD	739989
-#define FREQ_SOLB	FREQ_FAD
-#define FREQ_SOL	783991
-#define FREQ_SOLD	830609
-#define FREQ_LAB	FREQ_SOLD
-
-// TODO faire -1 sur ce res
-#define PERIOD_LA	(FREQ_PROC / FREQ_LA)
-#define PERIOD_LAD	(FREQ_PROC / FREQ_LAD)
-#define PERIOD_SIB	(FREQ_PROC / FREQ_SIB)
-#define PERIOD_SI	(FREQ_PROC / FREQ_SI)
-#define PERIOD_DO	(FREQ_PROC / FREQ_DO)
-#define PERIOD_DOD	(FREQ_PROC / FREQ_DOD)
-#define PERIOD_REB	(FREQ_PROC / FREQ_REB)
-#define PERIOD_RE	(FREQ_PROC / FREQ_RE)
-#define PERIOD_RED	(FREQ_PROC / FREQ_RED)
-#define PERIOD_MIB	(FREQ_PROC / FREQ_MIB)
-#define PERIOD_MI	(FREQ_PROC / FREQ_MI)
-#define PERIOD_FA	(FREQ_PROC / FREQ_FA)
-#define PERIOD_FAD	(FREQ_PROC / FREQ_FAD)
-#define PERIOD_SOLB	(FREQ_PROC / FREQ_SOLB)
-#define PERIOD_SOL	(FREQ_PROC / FREQ_SOL)
-#define PERIOD_SOLD	(FREQ_PROC / FREQ_SOLD)
-#define PERIOD_LAB	(FREQ_PROC / FREQ_LAB)
-
 unsigned short notes[13] =
 {
 	0,
@@ -77,16 +19,19 @@ unsigned short notes[13] =
 
 struct etape_musique
 {
-	unsigned char registre; // Régistre mémoire ou écrire la valeur
+	unsigned char registre; // Registre mémoire où écrire la valeur
 	unsigned char delai;     // Délai (par rapport à l'étape précédente) à attendre (PAL 50 fps)
-    unsigned char valeur;    // Valeur à assigner au registre
+	unsigned char valeur;    // Valeur à assigner au registre
 };
 
-unsigned char bip_bip[] = {0x00, 50, 0x4f,
-                           0x01, 0, 0x9a,
-						   0x02, 0, 0xeb,
-						   0x03, 0, 0x80,
-						   0xff, 0, 0};
+unsigned char bip_bip[] =
+{
+	0x00, 50, 0x4f,
+	0x01, 0, 0x9a,
+	0x02, 0, 0xeb,
+	0x03, 0, 0x80,
+	0xff, 0, 0
+};
 
 unsigned char bip_bip2[] =
 {
@@ -203,9 +148,9 @@ unsigned char bip_bip4[] =
 	0xff, 0, 0
 };
 
-static struct etape_musique **musique = (void*)0x23;         // Stocke l'adresse du début de la musique en cours, changer pour changer de musique
-static struct etape_musique **etape_courante = (void*)0x25;  // Socker l'adresse de l'étape actuelle, incrémenter 50 fois par seconde (en PAL)
-static unsigned char         *delai_actuel = (void*)0x27;
+static struct etape_musique **musique           = ZP_ADR_MUS;      // Stocke l'adresse du début de la musique en cours, changer pour changer de musique
+static struct etape_musique **etape_courante    = ZP_ADR_MUS_CUR;  // Socker l'adresse de l'étape actuelle, incrémenter 50 fois par seconde (en PAL)
+static unsigned char         *delai_actuel      = ZP_MUS_CMPT;
 
 void jouer_son_carre_1(struct CanalCarre* son)
 {
@@ -237,8 +182,7 @@ void jouer_son_bruit(struct CanalBruit* son)
 	*((unsigned char*)0x400f) = son->reg_3;
 }
 
-#define freq 50
-
+#if 0
 char mus[] = {
 	IDX_LA,		-2,
 	IDX_DO,		-2,
@@ -264,57 +208,184 @@ char mus[] = {
 
 	IDX_END,	0
 };
+#else
+char mus[] = {
+	IDX_LA,		-1,
+	IDX_LAD,	-1,
+	IDX_SI,		-1,
+	IDX_DO,		-1,
+	IDX_DOD,	-1,
+	IDX_RE,		-1,
+	IDX_RED,	-1,
+	IDX_MI,		-1,
+	IDX_FA,		-1,
+	IDX_FAD,	-1,
+	IDX_SOL,	-1,
+	IDX_SOLD,	-1,
+	IDX_LA,		0,
+	IDX_LAD,	0,
+	IDX_SI,		0,
+	IDX_DO,		0,
+	IDX_DOD,	0,
+	IDX_RE,		0,
+	IDX_RED,	0,
+	IDX_MI,		0,
+	IDX_FA,		0,
+	IDX_FAD,	0,
+	IDX_SOL,	0,
+	IDX_SOLD,	0,
 
-unsigned char partition[15] =
+	IDX_END,	0
+};
+#endif
+
+#define PARTITION_SIZE 7
+
+unsigned char partition[12 * PARTITION_SIZE + 3] =
 {
 	0x00, 50, 0xbf,
 	0x01, 0, 0x00,
 	0x02, 0, 0x17,
 	0x03, 0, 0xf9,
 
-	0xff, 0, 0,
+	0xff, 50, 0,
 };
 
+static char const *m = mus;
+
+void init_musique()
+{
+	unsigned char *p = partition;
+	unsigned short note;
+	signed char vnote;
+	signed char hauteur;
+	int i;
+
+	*musique = (struct etape_musique*)partition;
+	*etape_courante = (struct etape_musique*)partition;
+	*delai_actuel = 0;
+
+	for (i = 0; i < PARTITION_SIZE; ++i)
+	{
+		p[0]  = 0x00; p[1]  = 500; p[2]  = 0xbf;
+		p[3]  = 0x01; p[4]  =   0; p[5]  = 0x00;
+		p[6]  = 0x02; p[7]  =   0; //p[8]  = note & 0xff;
+		p[9]  = 0x03; p[10] =   0; //p[11] = 0xf8 + ((note >> 8) & 0xff);
+		p += 12;
+	}
+	p[0] = 0xff; p[1] = 50; p[2] = 0x00;
+
+	if (*mus == IDX_END)
+	{
+		partition[0] = 0xff;
+		return;
+	}
+
+	p = partition;
+
+	for (i = 0; i < PARTITION_SIZE; ++i)
+	{
+		if (*m == IDX_END)
+		{
+			m = mus;
+		}
+
+		vnote = m[0];
+		hauteur = m[1];
+
+		if (hauteur > 0)
+		{
+			note = (notes[vnote] >> hauteur) - 1;
+		}
+		else if (hauteur < 0)
+		{
+			note = (notes[vnote] << -hauteur) - 1;
+		}
+		else
+		{
+			note = (notes[vnote]) - 1;
+		}
+
+		m+=2;
+		p[8]  = note & 0xff;
+		p[11] = 0xf8 + ((note >> 8) & 0xff);
+		p += 12;
+	}
+}
+
+// TODO: fct transpose
+
+#if 1
 void jouer_musique()
 {
-	static char const *m = mus;
+	static int carry = 0;
+	static char *oldcur = (char*)0;
+	char *newcur;
+
+	static unsigned int pindex = 0;
 	static unsigned char *p = partition;
 	unsigned short note;
 	signed char vnote;
 	signed char hauteur;
 
-	if (*m == IDX_END)
+	if (*mus == IDX_END)
+	{
+		partition[0] = 0xff;
+		return;
+	}
+
+	newcur =  *((char**)ZP_ADR_MUS_CUR);
+	if (oldcur > newcur)
+	{
+		carry = 1;
+	}
+	oldcur = newcur;
+
+	//if ((char*)p <= (char*)*etape_courante)
+	if ((char*)p >= newcur && !carry)
 	{
 		return;
+	}
+
+	if (*m == IDX_END)
+	{
+		m = mus;
 	}
 
 	vnote = m[0];
 	hauteur = m[1];
 
 	if (hauteur > 0)
+	{
 		note = (notes[vnote] >> hauteur) - 1;
+	}
 	else if (hauteur < 0)
+	{
 		note = (notes[vnote] << -hauteur) - 1;
+	}
 	else
+	{
 		note = (notes[vnote]) - 1;
+	}
 
 	m+=2;
-	p[0]  = 0x00; p[1]  = 50; p[2]  = 0xbf;
-	p[3]  = 0x01; p[4]  =  0; p[5]  = 0x00;
-	p[6]  = 0x02; p[7]  =  0; p[8]  = note & 0xff;
-	p[9]  = 0x03; p[10] =  0; p[11] = 0xf8 + ((note >> 8) & 0xff);
-	p[12] = 0xff; p[13] =  0; p[14] = 0x00;
+	p[8]  = note & 0xff;
+	p[11] = 0xf8 + ((note >> 8) & 0xff);
 	p += 12;
-	*musique = (struct etape_musique*)partition;
-	*etape_courante = (struct etape_musique*)partition;
-	*delai_actuel = 0;
+	pindex++;
+	if (pindex == PARTITION_SIZE)
+	{
+		pindex = 0;
+		p = partition;
+		carry = 0;
+	}
 }
-
-#if 0
+// TODO: etape_courante: en faire offset et pas un pointeur ?
+#else
 void jouer_musique()
 {
-	*musique = (struct etape_musique*)bip_bip4;
-	*etape_courante = (struct etape_musique*)bip_bip4;
+	*musique = (struct etape_musique*)bip_bip;
+	*etape_courante = (struct etape_musique*)bip_bip;
 	*delai_actuel = 0;
 }
 #endif
