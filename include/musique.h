@@ -35,6 +35,8 @@ void jouer_son_bruit(struct CanalBruit* son);
 void jouer_musique();
 void init_musique();
 
+void change_variation(char i);
+
 # define FREQ_PROC	111860800
 
 # define IDX_END	0

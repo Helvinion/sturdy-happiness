@@ -132,5 +132,14 @@ void moteur_mode_jeu()
 		saut(joueur);
 	}
 
+	if (bouton_presse_manette_1(BOUTON_HAUT))
+	{
+		change_variation(1);
+	}
+	else if (bouton_presse_manette_1(BOUTON_BAS))
+	{
+		change_variation(-1);
+	}
+
 	fin_boucle();
 }
