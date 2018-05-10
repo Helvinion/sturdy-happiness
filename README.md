@@ -85,11 +85,12 @@ FCEUX pour windows fonctionne mal pour ce jeu... dommage, c'est la seule version
 
 
 ## Émulateurs NES à tester
-- Fceux
-- Mesen
+    Fceux
+    Mesen
 
 ## Documentation
     https://wiki.nesdev.com/
     http://jdc.koitsu.org/lj/Programmingthe65816_ProgManual.pdf
+    https://www.cc65.org/doc/cc65.html
 
 # EOF

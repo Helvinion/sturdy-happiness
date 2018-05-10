@@ -99,101 +99,100 @@ void jouer_son_bruit(struct CanalBruit* son)
     *((unsigned char*)0x400f) = son->reg_3;
 }
 
+char mus1[] = {
+    IDX_LA, -2, IDX_DO, -2, IDX_MI, -2,
+    IDX_LA, -1, IDX_DO, -1, IDX_MI, -1,
+    IDX_LA,  0, IDX_DO,  0, //  IDX_MI,  0,
+//  IDX_LA,  1, IDX_DO,  1, IDX_MI,  1,
+//  IDX_LA,  2, IDX_DO,  2, IDX_MI,  2,
+//  IDX_LA,  3, IDX_DO,  3, IDX_MI,  3,
+//  IDX_LA,  4, IDX_DO,  4, IDX_MI,  4,
+//  IDX_DO,  4, IDX_LA,  4,
+//  IDX_MI,  3, IDX_DO,  3, IDX_LA,  3,
+//  IDX_MI,  2, IDX_DO,  2, IDX_LA,  2,
+//  IDX_MI,  1, IDX_DO,  1, IDX_LA,  1,
+    IDX_MI,  0, IDX_DO,  0, IDX_LA,  0,
+    IDX_MI, -1, IDX_DO, -1, IDX_LA, -1,
+    IDX_MI, -2, IDX_DO, -2, //IDX_LA, -2,
+    IDX_END,    0
+};
+
+char mus2[] = {
+    IDX_LA,    -1, IDX_LAD,   -1, IDX_SI,    -1, IDX_DO,    -1,
+    IDX_DOD,   -1, IDX_RE,    -1, IDX_RED,   -1, IDX_MI,    -1,
+    IDX_FA,    -1, IDX_FAD,   -1, IDX_SOL,   -1, IDX_SOLD,  -1,
+    IDX_LA,     0, IDX_LAD,    0, IDX_SI,     0, IDX_DO,     0,
+    IDX_DOD,    0, IDX_RE,     0, IDX_RED,    0, IDX_MI,     0,
+    IDX_FA,     0, IDX_FAD,    0, IDX_SOL,    0, IDX_SOLD,   0,
+    IDX_END,    0
+};
+
+char mus3[] = {
+    IDX_DO,  -2,    IDX_RE,  -2, IDX_MI,  -2,
+    IDX_SOL, -2,    IDX_MI,  -2, IDX_RE,  -2,
+    IDX_END, 0
+};
+
+char nolife[] = {
+    IDX_SOLD,   -3,
+    IDX_DO,     -2,
+    IDX_RED,    -2,
+    IDX_SOLD,   -2,
+    IDX_RED,    -2,
+    IDX_DO,     -2,
+
+    IDX_END,    0
+};
+
+#define ARMURE 0x5F // 0 1011111, diese/bemol, la si do re mi fa sol
+
+// TODO: Dans un char, on peut mettre la note (4 bits), la hauteur (3 bits) et la duree (1 bit : legato ou non)
+char mus[] = {
+    // INTRO
+    IDX_RED,  -2,   IDX_RED,  -1,   IDX_FAD,  -1,   IDX_RED,   0,   IDX_LAD,   0,   IDX_FAD,  -1,
+    IDX_SOLD, -2,   IDX_SI,   -1,   IDX_RED,  -1,   IDX_SI,    0,   IDX_SOLD, -1,   IDX_RED,  -1,
+    IDX_SI,   -1,   IDX_RED,  -1,   IDX_FAD,  -1,   IDX_SI,    0,   IDX_FAD,  -1,   IDX_RED,  -1,
+    IDX_DOD,  -1,   IDX_RED,  -1,   IDX_FAD,  -1,   IDX_DOD,   0,   IDX_FAD,  -1,   IDX_FA,   -1,
+
+    IDX_RED,  -2,   IDX_RED,  -1,   IDX_FAD,  -1,   IDX_RED,   0,   IDX_LAD,   0,   IDX_FAD,  -1,
+    IDX_SOLD, -2,   IDX_SI,   -1,   IDX_RED,  -1,   IDX_SI,    0,   IDX_SOLD, -1,   IDX_RED,  -1,
+    IDX_SI,   -1,   IDX_RED,  -1,   IDX_FAD,  -1,   IDX_SI,    0,   IDX_FAD,  -1,   IDX_RED,  -1,
+    IDX_DOD,  -1,   IDX_RED,  -1,   IDX_FAD,  -1,   IDX_DOD,   0,   IDX_FAD,  -1,   IDX_FA,   -1,
+
+
 #if 0
-char mus[] = {
-    IDX_LA, -2,
-    IDX_DO, -2,
-    IDX_MI, -2,
-    IDX_LA, -1,
-    IDX_DO, -1,
-    IDX_MI, -1,
-    IDX_LA,  0,
-    IDX_DO,  0,
-//    IDX_MI,  0,
-//    IDX_LA,  1,
-//    IDX_DO,  1,
-//    IDX_MI,  1,
-//    IDX_LA,  2,
-//    IDX_DO,  2,
-//    IDX_MI,  2,
-//    IDX_LA,        3,
-//    IDX_DO,        3,
-//    IDX_MI,        3,
-//    IDX_LA,        4,
-//    IDX_DO,        4,
-//    IDX_MI,        4,
-//    IDX_DO,        4,
-//    IDX_LA,        4,
-//    IDX_MI,        3,
-//    IDX_DO,        3,
-//    IDX_LA,        3,
-//    IDX_MI,  2,
-//    IDX_DO,  2,
-//    IDX_LA,  2,
-//    IDX_MI,  1,
-//    IDX_DO,  1,
-//    IDX_LA,  1,
-    IDX_MI,  0,
-    IDX_DO,  0,
-    IDX_LA,  0,
-    IDX_MI, -1,
-    IDX_DO, -1,
-    IDX_LA, -1,
-    IDX_MI, -2,
-    IDX_DO, -2,
-    //IDX_LA, -2,
-
-    IDX_END,    0
-};
-#elif 1
-char mus[] = {
-    IDX_DO, -2,
-    IDX_RE, -2,
-    IDX_MI, -2,
-    IDX_SOL, -2,
-    IDX_MI, -2,
-    IDX_RE, -2,
-
-    IDX_END,    0
-};
-#else
-char mus[] = {
-    IDX_LA,		-1,
-    IDX_LAD,	-1,
-    IDX_SI,		-1,
-    IDX_DO,		-1,
-    IDX_DOD,	-1,
-    IDX_RE,		-1,
-    IDX_RED,	-1,
-    IDX_MI,		-1,
-    IDX_FA,		-1,
-    IDX_FAD,	-1,
-    IDX_SOL,	-1,
-    IDX_SOLD,	-1,
-    IDX_LA,		0,
-    IDX_LAD,	0,
-    IDX_SI,		0,
-    IDX_DO,		0,
-    IDX_DOD,	0,
-    IDX_RE,		0,
-    IDX_RED,	0,
-    IDX_MI,		0,
-    IDX_FA,		0,
-    IDX_FAD,	0,
-    IDX_SOL,	0,
-    IDX_SOLD,	0,
-
-    IDX_END,	0
-};
+    IDX_RED,  -2,   IDX_FAD,  -1,   IDX_LAD,   0,   IDX_RED,   0,   IDX_LAD,   0,   IDX_FAD,  -1,
+    IDX_SOLD, -2,   IDX_SI,   -1,   IDX_RED,  -1,   IDX_SOLD, -1,   IDX_RED,  -1,   IDX_SOLD, -2,
+    IDX_SI,   -1,   IDX_RED,  -1,   IDX_FAD,  -1,   IDX_SI,    0,   IDX_FAD,  -1,   IDX_RED,  -1,
+    IDX_DOD,  -1,   IDX_RED,  -1,   IDX_FAD,  -1,   IDX_DOD,   0,   IDX_FAD,  -1,   IDX_RED,  -1,
 #endif
 
+    IDX_DOD,  -1,   IDX_RED,  -1,   IDX_RED,  -1,   IDX_DOD,  -1,   IDX_RED,  -1,   IDX_RED,  -1,
+    IDX_DOD,  -1,   IDX_RED,  -1,   IDX_FAD,  -1,   IDX_RED,  -1,   IDX_DOD,  -1,   IDX_LAD,  -1,
+    IDX_SOLD, -2,   IDX_FAD,  -2,   IDX_SOLD, -2,   IDX_FAD,  -2,   IDX_SOLD, -2,   IDX_SOLD, -2,
+    IDX_FAD,  -2,   IDX_SOLD, -2,   IDX_SOLD, -2,   IDX_SOLD, -2,   IDX_SOLD, -2,
+
+    IDX_DOD,  -1,   IDX_RED,  -1,   IDX_RED,  -1,   IDX_DOD,  -1,   IDX_RED,  -1,   IDX_RED,  -1,
+    IDX_DOD,  -1,   IDX_RED,  -1,   IDX_FAD,  -1,   IDX_RED,  -1,   IDX_DOD,  -1,   IDX_LAD,  -1,
+    IDX_SOLD, -2,   IDX_FAD,  -2,   IDX_SOLD, -2,   IDX_FAD,  -2,   IDX_SOLD, -2,   IDX_SOLD, -2,
+    IDX_FAD,  -2,   IDX_SOLD, -2,   IDX_SOLD, -2,   IDX_SOLD, -2,   IDX_SOLD, -2,
+    IDX_END,    0,
+
+#if 0
+    IDX_SOLD, -1,   IDX_SOLD, -1,   IDX_SOLD, -1,
+    IDX_LAD,   0,   IDX_LAD,   0,   IDX_LAD,   0,   IDX_LAD,   0,
+    IDX_LAD,   0,   IDX_LAD,   0,   IDX_LAD,   0,   IDX_SOLD, -1,   IDX_SOLD, -1,
+    IDX_LAD,   0,   IDX_SOLD, -1,   IDX_LAD,   0,   IDX_LAD,   0,   IDX_SOLD, -1,   IDX_LAD,   0,
+    IDX_LAD,   0,   IDX_LAD,   0,   IDX_RED,   0,   IDX_RED,   0,   IDX_DOD,   0,   IDX_LAD,   0,
+
+#endif
+    IDX_END,    0
+};
+
+#define VAR 12
 #define PARTITION_SIZE 7
 
-unsigned char partition[12 * PARTITION_SIZE + 3] =
-{
-    0x00, 50, 0xbf,     0x01, 0, 0x00,      0x02, 0, 0x17,      0x03, 0, 0xf9,
-    0xff,  0, 0x00
-};
+unsigned char partition[12 * PARTITION_SIZE + 3];
 
 static char const *m = mus;
 char variation;
@@ -213,7 +212,7 @@ void init_musique()
     signed char hauteur;
     int i;
 
-    variation = 1;
+    variation = VAR;
 
     *musique = (struct etape_musique*)partition;
     *etape_courante = (struct etape_musique*)partition;
@@ -307,7 +306,7 @@ void jouer_musique()
 
     if (*m == IDX_END)
     {
-        transpose += n;
+        //transpose += n;
         if (transpose == 0)
             n = 1;
         if (transpose == 11)

@@ -37,6 +37,15 @@ void init_musique();
 
 void change_variation(char i);
 
+#if 0 // GNU EXTENSIONS :'(
+struct note
+{
+	unsigned char note:4;
+	unsigned char hauteur:3;
+	unsigned char continuation:1;
+} __attribute__((__packed__));
+#endif
+
 # define FREQ_PROC	111860800
 
 # define IDX_END	0
