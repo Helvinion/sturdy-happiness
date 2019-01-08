@@ -14,7 +14,7 @@ static const struct partie_personnage G_Jolivet_debout_tab[] =
 	{0, 24,   58, 2}
 };
 
-static const struct hitbox G_Jolivet_debout_hitbox = {-8, 0, 16, 32};
+static const struct hitbox G_Jolivet_debout_hitbox = {-7, 0, 16, 32};
 
 static const struct pack_hitbox G_Jolivet_debout_pack_hitbox =
 {

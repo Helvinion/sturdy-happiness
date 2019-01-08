@@ -123,6 +123,42 @@ static void corriger_verticalement(struct element_physique *element)
 	}
 }
 
+static void corriger_honrizontalement(struct element_physique *element)
+{
+	signed int future_coordonnee_x = element->coordonnee_x + element->vitesse_x;
+	signed int tmp = 0;
+	const struct avatar*      raccourci_dessin = element->dessin;
+	const struct pack_hitbox* raccourci_hitbox = raccourci_dessin->anims->anims[raccourci_dessin->animation_courante].anim[raccourci_dessin->etape_anim].hitbox;
+	const struct hitbox*      raccourci_hitbox_collision = raccourci_hitbox->collisions;
+
+	// Application des collisions.
+
+	if (element->vitesse_x > 0)
+	{
+		tmp = detecter_future_collision_droite(element, raccourci_hitbox_collision);
+		if (tmp != element->vitesse_x)
+		{
+			element->acceleration_x = 0;
+			element->vitesse_x = tmp;
+			element->coordonnee_x += tmp;
+		}
+		else
+			element->coordonnee_x = future_coordonnee_x;
+	}
+	else if (element->vitesse_x < 0)
+	{
+		tmp = detecter_future_collision_gauche(element, raccourci_hitbox_collision);
+		if (tmp != element->vitesse_x)
+		{
+			element->acceleration_x = 0;
+			element->vitesse_x = tmp;
+			element->coordonnee_x += tmp;
+		}
+		else
+			element->coordonnee_x = future_coordonnee_x;
+	}
+}
+
 static void appliquer_gravite(struct element_physique *element)
 {
 	static unsigned char i = 1;
@@ -156,9 +192,12 @@ void appliquer_physique(struct element_physique *element)
 {
 	// Gestion horizontale :
 	element->vitesse_x += element->acceleration_x;
+	corriger_honrizontalement(element);
+
+	/*
 	if (element->vitesse_x != 0)
 		element->coordonnee_x += element->vitesse_x;
-
+*/
 	// Gestion verticale :
 	appliquer_gravite(element);
 	corriger_verticalement(element);

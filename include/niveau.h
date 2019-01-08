@@ -14,5 +14,7 @@ int camera_dans_niveau(unsigned int x, unsigned int y);
 
 signed int detecter_future_collision_bas(const struct element_physique *element, const struct hitbox *ligne);
 signed int detecter_future_collision_haut(const struct element_physique *element, const struct hitbox *ligne);
+signed int detecter_future_collision_gauche(const struct element_physique *element, const struct hitbox *ligne);
+signed int detecter_future_collision_droite(const struct element_physique *element, const struct hitbox *ligne);
 
 #endif /* NIVEAU_H */

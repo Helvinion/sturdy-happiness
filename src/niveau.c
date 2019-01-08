@@ -270,6 +270,7 @@ signed int detecter_future_collision_bas(const struct element_physique *element,
 }
 #endif
 
+/* TODO : fusionner les deux methodes */
 signed int detecter_future_collision_bas(const struct element_physique *element, const struct hitbox *box)
 {
 	/* Calcul du début et de la fin du trait de collision à tester */
@@ -317,3 +318,53 @@ signed int detecter_future_collision_haut(const struct element_physique *element
 
 	return element->vitesse_y;
 }
+
+signed int detecter_future_collision_droite(const struct element_physique *element, const struct hitbox *box)
+{
+	/* Calcul du début et de la fin du trait de collision à tester */
+	const signed int position_y_debut = element->coordonnee_y + element->vitesse_y + box->diff_y;
+	const signed int position_y_fin = position_y_debut + box->taille_y;
+
+	const signed int position_x = element->coordonnee_x + box->diff_x + box->taille_x + element->vitesse_x;
+
+	/* Variables d'itération */
+	signed int       position_y = position_y_debut;
+	unsigned char    tile;
+
+	for (position_y = position_y_debut; position_y < position_y_fin; position_y += 8)
+	{
+		tile = get_tile(position_x, position_y);
+		if (tile == '|')
+		{
+			return (element->vitesse_x - position_x % 8 - 1);
+		}
+	}
+
+	return element->vitesse_x;
+}
+
+signed int detecter_future_collision_gauche(const struct element_physique *element, const struct hitbox *box)
+{
+	/* Calcul du début et de la fin du trait de collision à tester */
+	const signed int position_y_debut = element->coordonnee_y + element->vitesse_y + box->diff_y;
+	const signed int position_y_fin = position_y_debut + box->taille_y;
+
+	const signed int position_x = element->coordonnee_x + box->diff_x + element->vitesse_x;
+
+	/* Variables d'itération */
+	signed int       position_y = position_y_debut;
+	unsigned char    tile;
+
+	for (position_y = position_y_debut; position_y < position_y_fin; position_y += 8)
+	{
+		tile = get_tile(position_x, position_y);
+		if (tile == '|')
+		{
+			__asm__("nop");
+			return (element->vitesse_x + position_x % 8 - 1);
+		}
+	}
+
+	return element->vitesse_x;
+}
+
