@@ -52,22 +52,23 @@ static void traiter_animations()
 
 static void debut_boucle()
 {
-	update_manettes();
-	tiles_update();
-	sprites_begin();
+	update_manettes(); // 289 cycles
+	tiles_update();    // 21 cycles
+	sprites_begin();   // 23 cycles
 }
 
 static void fin_boucle()
 {
 	int i = 0;
 
-	traiter_animations();
+	traiter_animations(); // 36 cycles quand rien à animer
 //	while (i++ < nombre_elements)
 	{
-		appliquer_physique(joueur);
-		afficher_personnage(joueur->dessin);
+		appliquer_physique(joueur); // 12948 cycles quand rien ne se passe !
+		afficher_personnage(joueur->dessin); // 8591 cycles
 	}
-	sprites_end();
+	sprites_end(); // 70 cycles
+	
 	attendre_VBlank();
 }
 
@@ -107,10 +108,15 @@ void initialiser()
 
 void moteur_mode_jeu()
 {
-	jouer_musique();
+	// OK alors à partir d'ici, on a le droit de
+	// n'utiliser que 28000 cycles CPU pour faire
+	// tout ce qu'on a à faire. TOUT compte !
+	
+	jouer_musique(); // 250 cycles en général, 2450 cycles aux changements de note
 
-	debut_boucle();
+	debut_boucle(); // 345 cycles
 
+	// Tout ça : 846 cycles quand rien ne se passe
 	if (bouton_presse_manette_1(BOUTON_DROITE))
 	{
 		changer_animation(joueur->dessin, 1);
@@ -141,5 +147,5 @@ void moteur_mode_jeu()
 		change_variation(-1);
 	}
 
-	fin_boucle();
+	fin_boucle(); // 15923 cycles !
 }

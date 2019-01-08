@@ -96,7 +96,7 @@ static void corriger_verticalement(struct element_physique *element)
 
 	if (element->vitesse_y > 0)
 	{
-		tmp = detecter_future_collision_bas(element, raccourci_hitbox_collision);
+		tmp = detecter_future_collision_bas(element, raccourci_hitbox_collision); // 4012 cycles; s'execute sans raison
 		if (tmp != element->vitesse_y)
 		{
 			element->flags |= FLAGS_AU_SOL;
@@ -191,22 +191,24 @@ static void appliquer_gravite(struct element_physique *element)
 void appliquer_physique(struct element_physique *element)
 {
 	// Gestion horizontale :
-	element->vitesse_x += element->acceleration_x;
-	corriger_honrizontalement(element);
-
+	element->vitesse_x += element->acceleration_x; 	// 566 cycles (!?)
+	
+	corriger_honrizontalement(element); // 1734 cycles
+	
 	/*
 	if (element->vitesse_x != 0)
 		element->coordonnee_x += element->vitesse_x;
 */
 	// Gestion verticale :
-	appliquer_gravite(element);
-	corriger_verticalement(element);
+	appliquer_gravite(element); // 1348 cycles
+	corriger_verticalement(element); // 1665 cycles mais des fois 7000 ?
 
 	// Remise à zéro des forces
 	element->acceleration_x = 0;
 	element->acceleration_y = 0;
-
-	MaJ_dessin(element);
+	// 439 cycles
+	
+	MaJ_dessin(element); // 1198
 }
 
 void saut(struct element_physique *element)
