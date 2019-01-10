@@ -31,7 +31,8 @@ SRC_C=./avatar.c \
 ./physique.c     \
 ./tiles.c        \
 ./moteur.c       \
-./niveau.c
+./niveau_bis.c   \
+./tileset.c
 
 ANIMS_C=./animations/src/G_Jolivet.c
 

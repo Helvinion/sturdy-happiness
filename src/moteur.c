@@ -55,6 +55,7 @@ static void debut_boucle()
 	update_manettes(); // 289 cycles
 	tiles_update();    // 21 cycles
 	sprites_begin();   // 23 cycles
+	jouer_musique(); // 250 cycles en général, 2450 cycles aux changements de note
 }
 
 static void fin_boucle()
@@ -64,8 +65,8 @@ static void fin_boucle()
 	traiter_animations(); // 36 cycles quand rien à animer
 //	while (i++ < nombre_elements)
 	{
-		appliquer_physique(joueur); // 12948 cycles quand rien ne se passe !
-		afficher_personnage(joueur->dessin); // 8591 cycles
+		// appliquer_physique(joueur); // 12948 cycles quand rien ne se passe !
+		// afficher_personnage(joueur->dessin); // 8591 cycles
 	}
 	sprites_end(); // 70 cycles
 	
@@ -75,8 +76,6 @@ static void fin_boucle()
 void initialiser()
 {
 	int i = 0;
-	static struct avatar G_Jolivet = {40, 0, &G_Jolivet_pack, 0, 0};
-	static struct element_physique G_Jolivet_phys = {&G_Jolivet, 40,191, 0,0, 0,0, 0};
 
 	(*PPUCTRL) = (unsigned char)0x90;
 
@@ -98,8 +97,6 @@ void initialiser()
 
     tiles_init();
 
-	joueur = &G_Jolivet_phys;
-
 	changer_niveau(0);
 	fixer_position_camera(0, 0);
 	init_musique();
@@ -110,42 +107,8 @@ void moteur_mode_jeu()
 {
 	// OK alors à partir d'ici, on a le droit de
 	// n'utiliser que 28000 cycles CPU pour faire
-	// tout ce qu'on a à faire. TOUT compte !
-	
-	jouer_musique(); // 250 cycles en général, 2450 cycles aux changements de note
+	// tout ce qu'on a à faire. TOUT compte !	
+	debut_boucle();
 
-	debut_boucle(); // 345 cycles
-
-	// Tout ça : 846 cycles quand rien ne se passe
-	if (bouton_presse_manette_1(BOUTON_DROITE))
-	{
-		changer_animation(joueur->dessin, 1);
-		joueur->vitesse_x = 2;
-	}
-	else if (bouton_presse_manette_1(BOUTON_GAUCHE))
-	{
-		changer_animation(joueur->dessin, 1);
-		joueur->vitesse_x = -2;
-	}
-	else
-	{
-		changer_animation(joueur->dessin, 0);
-		joueur->vitesse_x = 0;
-	}
-
-	if (nouveau_bouton_presse_manette_1(BOUTON_A))
-	{
-		saut(joueur);
-	}
-
-	if (bouton_presse_manette_1(BOUTON_HAUT))
-	{
-		change_variation(1);
-	}
-	else if (bouton_presse_manette_1(BOUTON_BAS))
-	{
-		change_variation(-1);
-	}
-
-	fin_boucle(); // 15923 cycles !
+	fin_boucle();
 }
