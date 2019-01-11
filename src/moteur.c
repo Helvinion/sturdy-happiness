@@ -109,6 +109,23 @@ void moteur_mode_jeu()
 	// n'utiliser que 28000 cycles CPU pour faire
 	// tout ce qu'on a à faire. TOUT compte !	
 	debut_boucle();
+	
+	if (bouton_presse_manette_1(BOUTON_DROITE))
+	{
+		bouger_camera_x(1);
+	}
+	else if (bouton_presse_manette_1(BOUTON_GAUCHE))
+	{
+		bouger_camera_x(-1);
+	}
+	else if (bouton_presse_manette_1(BOUTON_HAUT))
+	{
+		bouger_camera_y(-1);
+	}
+	else if (bouton_presse_manette_1(BOUTON_BAS))
+	{
+		bouger_camera_y(1);
+	}
 
 	fin_boucle();
 }

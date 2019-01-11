@@ -18,28 +18,28 @@ typedef struct niveau niveau;
 
 static const unsigned char niveau_0_tiles[] = 
 {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0,
-	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0,
+	0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0,
+	0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0,
+	0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0,
+	1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0,
+	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
 };
 
 static const niveau niveau_0 = 
 {
 	0,
-	16,
+	32,
 	16,
 	0,
 	0,
@@ -60,17 +60,25 @@ static void attendre_VBlank(void)
 
 unsigned int taille_x_niveau_courant()
 {
-	return 0;
+	return niveau_0.taille_x * 2;
 }
 
 unsigned int taille_y_niveau_courant()
 {
-	return 0;
+	return niveau_0.taille_y * 2;
 }
 
 void changer_niveau(unsigned char niveau_n)
 {
 	return;
+}
+
+void charger_brique(unsigned char nametable, unsigned char ligne, unsigned char colonne, unsigned char brique)
+{
+	tiles_add_change(nametable, ligne * 2,     colonne * 2,     GET_TILE(brique)[0]);
+	tiles_add_change(nametable, ligne * 2,     colonne * 2 + 1, GET_TILE(brique)[1]);
+	tiles_add_change(nametable, ligne * 2 + 1, colonne * 2,     GET_TILE(brique)[2]);
+	tiles_add_change(nametable, ligne * 2 + 1, colonne * 2 + 1, GET_TILE(brique)[3]);
 }
 
 void charger_niveau(unsigned char nametable, unsigned int position_x, unsigned int position_y)
@@ -80,15 +88,12 @@ void charger_niveau(unsigned char nametable, unsigned int position_x, unsigned i
 	const unsigned char* addr = niveau_0.addr;
 	unsigned char* tile = 0;
 		
-	while (ligne < 15)
+	while (ligne < 16)
 	{
 		colonne = 0;
 		while (colonne < 16)
 		{
-			tiles_add_change(nametable, ligne * 2,     colonne * 2,     GET_TILE(*addr)[0]);
-			tiles_add_change(nametable, ligne * 2,     colonne * 2 + 1, GET_TILE(*addr)[1]);
-			tiles_add_change(nametable, ligne * 2 + 1, colonne * 2,     GET_TILE(*addr)[2]);
-			tiles_add_change(nametable, ligne * 2 + 1, colonne * 2 + 1, GET_TILE(*addr)[3]);
+			charger_brique(nametable, ligne, colonne, *addr);
 			
 			if (colonne % 2 == 1)
 			{
@@ -100,6 +105,7 @@ void charger_niveau(unsigned char nametable, unsigned int position_x, unsigned i
 			colonne++;
 		}
 		ligne++;
+		addr = addr - 16 + niveau_0.taille_x;
 	}
 	
 	return;
@@ -107,12 +113,54 @@ void charger_niveau(unsigned char nametable, unsigned int position_x, unsigned i
 
 void charger_ligne_verticale(unsigned char nametable, unsigned char c, unsigned int position_x, unsigned int position_y)
 {
-	return;
+	unsigned char *buffer = tiles_get_buffer();
+	unsigned char i = 0;
+	const unsigned char* addr = niveau_0.addr;
+	unsigned char brique;
+	
+	addr += (position_y / 2) * niveau_0.taille_x + (position_x / 2);
+
+	while (i < 16)
+	{
+		brique = *addr;
+		
+		*buffer = GET_TILE(brique)[0];
+		buffer++;
+		*buffer = GET_TILE(brique)[2];
+		buffer++;
+		
+		addr += niveau_0.taille_x;
+		i++;
+	}
+	
+	tiles_set_group_vertical(nametable, c);
+	tiles_commit_groups();
 }
 
 void charger_ligne_horizontale(unsigned char nametable, unsigned char l, unsigned int position_x, unsigned int position_y)
 {
-	return;
+	unsigned char *buffer = tiles_get_buffer();
+	unsigned char i = 0;
+	const unsigned char* addr = niveau_0.addr;
+	unsigned char brique;
+	
+	addr += (position_y / 2) * niveau_0.taille_x + (position_x / 2);
+
+	while (i < 16)
+	{
+		brique = *addr;
+		
+		*buffer = GET_TILE(brique)[0];
+		buffer++;
+		*buffer = GET_TILE(brique)[1];
+		buffer++;
+		
+		addr++;
+		i++;
+	}
+	
+	tiles_set_group_horizontal(nametable, l);
+	tiles_commit_groups();
 }
 
 int camera_dans_niveau(unsigned int x, unsigned int y)

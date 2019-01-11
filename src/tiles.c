@@ -1,5 +1,6 @@
 #include <common.h>
 #include <utile.h>
+#include <tiles.h>
 
 #define TILE_UPDATE_BUFFER 0x32
 #define TILE_UPDATE_SIZE   0x34
@@ -60,9 +61,6 @@ void tiles_add_group_vertical(unsigned char nametable, unsigned char c, const ch
 	unsigned int i = 0;
 	char*        dst = group_updates.tiles;
 
-	group_updates.ppu_addr = TO_PPU_ADDR(NAMETABLES[nametable], 0, c);
-	group_updates.options = 1; // Vertical (todo : a améliorer)
-
 	while (i != 32)
 	{
 		*dst = *source;
@@ -70,15 +68,14 @@ void tiles_add_group_vertical(unsigned char nametable, unsigned char c, const ch
 		source++;
 		i++;
 	}
+
+	tiles_set_group_vertical(nametable, c);
 }
 
 void tiles_add_group_horizontal(unsigned char nametable, unsigned char l, unsigned int step, const char* source)
 {
 	unsigned int i = 0;
 	char*        dst = group_updates.tiles;
-
-	group_updates.ppu_addr = TO_PPU_ADDR(NAMETABLES[nametable], l, 0);
-	group_updates.options = 0; // Horizontal (todo : a améliorer)
 
 	while (i != 32)
 	{
@@ -87,6 +84,8 @@ void tiles_add_group_horizontal(unsigned char nametable, unsigned char l, unsign
 		source -= step;
 		i++;
 	}
+	
+	tiles_set_group_horizontal(nametable, l);
 }
 
 void tiles_update()
@@ -96,4 +95,21 @@ void tiles_update()
     if ((*((unsigned char*)TILE_UPDATE_SIZE)) == 0)
         size = 0;
 	//size_groups = (*TILE_GROUP_SIZE);
+}
+
+unsigned char *tiles_get_buffer()
+{
+	return group_updates.tiles;
+}
+
+void tiles_set_group_vertical(unsigned char nametable, unsigned char c)
+{
+	group_updates.ppu_addr = TO_PPU_ADDR(NAMETABLES[nametable], 0, c);
+	group_updates.options = 1; // Vertical (todo : a améliorer)
+}
+
+void tiles_set_group_horizontal(unsigned char nametable, unsigned char l)
+{
+	group_updates.ppu_addr = TO_PPU_ADDR(NAMETABLES[nametable], l, 0);
+	group_updates.options = 0; // Horizontal (todo : a améliorer)
 }
