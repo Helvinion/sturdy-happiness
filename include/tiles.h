@@ -1,8 +1,11 @@
 #ifndef TILES_H
 #define TILES_H
 
+extern const unsigned short int NAMETABLES[];
+
 void tiles_init();
 void tiles_commit_changes();
+void tiles_set_change(unsigned short addr, unsigned char data);
 void tiles_add_change(unsigned char nametable, unsigned char l, unsigned char c, unsigned char data);
 void tiles_update();
 

@@ -23,11 +23,14 @@ enum Couleur
 	ROUGE  = 0x06,
 	VERT   = 0x1a,
 	MARRON = 0x07,
+	MARR_2 = 0x16,
 	PEAU   = 0x36,
 	VERT_1 = 0x18,
 	SAUMON = 0x26,
 	BLEU   = 0x01,
-	BLEU_1 = 0x11
+	BLEU_1 = 0x11,
+	KAKI   = 0x08,
+	BLEU_2 = 0x21
 };
 
 struct palette
@@ -45,6 +48,7 @@ enum Palettes
 	PALETTE_VISAGE_JOLIVET = 2,
 	PALETTE_JOLIVET = 3,
 	PALETTE_GRISE = 4,
+	PALETTE_NIVEAU_0 = 5
 };
 
 struct palette palettes_definies[] =
@@ -53,7 +57,8 @@ struct palette palettes_definies[] =
 	{NOIR, JAUNE, ROUGE, VERT},
 	{NOIR, MARRON, PEAU, BLEU},
 	{NOIR, VERT, PEAU, BLEU},
-	{NOIR, GRIS_0, GRIS_2, BLANC}
+	{NOIR, GRIS_0, GRIS_2, BLANC},
+	{BLEU_2, MARRON, KAKI, VERT}
 };
 
 void changer_palette(unsigned char which, struct palette* pal);

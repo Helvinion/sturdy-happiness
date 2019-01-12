@@ -84,7 +84,7 @@ void initialiser()
 
     for (i = 0; i < 4; i++)
     {
- 	   changer_palette(i, get_palette(PALETTE_GRISE));
+ 	   changer_palette(i, get_palette(PALETTE_NIVEAU_0));
     }
 
 	changer_palette(4, get_palette(PALETTE_CURSEURS));

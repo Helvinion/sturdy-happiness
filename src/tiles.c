@@ -20,10 +20,11 @@ struct tiles_group
 	unsigned char      tiles[32];
 };
 
-static const unsigned short int NAMETABLES[4] = {0x2000, 0x2400, 0x2800, 0x2C00};
+const unsigned short int NAMETABLES[4] = {0x2000, 0x2400, 0x2800, 0x2C00};
 static struct tile_to_update update_buffer[10]; // On interdit de modifier plus de 10 éléments en une frame
 static struct tiles_group    group_updates;  // On interdit de modifier plus d'une ligne complète en une seule frame
 static unsigned char size;
+
 
 void tiles_init()
 {
@@ -46,14 +47,19 @@ void tiles_commit_groups()
 	ecrire_zeropage(TILE_GROUP_SIZE, 1);
 }
 
-void tiles_add_change(unsigned char nametable, unsigned char l, unsigned char c, unsigned char data)
+void tiles_set_change(unsigned short addr, unsigned char data)
 {
 	if (size < 10)
 	{
-		update_buffer[size].ppu_addr = TO_PPU_ADDR(NAMETABLES[nametable], l, c);
+		update_buffer[size].ppu_addr = addr;
 		update_buffer[size].ppu_data = data;
 		size++;
 	}
+}
+
+void tiles_add_change(unsigned char nametable, unsigned char l, unsigned char c, unsigned char data)
+{
+	tiles_set_change(TO_PPU_ADDR(NAMETABLES[nametable], l, c), data);
 }
 
 void tiles_add_group_vertical(unsigned char nametable, unsigned char c, const char *source)
