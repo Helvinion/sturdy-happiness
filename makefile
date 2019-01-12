@@ -61,7 +61,7 @@ compile/obj/%.o:src/asm/%.asm
 compile/obj/%.o:compile/asm/%.asm
 	$(CA) $< $(CAFLAGS) -o $@
 
-rom.nes: $(OBJ) link.ld lib/nes.lib
+rom.nes: $(OBJ) link.ld lib/nes.lib graphics/noobnes.chr
 	$(LD) -v -C link.ld -o rom.nes $(OBJ) lib/nes.lib -vm -m debug/rom.map -Ln debug/labels.txt
 	$(PYTHON) fceux_symbols.py
 
