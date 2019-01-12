@@ -13,9 +13,9 @@ struct niveau
 	const unsigned int   taille_y;
 	const unsigned int   x0;
 	const unsigned int   y0;
-	const unsigned char* addr;
-	const unsigned char  palettes[4];
-	const unsigned char* palette_map;
+	const unsigned char *addr;
+	const unsigned char *palettes;
+	const unsigned char *palette_map;
 };
 typedef struct niveau niveau;
 
@@ -51,6 +51,7 @@ static const unsigned char niveau_0_palettes[] =
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
+static const unsigned char niveau_0_palettes_list[4] = {PALETTE_NIVEAU_0, PALETTE_NIVEAU_0, PALETTE_NIVEAU_0, PALETTE_NIVEAU_0};
 
 static const niveau niveau_0 = 
 {
@@ -60,7 +61,7 @@ static const niveau niveau_0 =
 	0,
 	0,
 	niveau_0_tiles,
-	{PALETTE_NIVEAU_0,PALETTE_NIVEAU_0,PALETTE_NIVEAU_0,PALETTE_NIVEAU_0},
+	niveau_0_palettes_list,
 	niveau_0_palettes,
 };
 
@@ -105,41 +106,42 @@ void charger_niveau(unsigned char nametable, unsigned int position_x, unsigned i
 	unsigned char colonne = 0;
 	const unsigned char* addr = niveau_0.addr;
 	const unsigned char* palette = niveau_0.palette_map;
-	unsigned char* tile = 0;
-	unsigned char i = 0;
-	
-	while (i < 4)
-	{
- 	   changer_palette(i, get_palette(niveau_0.palettes[i]));
-	   i++;
-    }
-	
-	while (ligne < 16)
+
+    changer_palette(0, get_palette(niveau_0.palettes[0]));
+ 	changer_palette(1, get_palette(niveau_0.palettes[1]));
+ 	changer_palette(2, get_palette(niveau_0.palettes[2]));
+ 	changer_palette(3, get_palette(niveau_0.palettes[3]));
+
+	while (ligne < 15)
 	{
 		colonne = 0;
 		while (colonne < 16)
 		{
 			charger_brique(nametable, ligne, colonne, *addr);
-			charger_palette(nametable, ligne, colonne, *palette);
+			charger_palette(nametable, ligne / 2, colonne / 2, *palette);
 			
-			if (colonne % 2 == 1)
+			addr++;
+			colonne++;
+
+			// Si on était sur une colonne impaire on
+			// commite les changements effectués
+			if (colonne % 2 == 0) // 2 4 6 8 10 12 14
 			{
 				tiles_commit_changes();
 				attendre_VBlank();
 				tiles_update();
 				palette++;
 			}
-			addr++;
-			colonne++;
 		}
 		
+		palette -= 8;
 		// Passer à la ligne suivante
 		ligne++;
 		addr = addr - 16 + niveau_0.taille_x;
-		if (ligne % 2 == 1)
-			palette = palette - 8 + niveau_0.taille_x / 2;
+		if (ligne % 2 == 0)
+			palette = palette + (niveau_0.taille_x / 2);
 	}
-	
+
 	return;
 }
 
@@ -152,7 +154,7 @@ void charger_ligne_verticale(unsigned char nametable, unsigned char c, unsigned 
 	
 	addr += (position_y / 2) * niveau_0.taille_x + (position_x / 2);
 
-	while (i < 16)
+	while (i < 15)
 	{
 		brique = *addr;
 		

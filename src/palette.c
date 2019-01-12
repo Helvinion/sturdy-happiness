@@ -4,18 +4,13 @@
 #define BUFFER_PALETTE ((struct palette*)0x01b0)
 #define TALLE_BUFFER_PALETTE 8
 
-const unsigned short int ATTRTABLES[4] = {0x23c0, 0x27c0, 0x2ac0, 0x2fc0};
+const unsigned short int ATTRTABLES[4] = {0x23c0, 0x27c0, 0x2bc0, 0x2fc0};
 
-void charger_palette(unsigned char nametable, unsigned char ligne, unsigned char colonne, unsigned char which)
+void charger_palette(unsigned char nametable, unsigned char ligne, unsigned char colonne, unsigned char color)
 {
 	unsigned char* attrtable = 0;
-	unsigned char value = which << 6 + which << 4 + which << 2 + which;
-	
-	// Conversion de coordonnées de nametable (8 px * 8 px) en coordonnées de attrtable (32 px * 32 px)
-	// On ne divise pas l par qautre parce que juste après on le multiplie par 8. Autant optimiser
-	// Ce 8 est la taille en largeur de la attrtable. Pour accéder au bon octet on est sensé faire
-	// l * 8 + c. Sauf qu'on veut diviser l par 4. D'ou l'optimisation.
-	attrtable = (unsigned char*)(ATTRTABLES[nametable] + ligne * 2 + colonne / 4);
+
+	attrtable = (unsigned char*)(ATTRTABLES[nametable] + ligne * 8 + colonne);
 	/*
 	value = *attrtable;
 	
@@ -37,7 +32,7 @@ void charger_palette(unsigned char nametable, unsigned char ligne, unsigned char
 			value = (value & 0xfc) | (which & 0x03) << 0; // haut gauche : 0000 0011
 	}
 	*/
-	tiles_set_change(attrtable, value);
+	tiles_set_change(attrtable, color);
 	tiles_commit_changes();
 }
 
