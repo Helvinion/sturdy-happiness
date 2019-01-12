@@ -6,7 +6,7 @@
 
 const unsigned short int ATTRTABLES[4] = {0x23c0, 0x27c0, 0x2ac0, 0x2fc0};
 
-void charger_palette(unsigned char which, unsigned char nametable, unsigned char ligne, unsigned char colonne)
+void charger_palette(unsigned char nametable, unsigned char ligne, unsigned char colonne, unsigned char which)
 {
 	unsigned char* attrtable = 0;
 	unsigned char value = which << 6 + which << 4 + which << 2 + which;

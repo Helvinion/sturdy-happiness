@@ -1,6 +1,7 @@
 #include "niveau.h"
 #include "tileset.h"
 #include "tiles.h"
+#include "palette.h"
 
 #define PPU_CTRL_VAR  (unsigned char*)(0x30) // Nametable pour le scrolling (aussi géré en VBlank)
 #define PPUSTAT (unsigned char*)0x2002
@@ -13,6 +14,8 @@ struct niveau
 	const unsigned int   x0;
 	const unsigned int   y0;
 	const unsigned char* addr;
+	const unsigned char  palettes[4];
+	const unsigned char* palette_map;
 };
 typedef struct niveau niveau;
 
@@ -36,6 +39,19 @@ static const unsigned char niveau_0_tiles[] =
 	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
 };
 
+static const unsigned char niveau_0_palettes[] = 
+{
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+};
+
+
 static const niveau niveau_0 = 
 {
 	0,
@@ -43,7 +59,9 @@ static const niveau niveau_0 =
 	16,
 	0,
 	0,
-	niveau_0_tiles
+	niveau_0_tiles,
+	{PALETTE_NIVEAU_0,PALETTE_NIVEAU_0,PALETTE_NIVEAU_0,PALETTE_NIVEAU_0},
+	niveau_0_palettes,
 };
 
 static void attendre_VBlank(void)
@@ -86,26 +104,40 @@ void charger_niveau(unsigned char nametable, unsigned int position_x, unsigned i
 	unsigned char ligne = 0;
 	unsigned char colonne = 0;
 	const unsigned char* addr = niveau_0.addr;
+	const unsigned char* palette = niveau_0.palette_map;
 	unsigned char* tile = 0;
-		
+	unsigned char i = 0;
+	
+	while (i < 4)
+	{
+ 	   changer_palette(i, get_palette(niveau_0.palettes[i]));
+	   i++;
+    }
+	
 	while (ligne < 16)
 	{
 		colonne = 0;
 		while (colonne < 16)
 		{
 			charger_brique(nametable, ligne, colonne, *addr);
+			charger_palette(nametable, ligne, colonne, *palette);
 			
 			if (colonne % 2 == 1)
 			{
 				tiles_commit_changes();
 				attendre_VBlank();
 				tiles_update();
+				palette++;
 			}
 			addr++;
 			colonne++;
 		}
+		
+		// Passer à la ligne suivante
 		ligne++;
 		addr = addr - 16 + niveau_0.taille_x;
+		if (ligne % 2 == 1)
+			palette = palette - 8 + niveau_0.taille_x / 2;
 	}
 	
 	return;

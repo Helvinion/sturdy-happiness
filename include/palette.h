@@ -61,6 +61,7 @@ struct palette palettes_definies[] =
 	{BLEU_2, MARRON, KAKI, VERT}
 };
 
+void charger_palette(unsigned char nametable, unsigned char ligne, unsigned char colonne, unsigned char color);
 void changer_palette(unsigned char which, struct palette* pal);
 struct palette *get_palette(enum Palettes id);
 

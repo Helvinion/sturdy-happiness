@@ -82,11 +82,6 @@ void initialiser()
     // changer les palettes pendant un vblank
     attendre_VBlank();
 
-    for (i = 0; i < 4; i++)
-    {
- 	   changer_palette(i, get_palette(PALETTE_NIVEAU_0));
-    }
-
 	changer_palette(4, get_palette(PALETTE_CURSEURS));
 	changer_palette(5, get_palette(PALETTE_VISAGE_JOLIVET));
 	changer_palette(6, get_palette(PALETTE_JOLIVET));
