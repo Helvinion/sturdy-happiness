@@ -2,6 +2,7 @@
 #include "tileset.h"
 #include "tiles.h"
 #include "palette.h"
+#include "zeropage.h"
 
 #define PPU_CTRL_VAR  (unsigned char*)(0x30) // Nametable pour le scrolling (aussi géré en VBlank)
 #define PPUSTAT (unsigned char*)0x2002
@@ -37,11 +38,14 @@ static const unsigned char niveau_0_tiles[] =
 	3, 7, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 8, 4, 0,
 	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 8, 4,
 	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
 };
 
 static const unsigned char niveau_0_palettes[] = 
 {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -57,7 +61,7 @@ static const niveau niveau_0 =
 {
 	0,
 	32,
-	16,
+	18,
 	0,
 	0,
 	niveau_0_tiles,
@@ -145,9 +149,9 @@ void charger_niveau(unsigned char nametable, unsigned int position_x, unsigned i
 	return;
 }
 
-void charger_ligne_verticale(unsigned char nametable, unsigned char c, unsigned int position_x, unsigned int position_y)
+void charger_ligne_verticale(unsigned char nametable, unsigned char l, unsigned char c, unsigned int position_x, unsigned int position_y)
 {
-	unsigned char *buffer = tiles_get_buffer();
+	unsigned char *buffer = TILES_GROUP_BUF;
 	unsigned char i = 0;
 	const unsigned char* addr = niveau_0.addr;
 	unsigned char brique;
@@ -166,34 +170,62 @@ void charger_ligne_verticale(unsigned char nametable, unsigned char c, unsigned 
 		addr += niveau_0.taille_x;
 		i++;
 	}
-	
-	tiles_set_group_vertical(nametable, c);
+
+	/*
+	tiles_add_change(3, 2, 2, '0' + nametable);
+	tiles_add_change(3, 9, 10, 'L');
+	tiles_add_change(3, 9, 11, 'C');
+	tiles_add_change(3, 10, 9, 'T');
+	tiles_add_change(3, 11, 9, 'N');
+	tiles_add_change(3, 10, 10, '0' + l);
+	tiles_add_change(3, 10, 11, '0' + c);
+	tiles_add_change(3, 11, 10, '0' + position_y / 2);
+	tiles_add_change(3, 11, 11, '0' + position_x / 2);
+	tiles_commit_changes();
+	*/
+	tiles_set_group_vertical(nametable, l, c);
 	tiles_commit_groups();
 }
 
-void charger_ligne_horizontale(unsigned char nametable, unsigned char l, unsigned int position_x, unsigned int position_y)
+void charger_ligne_horizontale(unsigned char nametable, unsigned char l, unsigned char c, unsigned int position_x, unsigned int position_y)
 {
-	unsigned char *buffer = tiles_get_buffer();
+	unsigned char *buffer = TILES_GROUP_BUF;
 	unsigned char i = 0;
 	const unsigned char* addr = niveau_0.addr;
 	unsigned char brique;
-	
+
 	addr += (position_y / 2) * niveau_0.taille_x + (position_x / 2);
 
 	while (i < 16)
 	{
 		brique = *addr;
 		
-		*buffer = GET_TILE(brique)[0 + position_x % 2];
+		*buffer = GET_TILE(brique)[0 + position_y % 2];
 		buffer++;
-		*buffer = GET_TILE(brique)[1 + position_x % 2];
+		*buffer = GET_TILE(brique)[1 + position_y % 2];
 		buffer++;
 		
 		addr++;
 		i++;
 	}
-	
-	tiles_set_group_horizontal(nametable, l);
+
+
+	tiles_add_change(nametable ^ 0x03, l, c, GET_TILE(*addr)[0 + position_y % 2]);
+	tiles_commit_changes();
+
+	/*
+	tiles_add_change(3, 2, 2, '0' + nametable);
+	tiles_add_change(3, 9, 10, 'L');
+	tiles_add_change(3, 9, 11, 'C');
+	tiles_add_change(3, 10, 9, 'T');
+	tiles_add_change(3, 11, 9, 'N');
+	tiles_add_change(3, 10, 10, '0' + l);
+	tiles_add_change(3, 10, 11, '0' + c);
+	tiles_add_change(3, 11, 10, '0' + position_y / 2);
+	tiles_add_change(3, 11, 11, '0' + position_x / 2);
+	tiles_commit_changes();
+*/
+	tiles_set_group_horizontal(nametable, l, c);
 	tiles_commit_groups();
 }
 

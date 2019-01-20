@@ -14,8 +14,8 @@ void tiles_add_group_vertical(unsigned char nametable, unsigned char c, const ch
 void tiles_add_group_horizontal(unsigned char nametable, unsigned char l, unsigned int step, const char *buffer);
 
 unsigned char *tiles_get_buffer();
-void tiles_set_group_vertical(unsigned char nametable, unsigned char c);
-void tiles_set_group_horizontal(unsigned char nametable, unsigned char l);
+void tiles_set_group_vertical(unsigned char nametable, unsigned char l, unsigned char c);
+void tiles_set_group_horizontal(unsigned char nametable, unsigned char l, unsigned char c);
 
 
 #endif /* TILES_H */

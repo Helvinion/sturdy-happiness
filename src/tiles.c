@@ -1,6 +1,7 @@
 #include <common.h>
 #include <utile.h>
 #include <tiles.h>
+#include <zeropage.h>
 
 #define TILE_UPDATE_BUFFER 0x32
 #define TILE_UPDATE_SIZE   0x34
@@ -17,7 +18,7 @@ struct tiles_group
 {
 	unsigned short int ppu_addr;
 	unsigned char      options;
-	unsigned char      tiles[32];
+	unsigned char      *tiles;
 };
 
 const unsigned short int NAMETABLES[4] = {0x2000, 0x2400, 0x2800, 0x2C00};
@@ -30,6 +31,7 @@ void tiles_init()
 {
 	ecrire_zeropage_addr(TILE_UPDATE_BUFFER, (unsigned char*)update_buffer);
 	ecrire_zeropage_addr(TILE_GROUP, (unsigned char*)(&group_updates));
+	group_updates.tiles = (unsigned char*)(TILES_GROUP_BUF);
 	ecrire_zeropage(TILE_UPDATE_SIZE, 0);
 	ecrire_zeropage(TILE_GROUP_SIZE, 0);
     size                  = 0;
@@ -75,7 +77,7 @@ void tiles_add_group_vertical(unsigned char nametable, unsigned char c, const ch
 		i++;
 	}
 
-	tiles_set_group_vertical(nametable, c);
+	tiles_set_group_vertical(nametable, 0, c);
 }
 
 void tiles_add_group_horizontal(unsigned char nametable, unsigned char l, unsigned int step, const char* source)
@@ -91,7 +93,7 @@ void tiles_add_group_horizontal(unsigned char nametable, unsigned char l, unsign
 		i++;
 	}
 	
-	tiles_set_group_horizontal(nametable, l);
+	tiles_set_group_horizontal(nametable, l, 0);
 }
 
 void tiles_update()
@@ -108,14 +110,14 @@ unsigned char *tiles_get_buffer()
 	return group_updates.tiles;
 }
 
-void tiles_set_group_vertical(unsigned char nametable, unsigned char c)
+void tiles_set_group_vertical(unsigned char nametable, unsigned char l, unsigned char c)
 {
-	group_updates.ppu_addr = TO_PPU_ADDR(NAMETABLES[nametable], 0, c);
+	group_updates.ppu_addr = TO_PPU_ADDR(NAMETABLES[nametable], l, c);
 	group_updates.options = 1; // Vertical (todo : a améliorer)
 }
 
-void tiles_set_group_horizontal(unsigned char nametable, unsigned char l)
+void tiles_set_group_horizontal(unsigned char nametable, unsigned char l, unsigned char c)
 {
-	group_updates.ppu_addr = TO_PPU_ADDR(NAMETABLES[nametable], l, 0);
+	group_updates.ppu_addr = TO_PPU_ADDR(NAMETABLES[nametable], l, c);
 	group_updates.options = 0; // Horizontal (todo : a améliorer)
 }
