@@ -153,7 +153,7 @@ copy_vertical:
 	sta PPU_CTRL_VAR      ;
 	sta PPU_CTRL          ;
 	;jsr copy_group
-    ldx #32               ; Initialise le compteur d'octets copiés
+    ldx #30               ; Initialise le compteur d'octets copiés
 	ldy #0
 @4:	lda PPU_VER_LOC       ; Récupère la ligne d'écriture
 	cmp #30               ; Si on vient d'atteindre la table des attributions

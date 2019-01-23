@@ -158,6 +158,14 @@ void charger_ligne_verticale(unsigned char nametable, unsigned char l, unsigned 
 	
 	addr += (position_y / 2) * niveau_0.taille_x + (position_x / 2);
 
+	if (position_y % 2 == 1)
+	{
+		*buffer = GET_TILE(*addr)[2 + position_x % 2];
+		buffer++;
+		i++;
+		addr += niveau_0.taille_x;
+	}
+	
 	while (i < 15)
 	{
 		brique = *addr;
@@ -170,19 +178,10 @@ void charger_ligne_verticale(unsigned char nametable, unsigned char l, unsigned 
 		addr += niveau_0.taille_x;
 		i++;
 	}
+	
+	if (position_y % 2 == 1)
+		*buffer = GET_TILE(*addr)[0 + position_x % 2];
 
-	/*
-	tiles_add_change(3, 2, 2, '0' + nametable);
-	tiles_add_change(3, 9, 10, 'L');
-	tiles_add_change(3, 9, 11, 'C');
-	tiles_add_change(3, 10, 9, 'T');
-	tiles_add_change(3, 11, 9, 'N');
-	tiles_add_change(3, 10, 10, '0' + l);
-	tiles_add_change(3, 10, 11, '0' + c);
-	tiles_add_change(3, 11, 10, '0' + position_y / 2);
-	tiles_add_change(3, 11, 11, '0' + position_x / 2);
-	tiles_commit_changes();
-	*/
 	tiles_set_group_vertical(nametable, l, c);
 	tiles_commit_groups();
 }
@@ -196,6 +195,14 @@ void charger_ligne_horizontale(unsigned char nametable, unsigned char l, unsigne
 
 	addr += (position_y / 2) * niveau_0.taille_x + (position_x / 2);
 
+	if (position_x % 2 == 1)
+	{
+		*buffer = GET_TILE(*addr)[1 + position_y % 2];
+		buffer++;
+		i++;
+		addr ++;
+	}
+	
 	while (i < 16)
 	{
 		brique = *addr;
@@ -208,6 +215,9 @@ void charger_ligne_horizontale(unsigned char nametable, unsigned char l, unsigne
 		addr++;
 		i++;
 	}
+
+	if (position_x % 2 == 1)
+		*buffer = GET_TILE(*addr)[0 + position_y % 2];
 
 
 	tiles_add_change(nametable ^ 0x03, l, c, GET_TILE(*addr)[0 + position_y % 2]);
