@@ -7,9 +7,9 @@ extern const unsigned char tileset[];
 
 extern unsigned char *index_in_buffer_tile_groupe;
 
-void load_tile_hg(unsigned char brique);
-void load_tile_hd(unsigned char brique);
-void load_tile_bg(unsigned char brique);
-void load_tile_bd(unsigned char brique);
+void load_tile_hg();
+void load_tile_hd();
+void load_tile_bg();
+void load_tile_bd();
 
 #endif

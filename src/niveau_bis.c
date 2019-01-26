@@ -10,8 +10,8 @@
 struct niveau
 {
 	const unsigned char  numero;
-	const unsigned int   taille_x;
-	const unsigned int   taille_y;
+	const unsigned char  taille_x;
+	const unsigned char  taille_y;
 	const unsigned int   x0;
 	const unsigned int   y0;
 	const unsigned char *addr;
@@ -149,73 +149,104 @@ void charger_niveau(unsigned char nametable, unsigned int position_x, unsigned i
 	return;
 }
 
-static const unsigned char* addr;
+static const unsigned char** addr = (const unsigned char**)ADDR_LEVEL;
 
 static void charger_ligne_verticale_hg()
 {
-	unsigned char i = 0;
-	unsigned char brique;
-	
-	while (i < 15)
-	{
-		brique = *addr;
-		load_tile_hg(brique);
-		load_tile_bg(brique);
-		
-		addr += niveau_0.taille_x;
-		i++;
-	}
+	asm("ldx #0");
+	asm("debut_boucle:");
+	asm("txa");
+	asm("pha");
+	asm("jsr _load_tile_hg");
+	asm("jsr _load_tile_bg");
+	asm("pla");
+	asm("tax");
+	asm("lda _niveau_0+1");
+	asm("clc");
+	asm("adc %b",(char)ADDR_LEVEL);
+	asm("sta %b",(char)ADDR_LEVEL);
+	asm("lda %b+1",(char)ADDR_LEVEL);
+	asm("adc #0");
+	asm("sta %b+1",(char)ADDR_LEVEL);
+	asm("inx");
+	asm("cpx #15");
+	asm("bne debut_boucle");
+	asm("rts");
 }
 
 static void charger_ligne_verticale_hd()
 {
-	unsigned char i = 0;
-	unsigned char brique;
-		
-	while (i < 15)
-	{
-		brique = *addr;
-		
-		load_tile_hd(brique);
-		load_tile_bd(brique);
-		
-		addr += niveau_0.taille_x;
-		i++;
-	}
+	asm("ldx #0");
+	asm("debut_boucle:");
+	asm("txa");
+	asm("pha");
+	asm("jsr _load_tile_hd");
+	asm("jsr _load_tile_bd");
+	asm("pla");
+	asm("tax");
+	asm("lda _niveau_0+1");
+	asm("clc");
+	asm("adc %b",(char)ADDR_LEVEL);
+	asm("sta %b",(char)ADDR_LEVEL);
+	asm("lda %b+1",(char)ADDR_LEVEL);
+	asm("adc #0");
+	asm("sta %b+1",(char)ADDR_LEVEL);
+	asm("inx");
+	asm("cpx #15");
+	asm("bne debut_boucle");
+	asm("rts");
 }
 
 static void charger_ligne_verticale_bg()
 {
-	unsigned char i = 0;
-	
-	while (i < 15)
-	{
-		load_tile_bg(*addr);
-		addr += niveau_0.taille_x;
-		load_tile_hg(*addr);
-		
-		i++;
-	}
+	asm("ldx #0");
+	asm("debut_boucle:");
+	asm("txa");
+	asm("pha");
+	asm("jsr _load_tile_bg");
+	asm("lda _niveau_0+1");
+	asm("clc");
+	asm("adc %b",(char)ADDR_LEVEL);
+	asm("sta %b",(char)ADDR_LEVEL);
+	asm("lda %b+1",(char)ADDR_LEVEL);
+	asm("adc #0");
+	asm("sta %b+1",(char)ADDR_LEVEL);
+	asm("jsr _load_tile_hg");
+	asm("pla");
+	asm("tax");
+	asm("inx");
+	asm("cpx #15");
+	asm("bne debut_boucle");
+	asm("rts");
 }
 
 static void charger_ligne_verticale_bd()
 {
-	unsigned char i = 0;
-	
-	while (i < 15)
-	{
-		load_tile_bd(*addr);
-		addr += niveau_0.taille_x;
-		load_tile_hd(*addr);
-		
-		i++;
-	}
+	asm("ldx #0");
+	asm("debut_boucle:");
+	asm("txa");
+	asm("pha");
+	asm("jsr _load_tile_bd");
+	asm("lda _niveau_0+1");
+	asm("clc");
+	asm("adc %b",(char)ADDR_LEVEL);
+	asm("sta %b",(char)ADDR_LEVEL);
+	asm("lda %b+1",(char)ADDR_LEVEL);
+	asm("adc #0");
+	asm("sta %b+1",(char)ADDR_LEVEL);
+	asm("jsr _load_tile_hd");
+	asm("pla");
+	asm("tax");
+	asm("inx");
+	asm("cpx #15");
+	asm("bne debut_boucle");
+	asm("rts");
 }
 
 void charger_ligne_verticale(unsigned char nametable, unsigned char l, unsigned char c, unsigned int position_x, unsigned int position_y)
 {
 	*index_in_buffer_tile_groupe = 0;
-	addr = niveau_0.addr + (position_y / 2) * niveau_0.taille_x + (position_x / 2);
+	*addr = niveau_0.addr + (position_y / 2) * niveau_0.taille_x + (position_x / 2);
 
 	if (position_y % 2 == 0)
 	{
