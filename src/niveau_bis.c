@@ -149,38 +149,88 @@ void charger_niveau(unsigned char nametable, unsigned int position_x, unsigned i
 	return;
 }
 
-void charger_ligne_verticale(unsigned char nametable, unsigned char l, unsigned char c, unsigned int position_x, unsigned int position_y)
-{
-	unsigned char *buffer = TILES_GROUP_BUF;
-	unsigned char i = 0;
-	const unsigned char* addr = niveau_0.addr;
-	unsigned char brique;
-	
-	addr += (position_y / 2) * niveau_0.taille_x + (position_x / 2);
+static const unsigned char* addr;
 
-	if (position_y % 2 == 1)
-	{
-		*buffer = GET_TILE(*addr)[2 + position_x % 2];
-		buffer++;
-		i++;
-		addr += niveau_0.taille_x;
-	}
+static void charger_ligne_verticale_hg()
+{
+	unsigned char i = 0;
+	unsigned char brique;
 	
 	while (i < 15)
 	{
 		brique = *addr;
-		
-		*buffer = GET_TILE(brique)[0 + position_x % 2];
-		buffer++;
-		*buffer = GET_TILE(brique)[2 + position_x % 2];
-		buffer++;
+		load_tile_hg(brique);
+		load_tile_bg(brique);
 		
 		addr += niveau_0.taille_x;
 		i++;
 	}
+}
+
+static void charger_ligne_verticale_hd()
+{
+	unsigned char i = 0;
+	unsigned char brique;
+		
+	while (i < 15)
+	{
+		brique = *addr;
+		
+		load_tile_hd(brique);
+		load_tile_bd(brique);
+		
+		addr += niveau_0.taille_x;
+		i++;
+	}
+}
+
+static void charger_ligne_verticale_bg()
+{
+	unsigned char i = 0;
 	
-	if (position_y % 2 == 1)
-		*buffer = GET_TILE(*addr)[0 + position_x % 2];
+	while (i < 15)
+	{
+		load_tile_bg(*addr);
+		addr += niveau_0.taille_x;
+		load_tile_hg(*addr);
+		
+		i++;
+	}
+}
+
+static void charger_ligne_verticale_bd()
+{
+	unsigned char i = 0;
+	
+	while (i < 15)
+	{
+		load_tile_bd(*addr);
+		addr += niveau_0.taille_x;
+		load_tile_hd(*addr);
+		
+		i++;
+	}
+}
+
+void charger_ligne_verticale(unsigned char nametable, unsigned char l, unsigned char c, unsigned int position_x, unsigned int position_y)
+{
+	*index_in_buffer_tile_groupe = 0;
+	addr = niveau_0.addr + (position_y / 2) * niveau_0.taille_x + (position_x / 2);
+
+	if (position_y % 2 == 0)
+	{
+		if (position_x % 2 == 0)
+			charger_ligne_verticale_hg();
+		else
+			charger_ligne_verticale_hd();
+	}
+	else
+	{
+		if (position_x % 2 == 0)
+			charger_ligne_verticale_bg();
+		else
+			charger_ligne_verticale_bd();
+	}
 
 	tiles_set_group_vertical(nametable, l, c);
 	tiles_commit_groups();
@@ -223,18 +273,6 @@ void charger_ligne_horizontale(unsigned char nametable, unsigned char l, unsigne
 	tiles_add_change(nametable ^ 0x03, l, c, GET_TILE(*addr)[0 + position_y % 2]);
 	tiles_commit_changes();
 
-	/*
-	tiles_add_change(3, 2, 2, '0' + nametable);
-	tiles_add_change(3, 9, 10, 'L');
-	tiles_add_change(3, 9, 11, 'C');
-	tiles_add_change(3, 10, 9, 'T');
-	tiles_add_change(3, 11, 9, 'N');
-	tiles_add_change(3, 10, 10, '0' + l);
-	tiles_add_change(3, 10, 11, '0' + c);
-	tiles_add_change(3, 11, 10, '0' + position_y / 2);
-	tiles_add_change(3, 11, 11, '0' + position_x / 2);
-	tiles_commit_changes();
-*/
 	tiles_set_group_horizontal(nametable, l, c);
 	tiles_commit_groups();
 }
