@@ -1,7 +1,8 @@
-#include <tiles.h>
-#include <niveau.h>
-#include <physique.h>
-#include <hitbox.h>
+#include "niveau.h"
+#include "tileset.h"
+#include "tiles.h"
+#include "palette.h"
+#include "zeropage.h"
 
 #define PPU_CTRL_VAR  (unsigned char*)(0x30) // Nametable pour le scrolling (aussi géré en VBlank)
 #define PPUSTAT (unsigned char*)0x2002
@@ -9,99 +10,64 @@
 struct niveau
 {
 	const unsigned char  numero;
-	const unsigned int   taille_x;
-	const unsigned int   taille_y;
+	const unsigned char  taille_x;
+	const unsigned char  taille_y;
 	const unsigned int   x0;
 	const unsigned int   y0;
-	const unsigned char* addr;
+	const unsigned char *addr;
+	const unsigned char *palettes;
+	const unsigned char *palette_map;
 };
-
 typedef struct niveau niveau;
 
-static const niveau niveau_0 =
+static const unsigned char niveau_0_tiles[] = 
 {
-	0,
-	74,
-	30,
-	0,
-	0,
-	"D                             "
-	" +||||||||||||||||||||||||||+ "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                       -  - "
-	" -                       -  - "
-	" -                       -  - "
-	" -                       +||+ "
-	" -                       -  - "
-	" -                       -  - "
-	" -                       -  - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                    -     - "
-	" -                    -     - "
-	" -                    -     - "
-	" -                    +|||||+ "
-	" -                    -     - "
-	" -                    -     - "
-	" -                    -     - "
-	" -                          - "
-	" -               -          - "
-	" -               -          - "
-	" -               -          - "
-	" -               +||||||||||+ "
-	" -               -          - "
-	" -               -          - "
-	" -               -          - "
-	" -           -              - "
-	" -           -              - "
-	" -           -              - "
-	" -           +||||||||||||||+ "
-	" -           -              - "
-	" -           -              - "
-	" -           -              - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" -                          - "
-	" +||||||||||||||||||||||||||+ "
-	"                             F"
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 10,1,11, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 3, 9, 6, 9, 6, 9, 6, 9, 6, 9, 6, 9, 6, 7, 2, 8, 4, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 3, 7, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 8, 4, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 3, 7, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 8, 4, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 3, 7, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 8, 4, 0, 0, 0, 0, 0,
+	0, 0, 0, 3, 7, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 8, 4, 0, 0, 0, 0,
+	0, 0, 3, 7, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 8, 4, 0, 0, 0,
+	0, 3, 7, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 8, 4, 0, 0,
+	3, 7, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 8, 4, 0,
+	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 8, 4,
+	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
 };
 
-static const niveau *niveau_courant;
+static const unsigned char niveau_0_palettes[] = 
+{
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+};
+
+static const unsigned char niveau_0_palettes_list[4] = {PALETTE_NIVEAU_0, PALETTE_NIVEAU_0, PALETTE_NIVEAU_0, PALETTE_NIVEAU_0};
+
+static const niveau niveau_0 = 
+{
+	0,
+	32,
+	18,
+	0,
+	0,
+	niveau_0_tiles,
+	niveau_0_palettes_list,
+	niveau_0_palettes,
+};
 
 static void attendre_VBlank(void)
 {
@@ -117,254 +83,350 @@ static void attendre_VBlank(void)
 
 unsigned int taille_x_niveau_courant()
 {
-	return niveau_courant->taille_x;
+	return niveau_0.taille_x * 2;
 }
 
 unsigned int taille_y_niveau_courant()
 {
-	return niveau_courant->taille_y;
+	return niveau_0.taille_y * 2;
 }
 
 void changer_niveau(unsigned char niveau_n)
 {
-	if (niveau_n == 0)
-		niveau_courant = &niveau_0;
+	return;
 }
 
-// Pour charger un niveau :
-// On lit les octets du niveau
-// On les place dans la nametable indiquée.
-// On switch sur cete nametable
-// N.B. : Cette fonction garde le controle du programme tant que la nametable n'a pas été remplie
-// En principe, cela dure 32 frames.
+void charger_brique(unsigned char nametable, unsigned char ligne, unsigned char colonne, unsigned char brique)
+{
+	tiles_add_change(nametable, ligne * 2,     colonne * 2,     GET_TILE(brique)[0]);
+	tiles_add_change(nametable, ligne * 2,     colonne * 2 + 1, GET_TILE(brique)[1]);
+	tiles_add_change(nametable, ligne * 2 + 1, colonne * 2,     GET_TILE(brique)[2]);
+	tiles_add_change(nametable, ligne * 2 + 1, colonne * 2 + 1, GET_TILE(brique)[3]);
+}
+
 void charger_niveau(unsigned char nametable, unsigned int position_x, unsigned int position_y)
 {
-	unsigned int ligne;
+	unsigned char ligne = 0;
+	unsigned char colonne = 0;
+	const unsigned char* addr = niveau_0.addr;
+	const unsigned char* palette = niveau_0.palette_map;
 
-	for (ligne = 0; ligne < 30; ligne++)
+    changer_palette(0, get_palette(niveau_0.palettes[0]));
+ 	changer_palette(1, get_palette(niveau_0.palettes[1]));
+ 	changer_palette(2, get_palette(niveau_0.palettes[2]));
+ 	changer_palette(3, get_palette(niveau_0.palettes[3]));
+
+	while (ligne < 15)
 	{
-		// Charger la ligne du niveau située en (position_x, position_y + ligne sur l'écran à la ligne l
-		charger_ligne_horizontale(nametable, ligne, position_x, position_y + ligne);
+		colonne = 0;
+		while (colonne < 16)
+		{
+			charger_brique(nametable, ligne, colonne, *addr);
+			charger_palette(nametable, ligne / 2, colonne / 2, *palette);
+			
+			addr++;
+			colonne++;
 
-		attendre_VBlank();
-		tiles_update();
+			// Si on était sur une colonne impaire on
+			// commite les changements effectués
+			if (colonne % 2 == 0) // 2 4 6 8 10 12 14
+			{
+				tiles_commit_changes();
+				attendre_VBlank();
+				tiles_update();
+				palette++;
+			}
+		}
+		
+		palette -= 8;
+		// Passer à la ligne suivante
+		ligne++;
+		addr = addr - 16 + niveau_0.taille_x;
+		if (ligne % 2 == 0)
+			palette = palette + (niveau_0.taille_x / 2);
 	}
+
+	return;
 }
 
-static const unsigned char *conversion_coordonnees_adresse(unsigned int x, unsigned int y)
+static const unsigned char** addr = (const unsigned char**)ADDR_LEVEL;
+
+static void charger_ligne_verticale_hg()
 {
-	static const niveau *niveau_courant_sav = 0;
-	static const char   *fin_buffer_sav = 0;
-	static unsigned int x_sav;
-	static unsigned int mul_sav; /* sauvegarde de la position x * la taille y */
+	// Initialiser le compteur de boucle
+	asm("ldx #0");
+	asm("debut_boucle:");
 
-	/* Les données du niveau le représentent tourné à 90 degrés
-	   Il faut donc appliquer une formule différente de d'habitude
-	   pour trouver où commencer à lire les données :
-	   DEBUT + (TAILLE_X * TAILLE_Y) - TAILLE_Y - (TAILLE_Y * POSITION_X) + POSITION_Y */
+	// Appeler les deux procédures de changement appropriées
+	asm("txa");
+	asm("pha");
+	asm("jsr _load_tile_hg");
+	asm("jsr _load_tile_bg");
+	asm("pla");
+	asm("tax");
 
-	if (niveau_courant != niveau_courant_sav)
+	// Incrémenter l'adresse de lecture utilisée par les procédures de changement
+	asm("lda _niveau_0+1");
+	asm("clc");
+	asm("adc %b",(char)ADDR_LEVEL);
+	asm("sta %b",(char)ADDR_LEVEL);
+	asm("lda %b+1",(char)ADDR_LEVEL);
+	asm("adc #0");
+	asm("sta %b+1",(char)ADDR_LEVEL);
+
+	// Passer au tour de boucle suivant
+	asm("inx");
+	asm("cpx #15");
+	asm("bne debut_boucle");
+
+	asm("rts");
+}
+
+static void charger_ligne_verticale_hd()
+{
+	asm("ldx #0");
+	asm("debut_boucle:");
+	asm("txa");
+	asm("pha");
+	asm("jsr _load_tile_hd");
+	asm("jsr _load_tile_bd");
+	asm("pla");
+	asm("tax");
+	asm("lda _niveau_0+1");
+	asm("clc");
+	asm("adc %b",(char)ADDR_LEVEL);
+	asm("sta %b",(char)ADDR_LEVEL);
+	asm("lda %b+1",(char)ADDR_LEVEL);
+	asm("adc #0");
+	asm("sta %b+1",(char)ADDR_LEVEL);
+	asm("inx");
+	asm("cpx #15");
+	asm("bne debut_boucle");
+	asm("rts");
+}
+
+static void charger_ligne_verticale_bg()
+{
+	asm("ldx #0");
+	asm("debut_boucle:");
+	asm("txa");
+	asm("pha");
+	asm("jsr _load_tile_bg");
+	asm("lda _niveau_0+1");
+	asm("clc");
+	asm("adc %b",(char)ADDR_LEVEL);
+	asm("sta %b",(char)ADDR_LEVEL);
+	asm("lda %b+1",(char)ADDR_LEVEL);
+	asm("adc #0");
+	asm("sta %b+1",(char)ADDR_LEVEL);
+	asm("jsr _load_tile_hg");
+	asm("pla");
+	asm("tax");
+	asm("inx");
+	asm("cpx #15");
+	asm("bne debut_boucle");
+	asm("rts");
+}
+
+static void charger_ligne_verticale_bd()
+{
+	asm("ldx #0");
+	asm("debut_boucle:");
+	asm("txa");
+	asm("pha");
+	asm("jsr _load_tile_bd");
+	asm("lda _niveau_0+1");
+	asm("clc");
+	asm("adc %b",(char)ADDR_LEVEL);
+	asm("sta %b",(char)ADDR_LEVEL);
+	asm("lda %b+1",(char)ADDR_LEVEL);
+	asm("adc #0");
+	asm("sta %b+1",(char)ADDR_LEVEL);
+	asm("jsr _load_tile_hd");
+	asm("pla");
+	asm("tax");
+	asm("inx");
+	asm("cpx #15");
+	asm("bne debut_boucle");
+	asm("rts");
+}
+
+void charger_ligne_verticale(unsigned char nametable, unsigned char l, unsigned char c, unsigned int position_x, unsigned int position_y)
+{
+	*index_in_buffer_tile_groupe = 0;
+	*addr = niveau_0.addr + (position_y / 2) * niveau_0.taille_x + (position_x / 2);
+
+	// Pour chacune des positions fournies, charger une ligne à partir d'un des quatre tiles par brique.
+	if (position_y % 2 == 0)
 	{
-		/* Optimisation : on garde une trace de la taille du niveau courant */
-		niveau_courant_sav = niveau_courant;
-		fin_buffer_sav = niveau_courant->addr + (niveau_courant->taille_y * niveau_courant->taille_x);
-		x_sav = x;
+		if (position_x % 2 == 0)
+			charger_ligne_verticale_hg(); // hg = Haut Gauche
+		else
+			charger_ligne_verticale_hd(); // hd = Haut Droite
+	}
+	else
+	{
+		if (position_x % 2 == 0)
+			charger_ligne_verticale_bg(); // bg = Bas Gauche
+		else
+			charger_ligne_verticale_bd(); // bd = Bas Droite
 	}
 
-	/* Optimisation : si x changé de 1 par rapport à la dernière fois,
-	   Pas besoin de refaire la multiplication */
-	if (x == x_sav + 1)
-		mul_sav += niveau_courant->taille_y;
-	else if (x == x_sav - 1)
-		mul_sav -= niveau_courant->taille_y;
-	else if (x != x_sav)
-		mul_sav = niveau_courant->taille_y * (x);
-
-	x_sav = x;
-
-	return (fin_buffer_sav - mul_sav + y);
+	tiles_set_group_vertical(nametable, l, c);
+	tiles_commit_groups();
 }
 
-void charger_ligne_verticale(unsigned char nametable, unsigned char colonne_ecran, unsigned int position_x, unsigned int position_y)
+void charger_ligne_horizontale_hg()
 {
-	static unsigned char colonne_sav = 0;
-	static unsigned int x_sav = 0;
-	static unsigned int y_sav = 0;
-
-	if (colonne_sav == colonne_ecran && x_sav == position_x && y_sav == position_y)
-		return;
-
-	tiles_add_group_vertical(nametable, colonne_ecran, conversion_coordonnees_adresse(position_x, position_y));
-	tiles_commit_groups();
-
-	colonne_sav = colonne_ecran;
-	x_sav = position_x;
-	y_sav = position_y;
+	asm("ldx #0");
+	asm("debut_boucle:");
+	asm("txa");
+	asm("pha");
+	asm("jsr _load_tile_hg");
+	asm("jsr _load_tile_hd");
+	asm("pla");
+	asm("tax");
+	asm("clc");
+	asm("lda %b", (char)ADDR_LEVEL);
+	asm("adc #1");
+	asm("sta %b", (char)ADDR_LEVEL);
+	asm("lda %b+1",(char)ADDR_LEVEL);
+	asm("adc #0");
+	asm("sta %b+1",(char)ADDR_LEVEL);
+	asm("inx");
+	asm("cpx #16");
+	asm("bne debut_boucle");
+	asm("rts");
 }
 
-void charger_ligne_horizontale(unsigned char nametable, unsigned char ligne_ecran, unsigned int position_x, unsigned int position_y)
+void charger_ligne_horizontale_hd()
 {
-	static unsigned char ligne_sav = 0;
-	static unsigned int x_sav = 0;
-	static unsigned int y_sav = 0;
+	asm("ldx #0");
+	asm("debut_boucle:");
+	asm("txa");
+	asm("pha");
+	asm("jsr _load_tile_hd");
+	asm("clc");
+	asm("lda %b", (char)ADDR_LEVEL);
+	asm("adc #1");
+	asm("sta %b", (char)ADDR_LEVEL);
+	asm("lda %b+1",(char)ADDR_LEVEL);
+	asm("adc #0");
+	asm("sta %b+1",(char)ADDR_LEVEL);
+	asm("jsr _load_tile_hg");
+	asm("pla");
+	asm("tax");
+	asm("inx");
+	asm("cpx #16");
+	asm("bne debut_boucle");
+	asm("rts");	
+}
 
-	if (ligne_sav == ligne_ecran && x_sav == position_x && y_sav == position_y)
-		return;
+void charger_ligne_horizontale_bg()
+{
+	asm("ldx #0");
+	asm("debut_boucle:");
+	asm("txa");
+	asm("pha");
+	asm("jsr _load_tile_bg");
+	asm("jsr _load_tile_bd");
+	asm("pla");
+	asm("tax");
+	asm("clc");
+	asm("lda %b", (char)ADDR_LEVEL);
+	asm("adc #1");
+	asm("sta %b", (char)ADDR_LEVEL);
+	asm("lda %b+1",(char)ADDR_LEVEL);
+	asm("adc #0");
+	asm("sta %b+1",(char)ADDR_LEVEL);
+	asm("inx");
+	asm("cpx #16");
+	asm("bne debut_boucle");
+	asm("rts");
+}
 
-	tiles_add_group_horizontal(nametable, ligne_ecran, niveau_courant->taille_y, conversion_coordonnees_adresse(position_x, position_y));
+void charger_ligne_horizontale_bd()
+{
+	asm("ldx #0");
+	asm("debut_boucle:");
+	asm("txa");
+	asm("pha");
+	asm("jsr _load_tile_bd");
+	asm("clc");
+	asm("lda %b", (char)ADDR_LEVEL);
+	asm("adc #1");
+	asm("sta %b", (char)ADDR_LEVEL);
+	asm("lda %b+1",(char)ADDR_LEVEL);
+	asm("adc #0");
+	asm("sta %b+1",(char)ADDR_LEVEL);
+	asm("jsr _load_tile_bg");
+	asm("pla");
+	asm("tax");
+	asm("inx");
+	asm("cpx #16");
+	asm("bne debut_boucle");
+	asm("rts");
+}
+
+void charger_ligne_horizontale(unsigned char nametable, unsigned char l, unsigned char c, unsigned int position_x, unsigned int position_y)
+{
+	*index_in_buffer_tile_groupe = 0;
+	*addr = niveau_0.addr + (position_y / 2) * niveau_0.taille_x + (position_x / 2);
+
+	if (position_y % 2 == 0)
+	{
+		if (position_x % 2 == 0)
+		{
+			charger_ligne_horizontale_hg();
+			tiles_add_change(nametable ^ 0x03, l, c, GET_TILE(**addr)[0]);
+		}		
+		else
+		{
+			charger_ligne_horizontale_hd();
+			tiles_add_change(nametable ^ 0x03, l, c, GET_TILE(**addr)[1]);
+		}
+	}
+	else
+	{
+		if (position_x % 2 == 0)
+		{
+			charger_ligne_horizontale_bg();
+			tiles_add_change(nametable ^ 0x03, l, c, GET_TILE(**addr)[2]);
+		}
+		else
+		{
+			charger_ligne_horizontale_bd();
+			tiles_add_change(nametable ^ 0x03, l, c, GET_TILE(**addr)[3]);
+		}
+	}
+	
+	tiles_commit_changes();
+
+	tiles_set_group_horizontal(nametable, l, c);
 	tiles_commit_groups();
-
-	ligne_sav = ligne_ecran;
-	x_sav = position_x;
-	y_sav = position_y;
 }
 
 int camera_dans_niveau(unsigned int x, unsigned int y)
 {
-	unsigned int x_est_bon = (x > 0 && x + 256 < niveau_courant->taille_x);
-	unsigned int y_est_bon = (y > 0 && y + 240 < niveau_courant->taille_y);
-	return (x_est_bon && y_est_bon);
+	return 0;
 }
 
-unsigned char get_tile(signed int x, signed int y)
+signed int detecter_future_collision_bas(const struct element_physique *element, const struct hitbox *ligne)
 {
-	unsigned int tile_x = (unsigned int)(x / 8 + niveau_courant->x0);
-	unsigned int tile_y = (unsigned int)(y / 8 + niveau_courant->y0);
-
-	return *conversion_coordonnees_adresse(tile_x, tile_y);
+	return 0;
 }
 
-#if 0
-signed int detecter_future_collision_bas(const struct element_physique *element, const struct hitline *ligne)
+signed int detecter_future_collision_haut(const struct element_physique *element, const struct hitbox *ligne)
+{	
+	return 0;
+}
+
+signed int detecter_future_collision_gauche(const struct element_physique *element, const struct hitbox *ligne)
 {
-	/* Calcul du début et de la fin du trait de collision à tester */
-	const signed int position_x_debut = element->coordonnee_x + element->vitesse_x + ligne->diff_x;
-	const signed int position_x_fin = position_x_debut + ligne->taille;
-
-	/* Calcul de la hauteur initiale et finale de ce trait */
-	const signed int position_y_debut = element->coordonnee_y + ligne->diff_y;
-	const signed int position_y_fin = position_y_debut + element->vitesse_y;
-
-	/* Variables d'itération */
-	signed int       position_y = position_y_debut;
-	signed int       position_x = position_x_debut;
-	unsigned char    tile;
-
-	while (position_y < position_y_fin)
-	{
-		position_x = position_x_debut;
-		while (position_x < position_x_fin)
-		{
-			tile = get_tile(position_x, position_y);
-
-			/* Si une tile intraversable est détéctée, renvoyer le nombre de pixels autorisés à parcourir sans la toucher */
-			if (tile == '-')
-				return position_y_fin - position_y - 2; /* Pourquoi ce -2 (et pas -1), je ne sais pas */
-
-			/* Incrémente position_x de ce qu'il faut pour atteindre la prochaine huitaine */
-			position_x += (8 - (position_x % 8));
-		}
-		position_y+=8;
-	}
-	return element->vitesse_y;
+	return 0;
 }
-#endif
 
-/* TODO : fusionner les deux methodes */
-signed int detecter_future_collision_bas(const struct element_physique *element, const struct hitbox *box)
+signed int detecter_future_collision_droite(const struct element_physique *element, const struct hitbox *ligne)
 {
-	/* Calcul du début et de la fin du trait de collision à tester */
-	const signed int position_x_debut = element->coordonnee_x + element->vitesse_x + box->diff_x;
-	const signed int position_x_fin = position_x_debut + box->taille_x;
-
-	const signed int position_y = element->coordonnee_y + (box->diff_y + box->taille_y) + element->vitesse_y;
-
-	/* Variables d'itération */
-	signed int       position_x = position_x_debut;
-	unsigned char    tile;
-
-	for (position_x = position_x_debut; position_x < position_x_fin; position_x += 8)
-	{
-		tile = get_tile(position_x, position_y);
-		if (tile == '-')
-		{
-			return (element->vitesse_y - position_y % 8 - 1);
-		}
-	}
-
-	return element->vitesse_y;
+	return 0;
 }
-
-signed int detecter_future_collision_haut(const struct element_physique *element, const struct hitbox *box)
-{
-	/* Calcul du début et de la fin du trait de collision à tester */
-	const signed int position_x_debut = element->coordonnee_x + element->vitesse_x + box->diff_x;
-	const signed int position_x_fin = position_x_debut + box->taille_x;
-
-	const signed int position_y = element->coordonnee_y + box->diff_y + element->vitesse_y;
-
-	/* Variables d'itération */
-	signed int       position_x = position_x_debut;
-	unsigned char    tile;
-
-	for (position_x = position_x_debut; position_x < position_x_fin; position_x += 8)
-	{
-		tile = get_tile(position_x, position_y);
-		if (tile == '-')
-		{
-			return (element->vitesse_y + position_y % 8 - 1);
-		}
-	}
-
-	return element->vitesse_y;
-}
-
-signed int detecter_future_collision_droite(const struct element_physique *element, const struct hitbox *box)
-{
-	/* Calcul du début et de la fin du trait de collision à tester */
-	const signed int position_y_debut = element->coordonnee_y + element->vitesse_y + box->diff_y;
-	const signed int position_y_fin = position_y_debut + box->taille_y;
-
-	const signed int position_x = element->coordonnee_x + box->diff_x + box->taille_x + element->vitesse_x;
-
-	/* Variables d'itération */
-	signed int       position_y = position_y_debut;
-	unsigned char    tile;
-
-	for (position_y = position_y_debut; position_y < position_y_fin; position_y += 8)
-	{
-		tile = get_tile(position_x, position_y);
-		if (tile == '|')
-		{
-			return (element->vitesse_x - position_x % 8 - 1);
-		}
-	}
-
-	return element->vitesse_x;
-}
-
-signed int detecter_future_collision_gauche(const struct element_physique *element, const struct hitbox *box)
-{
-	/* Calcul du début et de la fin du trait de collision à tester */
-	const signed int position_y_debut = element->coordonnee_y + element->vitesse_y + box->diff_y;
-	const signed int position_y_fin = position_y_debut + box->taille_y;
-
-	const signed int position_x = element->coordonnee_x + box->diff_x + element->vitesse_x;
-
-	/* Variables d'itération */
-	signed int       position_y = position_y_debut;
-	unsigned char    tile;
-
-	for (position_y = position_y_debut; position_y < position_y_fin; position_y += 8)
-	{
-		tile = get_tile(position_x, position_y);
-		if (tile == '|')
-		{
-			__asm__("nop");
-			return (element->vitesse_x + position_x % 8 - 1);
-		}
-	}
-
-	return element->vitesse_x;
-}
-

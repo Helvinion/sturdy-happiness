@@ -32,7 +32,7 @@ SRC_C=./avatar.c \
 ./physique.c     \
 ./tiles.c        \
 ./moteur.c       \
-./niveau_bis.c
+./niveau.c
 
 ANIMS_C=./animations/src/G_Jolivet.c
 
