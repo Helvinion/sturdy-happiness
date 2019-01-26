@@ -56,6 +56,7 @@ static void debut_boucle()
 	tiles_update();    // 21 cycles
 	sprites_begin();   // 23 cycles
 	jouer_musique(); // 250 cycles en général, 2450 cycles aux changements de note
+	ligne_chargee = 0;
 }
 
 static void fin_boucle()
@@ -66,7 +67,7 @@ static void fin_boucle()
 //	while (i++ < nombre_elements)
 	{
 		// appliquer_physique(joueur); // 12948 cycles quand rien ne se passe !
-		// afficher_personnage(joueur->dessin); // 8591 cycles
+		 afficher_personnage(joueur->dessin); // 8591 cycles
 	}
 	sprites_end(); // 70 cycles
 	
@@ -77,6 +78,10 @@ void initialiser()
 {
 	int i = 0;
 
+	static struct avatar G_Jolivet = {40, 40, &G_Jolivet_pack, 0, 0};
+	static struct element_physique G_Jolivet_phys = {&G_Jolivet, 40,50, 0,0, 0,0, 0};
+	joueur = &G_Jolivet_phys;
+	
 	(*PPUCTRL) = (unsigned char)0x90;
 
     // changer les palettes pendant un vblank
@@ -108,18 +113,22 @@ void moteur_mode_jeu()
 	if (bouton_presse_manette_1(BOUTON_DROITE))
 	{
 		bouger_camera_x(1);
+		joueur->dessin->x++;
 	}
-	else if (bouton_presse_manette_1(BOUTON_GAUCHE))
+	if (bouton_presse_manette_1(BOUTON_GAUCHE))
 	{
 		bouger_camera_x(-1);
+		joueur->dessin->x--;
 	}
-	else if (bouton_presse_manette_1(BOUTON_HAUT))
+	if (bouton_presse_manette_1(BOUTON_HAUT))
 	{
 		bouger_camera_y(-1);
+		joueur->dessin->y--;
 	}
-	else if (bouton_presse_manette_1(BOUTON_BAS))
+	if (bouton_presse_manette_1(BOUTON_BAS))
 	{
 		bouger_camera_y(1);
+		joueur->dessin->y++;
 	}
 
 	fin_boucle();

@@ -1,6 +1,8 @@
 #ifndef ECRAN_H
 #define ECRAN_H
 
+extern unsigned char ligne_chargee;
+
 void fixer_position_camera(unsigned int x, unsigned int y);
 signed char faux_bouger_camera_x(signed char pixels);
 signed char bouger_camera_x(signed char pixels);

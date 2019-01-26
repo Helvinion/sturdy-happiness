@@ -3,6 +3,7 @@
 #include "tiles.h"
 #include "palette.h"
 #include "zeropage.h"
+#include "ecran.h"
 
 #define PPU_CTRL_VAR  (unsigned char*)(0x30) // Nametable pour le scrolling (aussi géré en VBlank)
 #define PPUSTAT (unsigned char*)0x2002
@@ -253,6 +254,15 @@ static void charger_ligne_verticale_bd()
 
 void charger_ligne_verticale(unsigned char nametable, unsigned char l, unsigned char c, unsigned int position_x, unsigned int position_y)
 {
+	static unsigned int dernier_chargement_ver_x = 0;
+	static unsigned int dernier_chargement_ver_y = 0;
+
+	if (dernier_chargement_ver_x == position_x && dernier_chargement_ver_y == position_y)
+		return;
+	
+	dernier_chargement_ver_x = position_x;
+	dernier_chargement_ver_y = position_y;
+	
 	*index_in_buffer_tile_groupe = 0;
 	*addr = niveau_0.addr + (position_y / 2) * niveau_0.taille_x + (position_x / 2);
 
@@ -274,6 +284,7 @@ void charger_ligne_verticale(unsigned char nametable, unsigned char l, unsigned 
 
 	tiles_set_group_vertical(nametable, l, c);
 	tiles_commit_groups();
+	ligne_chargee = 1;
 }
 
 void charger_ligne_horizontale_hg()
@@ -370,6 +381,15 @@ void charger_ligne_horizontale_bd()
 
 void charger_ligne_horizontale(unsigned char nametable, unsigned char l, unsigned char c, unsigned int position_x, unsigned int position_y)
 {
+	static unsigned int dernier_chargement_hor_x = 0;
+	static unsigned int dernier_chargement_hor_y = 0;
+
+	if (dernier_chargement_hor_x == position_x && dernier_chargement_hor_y == position_y)
+		return;
+	
+	dernier_chargement_hor_x = position_x;
+	dernier_chargement_hor_y = position_y;
+
 	*index_in_buffer_tile_groupe = 0;
 	*addr = niveau_0.addr + (position_y / 2) * niveau_0.taille_x + (position_x / 2);
 
@@ -404,6 +424,7 @@ void charger_ligne_horizontale(unsigned char nametable, unsigned char l, unsigne
 
 	tiles_set_group_horizontal(nametable, l, c);
 	tiles_commit_groups();
+	ligne_chargee = 1;
 }
 
 int camera_dans_niveau(unsigned int x, unsigned int y)

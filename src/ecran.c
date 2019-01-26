@@ -10,6 +10,9 @@
 static unsigned int camera_x;
 static unsigned int camera_y;
 
+// Indique si l'écriture d'une ligne a déjà été faite pendant ce tour de moteur.
+unsigned char ligne_chargee;
+
 void fixer_position_camera(unsigned int x, unsigned int y)
 {
 	// La nouvelle nametable est l'ancienne (deux derniers octets de PPU_CTRL_VAR) inversée (xor sur les deux derniers octets)
@@ -54,17 +57,20 @@ signed char bouger_camera_x(signed char pixels)
 	(*OLD_SCROLL) = (*SCROLL_X);
 	(*SCROLL_X) += pixels;
 
-	// Les parenthèses sont obligatoires parce que ce vieux cc65 ne gère pas les priorités d'opérateurs.
-	if ((pixels > 0 && (*SCROLL_X) < (*OLD_SCROLL)) || (pixels < 0 && (*SCROLL_X) > (*OLD_SCROLL)))
-		(*PPU_CTRL_VAR) ^= 0x03; // Inverse le dernier bit de ce registre pour changer de Nametable : on est arrivé au bout de l'autre.
+	if (!ligne_chargee)
+	{
+		// Les parenthèses sont obligatoires parce que ce vieux cc65 ne gère pas les priorités d'opérateurs.
+		if ((pixels > 0 && (*SCROLL_X) < (*OLD_SCROLL)) || (pixels < 0 && (*SCROLL_X) > (*OLD_SCROLL)))
+			(*PPU_CTRL_VAR) ^= 0x03; // Inverse le dernier bit de ce registre pour changer de Nametable : on est arrivé au bout de l'autre.
 
-	if (pixels > 0)
-	{
-		charger_ligne_verticale(((*PPU_CTRL_VAR) & (unsigned char)0x03) ^ (unsigned char)0x03, (*SCROLL_Y) / 8, (*SCROLL_X) / 8, (camera_x + 256) / 8, camera_y / 8);
-	}
-	else
-	{
-		charger_ligne_verticale(((*PPU_CTRL_VAR) & (unsigned char)0x03), (*SCROLL_Y) / 8, (*SCROLL_X) / 8, camera_x / 8, camera_y / 8);
+		if (pixels > 0)
+		{
+			charger_ligne_verticale(((*PPU_CTRL_VAR) & (unsigned char)0x03) ^ (unsigned char)0x03, (*SCROLL_Y) / 8, (*SCROLL_X) / 8, (camera_x + 256) / 8, camera_y / 8);
+		}
+		else
+		{
+			charger_ligne_verticale(((*PPU_CTRL_VAR) & (unsigned char)0x03), (*SCROLL_Y) / 8, (*SCROLL_X) / 8, camera_x / 8, camera_y / 8);
+		}
 	}
 
 	return sav - pixels;
@@ -89,27 +95,30 @@ signed char bouger_camera_y(signed char pixels)
 	(*OLD_SCROLL) = (*SCROLL_Y);
 	(*SCROLL_Y) += pixels;
 
-	// L'écran de la NES ne fait que 240 pixels en hauteur, le controle de l'inversion de la nametable est donc plus compliqué.
-	if (pixels > 0 && ((*OLD_SCROLL) > (*SCROLL_Y) || (*SCROLL_Y) > 240))
+	if (!ligne_chargee)
 	{
-		(*SCROLL_Y) += 16;
-		(*PPU_CTRL_VAR) ^= 0x03;
-		// Inverse le penultième bit de ce registre pour changer de Nametable : on est arrivé au bout de l'autre.
-	}
-	else if (pixels < 0 && ((unsigned char)-pixels) > (*OLD_SCROLL))
-	{
-		(*SCROLL_Y) -= 16;
-		(*PPU_CTRL_VAR) ^= 0x03;
-		// Inverse le penultième bit de ce registre pour changer de Nametable : on est arrivé au bout de l'autre.
-	}
-	
-	if (pixels > 0)
-	{
-		charger_ligne_horizontale(((*PPU_CTRL_VAR) & (unsigned char)0x03), (*SCROLL_Y) / 8, (*SCROLL_X) / 8, camera_x / 8, (camera_y + 240) / 8);
-	}
-	else
-	{
-		charger_ligne_horizontale(((*PPU_CTRL_VAR) & (unsigned char)0x03), (*SCROLL_Y) / 8, (*SCROLL_X) / 8, camera_x / 8, camera_y / 8);
+		// L'écran de la NES ne fait que 240 pixels en hauteur, le controle de l'inversion de la nametable est donc plus compliqué.
+		if (pixels > 0 && ((*OLD_SCROLL) > (*SCROLL_Y) || (*SCROLL_Y) > 240))
+		{
+			(*SCROLL_Y) += 16;
+			(*PPU_CTRL_VAR) ^= 0x03;
+			// Inverse le penultième bit de ce registre pour changer de Nametable : on est arrivé au bout de l'autre.
+		}
+		else if (pixels < 0 && ((unsigned char)-pixels) > (*OLD_SCROLL))
+		{
+			(*SCROLL_Y) -= 16;
+			(*PPU_CTRL_VAR) ^= 0x03;
+			// Inverse le penultième bit de ce registre pour changer de Nametable : on est arrivé au bout de l'autre.
+		}
+		
+		if (pixels > 0)
+		{
+			charger_ligne_horizontale(((*PPU_CTRL_VAR) & (unsigned char)0x03), (*SCROLL_Y) / 8, (*SCROLL_X) / 8, camera_x / 8, (camera_y + 240) / 8);
+		}
+		else
+		{
+			charger_ligne_horizontale(((*PPU_CTRL_VAR) & (unsigned char)0x03), (*SCROLL_Y) / 8, (*SCROLL_X) / 8, camera_x / 8, camera_y / 8);
+		}
 	}
 
 	return sav - pixels;
