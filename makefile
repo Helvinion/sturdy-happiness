@@ -17,6 +17,7 @@ SRC_ASM=./asm/graphics.asm \
 ./asm/start.asm            \
 ./asm/registres_cc65.asm   \
 ./asm/vectors.asm          \
+./asm/tileset.asm          \
 ./asm/utile.asm
 
 SRC_C=./avatar.c \
@@ -31,8 +32,7 @@ SRC_C=./avatar.c \
 ./physique.c     \
 ./tiles.c        \
 ./moteur.c       \
-./niveau_bis.c   \
-./tileset.c
+./niveau_bis.c
 
 ANIMS_C=./animations/src/G_Jolivet.c
 
