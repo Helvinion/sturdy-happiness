@@ -27,6 +27,9 @@ _tileset:
 	.byte $1e, $1d, $1f, $1f ; 0x09 : Terre sous sommet
 	.byte $00, $0b, $0f, $1e ; 0x0a : Sol fin montée
 	.byte $0c, $00, $1c, $0e ; 0x0b : Sol début descente
+	.byte $47, $61, $4e, $20 ; 0x0c : Ga/N_
+	.byte $65, $61, $34, $32 ; 0x0d : ea/42
+	.byte $01, $01, $01, $01 ; 0x0e : barre
 
 .segment	"CODE"
 	

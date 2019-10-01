@@ -63,7 +63,7 @@
 #define INDEX_GRP                   ((unsigned char*)0x5C)
 #define ADDR_LEVEL                  ((unsigned char*)0x5D)
 // OCCUPE                           ((void*)0x5E)
-//                                  ((void*)0x5F)
+#define ACTIVER_BARRE               ((unsigned char*)0x5F)
 //                                  ((void*)0x60)
 //                                  ((void*)0x61)
 //                                  ((void*)0x62)

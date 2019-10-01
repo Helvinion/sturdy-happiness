@@ -23,7 +23,7 @@ typedef struct niveau niveau;
 
 static const unsigned char niveau_0_tiles[] = 
 {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,12,13,0,14,14,14,14,14,14,14,14,14,14,14,14,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -45,7 +45,7 @@ static const unsigned char niveau_0_tiles[] =
 
 static const unsigned char niveau_0_palettes[] = 
 {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -56,7 +56,7 @@ static const unsigned char niveau_0_palettes[] =
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-static const unsigned char niveau_0_palettes_list[4] = {PALETTE_NIVEAU_0, PALETTE_NIVEAU_0, PALETTE_NIVEAU_0, PALETTE_NIVEAU_0};
+static const unsigned char niveau_0_palettes_list[4] = {PALETTE_NIVEAU_0, PALETTE_GRISE, PALETTE_NIVEAU_0, PALETTE_NIVEAU_0};
 
 static const niveau niveau_0 = 
 {
@@ -138,11 +138,31 @@ void charger_niveau(unsigned char nametable, unsigned int position_x, unsigned i
 				palette++;
 			}
 		}
-		
-		palette -= 8;
+
+		colonne = 0;
+		while (colonne < 16)
+		{
+			charger_brique(nametable ^ 0x03, ligne, colonne, *addr);
+			charger_palette(nametable ^ 0x03, ligne / 2, colonne / 2, *palette);
+			
+			addr++;
+			colonne++;
+
+			// Si on était sur une colonne impaire on
+			// commite les changements effectués
+			if (colonne % 2 == 0) // 2 4 6 8 10 12 14
+			{
+				tiles_commit_changes();
+				attendre_VBlank();
+				tiles_update();
+				palette++;
+			}
+		}
+
+		palette -= 16;
 		// Passer à la ligne suivante
 		ligne++;
-		addr = addr - 16 + niveau_0.taille_x;
+		addr = addr - 32 + niveau_0.taille_x;
 		if (ligne % 2 == 0)
 			palette = palette + (niveau_0.taille_x / 2);
 	}

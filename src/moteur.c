@@ -8,7 +8,9 @@
 #include <physique.h>
 #include <niveau.h>
 #include <ecran.h>
+#include <utile.h>
 #include <liste_animations.h>
+#include <zeropage.h>
 
 #define PPUCTRL (unsigned char*)0x2000
 #define PPUMASK (unsigned char*)0x2001
@@ -71,7 +73,8 @@ static void fin_boucle()
 	}
 	sprites_end(); // 70 cycles
 	
-	attendre_VBlank();
+	//attendre_VBlank();
+	attendre_VBlank_et_afficher_barre();
 }
 
 void initialiser()
@@ -97,6 +100,7 @@ void initialiser()
 	fixer_position_camera(0, 0);
 	init_musique();
 	attendre_VBlank();
+	*(ACTIVER_BARRE) = 5;
 }
 
 void moteur_mode_jeu()
@@ -105,6 +109,8 @@ void moteur_mode_jeu()
 	// n'utiliser que 28000 cycles CPU pour faire
 	// tout ce qu'on a à faire. TOUT compte !	
 	debut_boucle();
+	
+	add_sprite(0, 100, 10, 0);
 	
 	if (bouton_presse_manette_1(BOUTON_DROITE))
 	{
@@ -122,6 +128,16 @@ void moteur_mode_jeu()
 	{
 		bouger_camera_bas(1);
 	}
+	
+	
+	//while (!(*((char*)ZP_PPU_STATUS) & 0x40));
+
+	//add_sprite(0, 100, 100, 0);
 
 	fin_boucle();
+	
+	
+	if (*(ACTIVER_BARRE) != 0)
+		(*(ACTIVER_BARRE))--;
+
 }

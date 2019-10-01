@@ -44,6 +44,7 @@ unsigned char bouger_camera_droite(unsigned char pixels)
 {
 	unsigned char sav = pixels;
 
+
 	// Sécurité : éviter un camera_x > taille_x_niveau_courant
 	if (camera_x + 256 + pixels > 8 * taille_x_niveau_courant())
 		pixels = 8 * taille_x_niveau_courant() - camera_x - 256;

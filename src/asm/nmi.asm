@@ -12,9 +12,9 @@ nmi:
     pha ; Sauvegarder X
     tya ;
     pha ; Sauvegarder Y
-
-	sta PPU_MASK_VAR
-	lda PPU_MASK
+	;lda PPU_MASK_VAR
+	;sta PPU_MASK
+	;lda PPU_STATUS
 
     jsr update_sprites
     jsr update_palettes
@@ -50,14 +50,15 @@ update_sprites:
     rts
 
 update_scolling:
-    ;lda #0
-   ; sta PPU_ADDR
-    ;sta PPU_ADDR
-    lda <SCROLL_X        ;
-    sta PPU_SCROLL       ;
-    lda <SCROLL_Y        ;
-    sta PPU_SCROLL       ;
+    lda #0
+    sta PPU_ADDR
+    sta PPU_ADDR
+;    lda <SCROLL_X        ;
+;    sta PPU_SCROLL       ;
+;    lda <SCROLL_Y        ;
+;    sta PPU_SCROLL       ;
     lda <PPU_CTRL_VAR    ;
+	and #$FC
     sta PPU_CTRL         ; Reinitialise la PPU et le scrolling aux paramètres demandés
     rts
 
