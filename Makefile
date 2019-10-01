@@ -66,7 +66,7 @@ rom.nes: $(OBJ) link.ld lib/nes.lib graphics/noobnes.chr
 	$(PYTHON) fceux_symbols.py
 
 play: rom.nes
-	$(NES) rom.nes
+	$(NES) -pal 1 rom.nes
 
 prepare:
 	$(MKDIR) -p compile/asm/animations

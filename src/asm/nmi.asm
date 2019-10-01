@@ -54,9 +54,9 @@ update_scolling:
     sta PPU_ADDR
     sta PPU_ADDR
 ;    lda <SCROLL_X        ;
-;    sta PPU_SCROLL       ;
+    sta PPU_SCROLL       ;
 ;    lda <SCROLL_Y        ;
-;    sta PPU_SCROLL       ;
+    sta PPU_SCROLL       ;
     lda <PPU_CTRL_VAR    ;
 	and #$FC
     sta PPU_CTRL         ; Reinitialise la PPU et le scrolling aux paramètres demandés

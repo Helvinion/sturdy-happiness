@@ -86,7 +86,7 @@ void initialiser()
     // changer les palettes pendant un vblank
     attendre_VBlank();
 
-	changer_palette(4, get_palette(PALETTE_CURSEURS));
+	changer_palette(4, get_palette(PALETTE_GRISE));
 	changer_palette(5, get_palette(PALETTE_VISAGE_JOLIVET));
 	changer_palette(6, get_palette(PALETTE_JOLIVET));
 	changer_palette(7, get_palette(PALETTE_JOLIVET));
@@ -110,7 +110,7 @@ void moteur_mode_jeu()
 	// tout ce qu'on a à faire. TOUT compte !	
 	debut_boucle();
 	
-	add_sprite(0, 100, 10, 0);
+	add_sprite(5, 43, 27, 0x20);
 	
 	if (bouton_presse_manette_1(BOUTON_DROITE))
 	{

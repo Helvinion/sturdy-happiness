@@ -95,6 +95,7 @@ pasDeBarre:
 	sta PPU_ADDR      ; Ecrire sur le registre t de la PPU
 
 	lda <SCROLL_Y ; Récupérer le scrolling en Y
+	adc #32
 	sta PPU_SCROLL ; Ecrire sur le registre t de la PPU, ce qui le transfert dans v
 
 	and #$F8     ; Garder Y mais ne garder que ses bits de poid fort
@@ -112,7 +113,7 @@ pasDeBarre:
 	         ; dans PPUADDR pendant le prochain HBlank
 			 ; On aura alors un temps minuscule pour le faire
 			 
-	ldx #$06 ; A ajuster pour tomber pile sur un HBlank...
+	ldx #$03 ; A ajuster pour tomber pile sur un HBlank...
 loop2:
 	dex
 	bne loop2
